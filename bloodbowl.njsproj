@@ -1,294 +1,295 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <SchemaVersion>2.0</SchemaVersion>
-        <ProjectGuid>{a1d8e14b-7779-4e73-9c2f-448b10ad05a9}</ProjectGuid>
-        <ProjectHome />
-        <ProjectView>ShowAllFiles</ProjectView>
-        <StartupFile>app.js</StartupFile>
-        <WorkingDirectory>.</WorkingDirectory>
-        <OutputPath>.</OutputPath>
-        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
-        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
-    <ItemGroup>
-        <Compile Include="app.js" />
-        <Content Include="images\dirty-dan-hes-our-man.png" />
-        <Content Include="images\crests\amazon.png" />
-        <Content Include="images\crests\bretonnian.png" />
-        <Content Include="images\crests\chaos dwarf.png" />
-        <Content Include="images\crests\chaos pact.png" />
-        <Content Include="images\crests\chaos.png" />
-        <Content Include="images\crests\daemons of khorne.png" />
-        <Content Include="images\crests\dark elf.png" />
-        <Content Include="images\crests\dwarf.png" />
-        <Content Include="images\crests\elf.png" />
-        <Content Include="images\crests\goblin.png" />
-        <Content Include="images\crests\halfling.png" />
-        <Content Include="images\crests\high elf.png" />
-        <Content Include="images\crests\human.png" />
-        <Content Include="images\crests\khemri.png" />
-        <Content Include="images\crests\lizardman.png" />
-        <Content Include="images\crests\necromantic.png" />
-        <Content Include="images\crests\norse.png" />
-        <Content Include="images\crests\nurgle.png" />
-        <Content Include="images\crests\ogre.png" />
-        <Content Include="images\crests\orc.png" />
-        <Content Include="images\crests\simyn.png" />
-        <Content Include="images\crests\skaven.png" />
-        <Content Include="images\crests\slann.png" />
-        <Content Include="images\crests\undead.png" />
-        <Content Include="images\crests\underworld.png" />
-        <Content Include="images\crests\vampire.png" />
-        <Content Include="images\crests\wood elf.png" />
-        <Content Include="images\LRB5\Page-1-Image-1.png" />
-        <Content Include="images\LRB5\Page-10-Image-26.png" />
-        <Content Include="images\LRB5\Page-10-Image-27.png" />
-        <Content Include="images\LRB5\Page-10-Image-28.png" />
-        <Content Include="images\LRB5\Page-10-Image-29.png" />
-        <Content Include="images\LRB5\Page-11-Image-30.png" />
-        <Content Include="images\LRB5\Page-11-Image-31.png" />
-        <Content Include="images\LRB5\Page-11-Image-32.png" />
-        <Content Include="images\LRB5\Page-12-Image-49.png" />
-        <Content Include="images\LRB5\Page-12-Image-52.png" />
-        <Content Include="images\LRB5\Page-12-Image-53.png" />
-        <Content Include="images\LRB5\Page-12-Image-54.png" />
-        <Content Include="images\LRB5\Page-12-Image-55.png" />
-        <Content Include="images\LRB5\Page-12-Image-56.png" />
-        <Content Include="images\LRB5\Page-12-Image-57.png" />
-        <Content Include="images\LRB5\Page-12-Image-58.png" />
-        <Content Include="images\LRB5\Page-12-Image-59.png" />
-        <Content Include="images\LRB5\Page-13-Image-125.png" />
-        <Content Include="images\LRB5\Page-13-Image-126.png" />
-        <Content Include="images\LRB5\Page-13-Image-127.png" />
-        <Content Include="images\LRB5\Page-14-Image-128.png" />
-        <Content Include="images\LRB5\Page-14-Image-129.png" />
-        <Content Include="images\LRB5\Page-14-Image-130.png" />
-        <Content Include="images\LRB5\Page-14-Image-131.png" />
-        <Content Include="images\LRB5\Page-14-Image-132.png" />
-        <Content Include="images\LRB5\Page-15-Image-133.png" />
-        <Content Include="images\LRB5\Page-16-Image-134.png" />
-        <Content Include="images\LRB5\Page-17-Image-135.png" />
-        <Content Include="images\LRB5\Page-18-Image-136.png" />
-        <Content Include="images\LRB5\Page-18-Image-137.png" />
-        <Content Include="images\LRB5\Page-18-Image-138.png" />
-        <Content Include="images\LRB5\Page-19-Image-139.png" />
-        <Content Include="images\LRB5\Page-19-Image-140.png" />
-        <Content Include="images\LRB5\Page-19-Image-141.png" />
-        <Content Include="images\LRB5\Page-19-Image-142.png" />
-        <Content Include="images\LRB5\Page-19-Image-143.png" />
-        <Content Include="images\LRB5\Page-19-Image-144.png" />
-        <Content Include="images\LRB5\Page-2-Image-1.png" />
-        <Content Include="images\LRB5\Page-2-Image-2.png" />
-        <Content Include="images\LRB5\Page-2-Image-3.png" />
-        <Content Include="images\LRB5\Page-20-Image-145.png" />
-        <Content Include="images\LRB5\Page-20-Image-146.png" />
-        <Content Include="images\LRB5\Page-21-Image-147.png" />
-        <Content Include="images\LRB5\Page-21-Image-148.png" />
-        <Content Include="images\LRB5\Page-21-Image-149.png" />
-        <Content Include="images\LRB5\Page-21-Image-150.png" />
-        <Content Include="images\LRB5\Page-21-Image-151.png" />
-        <Content Include="images\LRB5\Page-22-Image-152.png" />
-        <Content Include="images\LRB5\Page-22-Image-153.png" />
-        <Content Include="images\LRB5\Page-22-Image-154.png" />
-        <Content Include="images\LRB5\Page-22-Image-155.png" />
-        <Content Include="images\LRB5\Page-22-Image-156.png" />
-        <Content Include="images\LRB5\Page-22-Image-169.png" />
-        <Content Include="images\LRB5\Page-23-Image-170.png" />
-        <Content Include="images\LRB5\Page-23-Image-187.png" />
-        <Content Include="images\LRB5\Page-23-Image-244.png" />
-        <Content Include="images\LRB5\Page-23-Image-245.png" />
-        <Content Include="images\LRB5\Page-23-Image-246.png" />
-        <Content Include="images\LRB5\Page-24-Image-171.png" />
-        <Content Include="images\LRB5\Page-24-Image-172.png" />
-        <Content Include="images\LRB5\Page-24-Image-173.png" />
-        <Content Include="images\LRB5\Page-24-Image-247.png" />
-        <Content Include="images\LRB5\Page-24-Image-248.png" />
-        <Content Include="images\LRB5\Page-24-Image-249.png" />
-        <Content Include="images\LRB5\Page-24-Image-250.png" />
-        <Content Include="images\LRB5\Page-25-Image-174.png" />
-        <Content Include="images\LRB5\Page-25-Image-175.png" />
-        <Content Include="images\LRB5\Page-25-Image-251.png" />
-        <Content Include="images\LRB5\Page-25-Image-252.png" />
-        <Content Include="images\LRB5\Page-25-Image-253.png" />
-        <Content Include="images\LRB5\Page-25-Image-254.png" />
-        <Content Include="images\LRB5\Page-25-Image-255.png" />
-        <Content Include="images\LRB5\Page-25-Image-256.png" />
-        <Content Include="images\LRB5\Page-25-Image-257.png" />
-        <Content Include="images\LRB5\Page-25-Image-258.png" />
-        <Content Include="images\LRB5\Page-25-Image-259.png" />
-        <Content Include="images\LRB5\Page-25-Image-260.png" />
-        <Content Include="images\LRB5\Page-25-Image-261.png" />
-        <Content Include="images\LRB5\Page-25-Image-262.png" />
-        <Content Include="images\LRB5\Page-25-Image-263.png" />
-        <Content Include="images\LRB5\Page-26-Image-176.png" />
-        <Content Include="images\LRB5\Page-26-Image-177.png" />
-        <Content Include="images\LRB5\Page-26-Image-178.png" />
-        <Content Include="images\LRB5\Page-26-Image-264.png" />
-        <Content Include="images\LRB5\Page-28-Image-179.png" />
-        <Content Include="images\LRB5\Page-28-Image-180.png" />
-        <Content Include="images\LRB5\Page-28-Image-181.png" />
-        <Content Include="images\LRB5\Page-28-Image-265.png" />
-        <Content Include="images\LRB5\Page-28-Image-266.png" />
-        <Content Include="images\LRB5\Page-29-Image-182.png" />
-        <Content Include="images\LRB5\Page-29-Image-267.png" />
-        <Content Include="images\LRB5\Page-29-Image-268.png" />
-        <Content Include="images\LRB5\Page-29-Image-269.png" />
-        <Content Include="images\LRB5\Page-29-Image-270.png" />
-        <Content Include="images\LRB5\Page-29-Image-271.png" />
-        <Content Include="images\LRB5\Page-29-Image-272.png" />
-        <Content Include="images\LRB5\Page-3-Image-2.png" />
-        <Content Include="images\LRB5\Page-3-Image-3.png" />
-        <Content Include="images\LRB5\Page-3-Image-4.png" />
-        <Content Include="images\LRB5\Page-3-Image-5.png" />
-        <Content Include="images\LRB5\Page-30-Image-183.png" />
-        <Content Include="images\LRB5\Page-30-Image-184.png" />
-        <Content Include="images\LRB5\Page-30-Image-185.png" />
-        <Content Include="images\LRB5\Page-30-Image-186.png" />
-        <Content Include="images\LRB5\Page-30-Image-187.png" />
-        <Content Include="images\LRB5\Page-30-Image-188.png" />
-        <Content Include="images\LRB5\Page-30-Image-189.png" />
-        <Content Include="images\LRB5\Page-30-Image-190.png" />
-        <Content Include="images\LRB5\Page-30-Image-191.png" />
-        <Content Include="images\LRB5\Page-30-Image-192.png" />
-        <Content Include="images\LRB5\Page-30-Image-193.png" />
-        <Content Include="images\LRB5\Page-30-Image-194.png" />
-        <Content Include="images\LRB5\Page-30-Image-195.png" />
-        <Content Include="images\LRB5\Page-30-Image-196.png" />
-        <Content Include="images\LRB5\Page-30-Image-197.png" />
-        <Content Include="images\LRB5\Page-30-Image-273.png" />
-        <Content Include="images\LRB5\Page-31-Image-199.png" />
-        <Content Include="images\LRB5\Page-32-Image-200.png" />
-        <Content Include="images\LRB5\Page-32-Image-202.png" />
-        <Content Include="images\LRB5\Page-32-Image-203.png" />
-        <Content Include="images\LRB5\Page-32-Image-204.png" />
-        <Content Include="images\LRB5\Page-32-Image-205.png" />
-        <Content Include="images\LRB5\Page-32-Image-274.png" />
-        <Content Include="images\LRB5\Page-33-Image-275.png" />
-        <Content Include="images\LRB5\Page-33-Image-276.png" />
-        <Content Include="images\LRB5\Page-34-Image-209.png" />
-        <Content Include="images\LRB5\Page-34-Image-210.png" />
-        <Content Include="images\LRB5\Page-34-Image-211.png" />
-        <Content Include="images\LRB5\Page-34-Image-212.png" />
-        <Content Include="images\LRB5\Page-34-Image-277.png" />
-        <Content Include="images\LRB5\Page-34-Image-278.png" />
-        <Content Include="images\LRB5\Page-34-Image-279.png" />
-        <Content Include="images\LRB5\Page-35-Image-280.png" />
-        <Content Include="images\LRB5\Page-35-Image-281.png" />
-        <Content Include="images\LRB5\Page-35-Image-282.png" />
-        <Content Include="images\LRB5\Page-35-Image-283.png" />
-        <Content Include="images\LRB5\Page-35-Image-284.png" />
-        <Content Include="images\LRB5\Page-35-Image-285.png" />
-        <Content Include="images\LRB5\Page-35-Image-286.png" />
-        <Content Include="images\LRB5\Page-36-Image-215.png" />
-        <Content Include="images\LRB5\Page-39-Image-546.png" />
-        <Content Include="images\LRB5\Page-39-Image-547.png" />
-        <Content Include="images\LRB5\Page-39-Image-548.png" />
-        <Content Include="images\LRB5\Page-39-Image-549.png" />
-        <Content Include="images\LRB5\Page-39-Image-550.png" />
-        <Content Include="images\LRB5\Page-39-Image-551.png" />
-        <Content Include="images\LRB5\Page-39-Image-552.png" />
-        <Content Include="images\LRB5\Page-39-Image-553.png" />
-        <Content Include="images\LRB5\Page-39-Image-554.png" />
-        <Content Include="images\LRB5\Page-4-Image-4.png" />
-        <Content Include="images\LRB5\Page-4-Image-5.png" />
-        <Content Include="images\LRB5\Page-4-Image-6.png" />
-        <Content Include="images\LRB5\Page-4-Image-7.png" />
-        <Content Include="images\LRB5\Page-40-Image-557.png" />
-        <Content Include="images\LRB5\Page-44-Image-989.png" />
-        <Content Include="images\LRB5\Page-5-Image-6.png" />
-        <Content Include="images\LRB5\Page-5-Image-7.png" />
-        <Content Include="images\LRB5\Page-5-Image-8 (2).png" />
-        <Content Include="images\LRB5\Page-5-Image-8.png" />
-        <Content Include="images\LRB5\Page-5-Image-9 (2).png" />
-        <Content Include="images\LRB5\Page-5-Image-9.png" />
-        <Content Include="images\LRB5\Page-6-Image-10.png" />
-        <Content Include="images\LRB5\Page-6-Image-11.png" />
-        <Content Include="images\LRB5\Page-7-Image-12.png" />
-        <Content Include="images\LRB5\Page-7-Image-13.png" />
-        <Content Include="images\LRB5\Page-7-Image-14.png" />
-        <Content Include="images\LRB5\Page-7-Image-15.png" />
-        <Content Include="images\LRB5\Page-7-Image-16.png" />
-        <Content Include="images\LRB5\Page-7-Image-17.png" />
-        <Content Include="images\LRB5\Page-7-Image-18.png" />
-        <Content Include="images\LRB5\Page-7-Image-19.png" />
-        <Content Include="images\LRB5\Page-7-Image-20.png" />
-        <Content Include="images\LRB5\Page-7-Image-21.png" />
-        <Content Include="images\LRB5\Page-8-Image-10.png" />
-        <Content Include="images\LRB5\Page-8-Image-22.png" />
-        <Content Include="images\LRB5\Page-8-Image-23.png" />
-        <Content Include="images\LRB5\Page-8-Image-24.png" />
-        <Content Include="images\LRB5\Page-8-Image-25.png" />
-        <Content Include="images\LRB5\Page-9-Image-11.png" />
-        <Content Include="images\LRB5\Page-9-Image-12.png" />
-        <Content Include="images\LRB5\Page-9-Image-13.png" />
-        <Content Include="images\minis\beastman.png" />
-        <Content Include="images\minis\dwarf blitzer.png" />
-        <Content Include="images\minis\hack enslash.png" />
-        <Content Include="images\minis\halfling.png" />
-        <Content Include="images\minis\human thrower.png" />
-        <Content Include="images\minis\khemri mummy.png" />
-        <Content Include="images\minis\kroxigor.png" />
-        <Content Include="images\minis\morg n thorg.png" />
-        <Content Include="images\minis\ogre.png" />
-        <Content Include="images\minis\orc lineman.png" />
-        <Content Include="images\minis\ramtut iii.png" />
-        <Content Include="images\minis\skink.png" />
-        <Content Include="images\minis\thrall.png" />
-        <Content Include="images\minis\undead cheerleader.png" />
-        <Content Include="images\minis\witch elf.png" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="bloodbowl" />
-        <Folder Include="images" />
-        <Folder Include="images\crests" />
-        <Folder Include="images\LRB5" />
-        <Folder Include="images\minis" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
-    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
-    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
-    <ProjectExtensions>
-        <VisualStudio>
-          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-            <WebProjectProperties>
-              <UseIIS>False</UseIIS>
-              <AutoAssignPort>True</AutoAssignPort>
-              <DevelopmentServerPort>0</DevelopmentServerPort>
-              <DevelopmentServerVPath>/</DevelopmentServerVPath>
-              <IISUrl>http://localhost:48022/</IISUrl>
-              <NTLMAuthentication>False</NTLMAuthentication>
-              <UseCustomServer>True</UseCustomServer>
-              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
-              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-            </WebProjectProperties>
-          </FlavorProperties>
-          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
-            <WebProjectProperties>
-              <StartPageUrl>
-              </StartPageUrl>
-              <StartAction>CurrentPage</StartAction>
-              <AspNetDebugging>True</AspNetDebugging>
-              <SilverlightDebugging>False</SilverlightDebugging>
-              <NativeDebugging>False</NativeDebugging>
-              <SQLDebugging>False</SQLDebugging>
-              <ExternalProgram>
-              </ExternalProgram>
-              <StartExternalURL>
-              </StartExternalURL>
-              <StartCmdLineArguments>
-              </StartCmdLineArguments>
-              <StartWorkingDirectory>
-              </StartWorkingDirectory>
-              <EnableENC>False</EnableENC>
-              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
-            </WebProjectProperties>
-          </FlavorProperties>
-        </VisualStudio>
-    </ProjectExtensions>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{a1d8e14b-7779-4e73-9c2f-448b10ad05a9}</ProjectGuid>
+    <ProjectHome />
+    <ProjectView>ProjectFiles</ProjectView>
+    <StartupFile>appwPromises.js</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Compile Include="appwPromises.js" />
+    <Compile Include="app.js" />
+    <Content Include="images\dirty-dan-hes-our-man.png" />
+    <Content Include="images\crests\amazon.png" />
+    <Content Include="images\crests\bretonnian.png" />
+    <Content Include="images\crests\chaos dwarf.png" />
+    <Content Include="images\crests\chaos pact.png" />
+    <Content Include="images\crests\chaos.png" />
+    <Content Include="images\crests\daemons of khorne.png" />
+    <Content Include="images\crests\dark elf.png" />
+    <Content Include="images\crests\dwarf.png" />
+    <Content Include="images\crests\elf.png" />
+    <Content Include="images\crests\goblin.png" />
+    <Content Include="images\crests\halfling.png" />
+    <Content Include="images\crests\high elf.png" />
+    <Content Include="images\crests\human.png" />
+    <Content Include="images\crests\khemri.png" />
+    <Content Include="images\crests\lizardman.png" />
+    <Content Include="images\crests\necromantic.png" />
+    <Content Include="images\crests\norse.png" />
+    <Content Include="images\crests\nurgle.png" />
+    <Content Include="images\crests\ogre.png" />
+    <Content Include="images\crests\orc.png" />
+    <Content Include="images\crests\simyn.png" />
+    <Content Include="images\crests\skaven.png" />
+    <Content Include="images\crests\slann.png" />
+    <Content Include="images\crests\undead.png" />
+    <Content Include="images\crests\underworld.png" />
+    <Content Include="images\crests\vampire.png" />
+    <Content Include="images\crests\wood elf.png" />
+    <Content Include="images\LRB5\Page-1-Image-1.png" />
+    <Content Include="images\LRB5\Page-10-Image-26.png" />
+    <Content Include="images\LRB5\Page-10-Image-27.png" />
+    <Content Include="images\LRB5\Page-10-Image-28.png" />
+    <Content Include="images\LRB5\Page-10-Image-29.png" />
+    <Content Include="images\LRB5\Page-11-Image-30.png" />
+    <Content Include="images\LRB5\Page-11-Image-31.png" />
+    <Content Include="images\LRB5\Page-11-Image-32.png" />
+    <Content Include="images\LRB5\Page-12-Image-49.png" />
+    <Content Include="images\LRB5\Page-12-Image-52.png" />
+    <Content Include="images\LRB5\Page-12-Image-53.png" />
+    <Content Include="images\LRB5\Page-12-Image-54.png" />
+    <Content Include="images\LRB5\Page-12-Image-55.png" />
+    <Content Include="images\LRB5\Page-12-Image-56.png" />
+    <Content Include="images\LRB5\Page-12-Image-57.png" />
+    <Content Include="images\LRB5\Page-12-Image-58.png" />
+    <Content Include="images\LRB5\Page-12-Image-59.png" />
+    <Content Include="images\LRB5\Page-13-Image-125.png" />
+    <Content Include="images\LRB5\Page-13-Image-126.png" />
+    <Content Include="images\LRB5\Page-13-Image-127.png" />
+    <Content Include="images\LRB5\Page-14-Image-128.png" />
+    <Content Include="images\LRB5\Page-14-Image-129.png" />
+    <Content Include="images\LRB5\Page-14-Image-130.png" />
+    <Content Include="images\LRB5\Page-14-Image-131.png" />
+    <Content Include="images\LRB5\Page-14-Image-132.png" />
+    <Content Include="images\LRB5\Page-15-Image-133.png" />
+    <Content Include="images\LRB5\Page-16-Image-134.png" />
+    <Content Include="images\LRB5\Page-17-Image-135.png" />
+    <Content Include="images\LRB5\Page-18-Image-136.png" />
+    <Content Include="images\LRB5\Page-18-Image-137.png" />
+    <Content Include="images\LRB5\Page-18-Image-138.png" />
+    <Content Include="images\LRB5\Page-19-Image-139.png" />
+    <Content Include="images\LRB5\Page-19-Image-140.png" />
+    <Content Include="images\LRB5\Page-19-Image-141.png" />
+    <Content Include="images\LRB5\Page-19-Image-142.png" />
+    <Content Include="images\LRB5\Page-19-Image-143.png" />
+    <Content Include="images\LRB5\Page-19-Image-144.png" />
+    <Content Include="images\LRB5\Page-2-Image-1.png" />
+    <Content Include="images\LRB5\Page-2-Image-2.png" />
+    <Content Include="images\LRB5\Page-2-Image-3.png" />
+    <Content Include="images\LRB5\Page-20-Image-145.png" />
+    <Content Include="images\LRB5\Page-20-Image-146.png" />
+    <Content Include="images\LRB5\Page-21-Image-147.png" />
+    <Content Include="images\LRB5\Page-21-Image-148.png" />
+    <Content Include="images\LRB5\Page-21-Image-149.png" />
+    <Content Include="images\LRB5\Page-21-Image-150.png" />
+    <Content Include="images\LRB5\Page-21-Image-151.png" />
+    <Content Include="images\LRB5\Page-22-Image-152.png" />
+    <Content Include="images\LRB5\Page-22-Image-153.png" />
+    <Content Include="images\LRB5\Page-22-Image-154.png" />
+    <Content Include="images\LRB5\Page-22-Image-155.png" />
+    <Content Include="images\LRB5\Page-22-Image-156.png" />
+    <Content Include="images\LRB5\Page-22-Image-169.png" />
+    <Content Include="images\LRB5\Page-23-Image-170.png" />
+    <Content Include="images\LRB5\Page-23-Image-187.png" />
+    <Content Include="images\LRB5\Page-23-Image-244.png" />
+    <Content Include="images\LRB5\Page-23-Image-245.png" />
+    <Content Include="images\LRB5\Page-23-Image-246.png" />
+    <Content Include="images\LRB5\Page-24-Image-171.png" />
+    <Content Include="images\LRB5\Page-24-Image-172.png" />
+    <Content Include="images\LRB5\Page-24-Image-173.png" />
+    <Content Include="images\LRB5\Page-24-Image-247.png" />
+    <Content Include="images\LRB5\Page-24-Image-248.png" />
+    <Content Include="images\LRB5\Page-24-Image-249.png" />
+    <Content Include="images\LRB5\Page-24-Image-250.png" />
+    <Content Include="images\LRB5\Page-25-Image-174.png" />
+    <Content Include="images\LRB5\Page-25-Image-175.png" />
+    <Content Include="images\LRB5\Page-25-Image-251.png" />
+    <Content Include="images\LRB5\Page-25-Image-252.png" />
+    <Content Include="images\LRB5\Page-25-Image-253.png" />
+    <Content Include="images\LRB5\Page-25-Image-254.png" />
+    <Content Include="images\LRB5\Page-25-Image-255.png" />
+    <Content Include="images\LRB5\Page-25-Image-256.png" />
+    <Content Include="images\LRB5\Page-25-Image-257.png" />
+    <Content Include="images\LRB5\Page-25-Image-258.png" />
+    <Content Include="images\LRB5\Page-25-Image-259.png" />
+    <Content Include="images\LRB5\Page-25-Image-260.png" />
+    <Content Include="images\LRB5\Page-25-Image-261.png" />
+    <Content Include="images\LRB5\Page-25-Image-262.png" />
+    <Content Include="images\LRB5\Page-25-Image-263.png" />
+    <Content Include="images\LRB5\Page-26-Image-176.png" />
+    <Content Include="images\LRB5\Page-26-Image-177.png" />
+    <Content Include="images\LRB5\Page-26-Image-178.png" />
+    <Content Include="images\LRB5\Page-26-Image-264.png" />
+    <Content Include="images\LRB5\Page-28-Image-179.png" />
+    <Content Include="images\LRB5\Page-28-Image-180.png" />
+    <Content Include="images\LRB5\Page-28-Image-181.png" />
+    <Content Include="images\LRB5\Page-28-Image-265.png" />
+    <Content Include="images\LRB5\Page-28-Image-266.png" />
+    <Content Include="images\LRB5\Page-29-Image-182.png" />
+    <Content Include="images\LRB5\Page-29-Image-267.png" />
+    <Content Include="images\LRB5\Page-29-Image-268.png" />
+    <Content Include="images\LRB5\Page-29-Image-269.png" />
+    <Content Include="images\LRB5\Page-29-Image-270.png" />
+    <Content Include="images\LRB5\Page-29-Image-271.png" />
+    <Content Include="images\LRB5\Page-29-Image-272.png" />
+    <Content Include="images\LRB5\Page-3-Image-2.png" />
+    <Content Include="images\LRB5\Page-3-Image-3.png" />
+    <Content Include="images\LRB5\Page-3-Image-4.png" />
+    <Content Include="images\LRB5\Page-3-Image-5.png" />
+    <Content Include="images\LRB5\Page-30-Image-183.png" />
+    <Content Include="images\LRB5\Page-30-Image-184.png" />
+    <Content Include="images\LRB5\Page-30-Image-185.png" />
+    <Content Include="images\LRB5\Page-30-Image-186.png" />
+    <Content Include="images\LRB5\Page-30-Image-187.png" />
+    <Content Include="images\LRB5\Page-30-Image-188.png" />
+    <Content Include="images\LRB5\Page-30-Image-189.png" />
+    <Content Include="images\LRB5\Page-30-Image-190.png" />
+    <Content Include="images\LRB5\Page-30-Image-191.png" />
+    <Content Include="images\LRB5\Page-30-Image-192.png" />
+    <Content Include="images\LRB5\Page-30-Image-193.png" />
+    <Content Include="images\LRB5\Page-30-Image-194.png" />
+    <Content Include="images\LRB5\Page-30-Image-195.png" />
+    <Content Include="images\LRB5\Page-30-Image-196.png" />
+    <Content Include="images\LRB5\Page-30-Image-197.png" />
+    <Content Include="images\LRB5\Page-30-Image-273.png" />
+    <Content Include="images\LRB5\Page-31-Image-199.png" />
+    <Content Include="images\LRB5\Page-32-Image-200.png" />
+    <Content Include="images\LRB5\Page-32-Image-202.png" />
+    <Content Include="images\LRB5\Page-32-Image-203.png" />
+    <Content Include="images\LRB5\Page-32-Image-204.png" />
+    <Content Include="images\LRB5\Page-32-Image-205.png" />
+    <Content Include="images\LRB5\Page-32-Image-274.png" />
+    <Content Include="images\LRB5\Page-33-Image-275.png" />
+    <Content Include="images\LRB5\Page-33-Image-276.png" />
+    <Content Include="images\LRB5\Page-34-Image-209.png" />
+    <Content Include="images\LRB5\Page-34-Image-210.png" />
+    <Content Include="images\LRB5\Page-34-Image-211.png" />
+    <Content Include="images\LRB5\Page-34-Image-212.png" />
+    <Content Include="images\LRB5\Page-34-Image-277.png" />
+    <Content Include="images\LRB5\Page-34-Image-278.png" />
+    <Content Include="images\LRB5\Page-34-Image-279.png" />
+    <Content Include="images\LRB5\Page-35-Image-280.png" />
+    <Content Include="images\LRB5\Page-35-Image-281.png" />
+    <Content Include="images\LRB5\Page-35-Image-282.png" />
+    <Content Include="images\LRB5\Page-35-Image-283.png" />
+    <Content Include="images\LRB5\Page-35-Image-284.png" />
+    <Content Include="images\LRB5\Page-35-Image-285.png" />
+    <Content Include="images\LRB5\Page-35-Image-286.png" />
+    <Content Include="images\LRB5\Page-36-Image-215.png" />
+    <Content Include="images\LRB5\Page-39-Image-546.png" />
+    <Content Include="images\LRB5\Page-39-Image-547.png" />
+    <Content Include="images\LRB5\Page-39-Image-548.png" />
+    <Content Include="images\LRB5\Page-39-Image-549.png" />
+    <Content Include="images\LRB5\Page-39-Image-550.png" />
+    <Content Include="images\LRB5\Page-39-Image-551.png" />
+    <Content Include="images\LRB5\Page-39-Image-552.png" />
+    <Content Include="images\LRB5\Page-39-Image-553.png" />
+    <Content Include="images\LRB5\Page-39-Image-554.png" />
+    <Content Include="images\LRB5\Page-4-Image-4.png" />
+    <Content Include="images\LRB5\Page-4-Image-5.png" />
+    <Content Include="images\LRB5\Page-4-Image-6.png" />
+    <Content Include="images\LRB5\Page-4-Image-7.png" />
+    <Content Include="images\LRB5\Page-40-Image-557.png" />
+    <Content Include="images\LRB5\Page-44-Image-989.png" />
+    <Content Include="images\LRB5\Page-5-Image-6.png" />
+    <Content Include="images\LRB5\Page-5-Image-7.png" />
+    <Content Include="images\LRB5\Page-5-Image-8 (2).png" />
+    <Content Include="images\LRB5\Page-5-Image-8.png" />
+    <Content Include="images\LRB5\Page-5-Image-9 (2).png" />
+    <Content Include="images\LRB5\Page-5-Image-9.png" />
+    <Content Include="images\LRB5\Page-6-Image-10.png" />
+    <Content Include="images\LRB5\Page-6-Image-11.png" />
+    <Content Include="images\LRB5\Page-7-Image-12.png" />
+    <Content Include="images\LRB5\Page-7-Image-13.png" />
+    <Content Include="images\LRB5\Page-7-Image-14.png" />
+    <Content Include="images\LRB5\Page-7-Image-15.png" />
+    <Content Include="images\LRB5\Page-7-Image-16.png" />
+    <Content Include="images\LRB5\Page-7-Image-17.png" />
+    <Content Include="images\LRB5\Page-7-Image-18.png" />
+    <Content Include="images\LRB5\Page-7-Image-19.png" />
+    <Content Include="images\LRB5\Page-7-Image-20.png" />
+    <Content Include="images\LRB5\Page-7-Image-21.png" />
+    <Content Include="images\LRB5\Page-8-Image-10.png" />
+    <Content Include="images\LRB5\Page-8-Image-22.png" />
+    <Content Include="images\LRB5\Page-8-Image-23.png" />
+    <Content Include="images\LRB5\Page-8-Image-24.png" />
+    <Content Include="images\LRB5\Page-8-Image-25.png" />
+    <Content Include="images\LRB5\Page-9-Image-11.png" />
+    <Content Include="images\LRB5\Page-9-Image-12.png" />
+    <Content Include="images\LRB5\Page-9-Image-13.png" />
+    <Content Include="images\minis\beastman.png" />
+    <Content Include="images\minis\dwarf blitzer.png" />
+    <Content Include="images\minis\hack enslash.png" />
+    <Content Include="images\minis\halfling.png" />
+    <Content Include="images\minis\human thrower.png" />
+    <Content Include="images\minis\khemri mummy.png" />
+    <Content Include="images\minis\kroxigor.png" />
+    <Content Include="images\minis\morg n thorg.png" />
+    <Content Include="images\minis\ogre.png" />
+    <Content Include="images\minis\orc lineman.png" />
+    <Content Include="images\minis\ramtut iii.png" />
+    <Content Include="images\minis\skink.png" />
+    <Content Include="images\minis\thrall.png" />
+    <Content Include="images\minis\undead cheerleader.png" />
+    <Content Include="images\minis\witch elf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bloodbowl" />
+    <Folder Include="images" />
+    <Folder Include="images\crests" />
+    <Folder Include="images\LRB5" />
+    <Folder Include="images\minis" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
