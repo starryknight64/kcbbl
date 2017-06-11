@@ -1,10 +1,33 @@
-var Express = require("express")
-var MySQL = require("mysql")
+var express = require("express")
+var mysql = require("mysql")
 var Type = require("type-of-is")
-var async = require("async-if-else")(require("async"))
+//var async = require("async-if-else")(require("async"))
+//var bootstrap = require("express-bootstrap-service")
 
-var app = Express()
-var db = MySQL.createConnection({
+var path = __dirname + "/views/"
+var app = express()
+app.set("view engine", "pug")
+//app.use(bootstrap.serve)
+app.use("/js", express.static(__dirname + "/node_modules/tether/dist/js"))
+app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"))
+app.use("/js", express.static(__dirname + "/views/js"))
+app.use("/css", express.static(__dirname + "/node_modules/tether/dist/css"))
+app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"))
+app.use("/css", express.static(__dirname + "/views/css"))
+app.use("/images", express.static(__dirname + "/views/images"))
+var router = express.Router()
+router.use(function (req, res, next) {
+    console.log(req.url)
+    next()
+})
+// bootstrap.options = {
+//     path: "./node_modules/bootstrap",
+//     styleSheetEngine: "css",
+//     minified: true,
+//     resourcesPath: "./node_modules/bootstrap/dist/"//__dirname + "/bootstrap/dist/"
+// }
+// router.use(bootstrap.serve)
+var db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
@@ -13,10 +36,16 @@ var db = MySQL.createConnection({
 db.connect()
 
 function handleError(res, error) {
-    if (Type.is(error, Object)) {
-        error["stacktrace"] = error.stack.split("\n")
+    err = {}
+    if (Type.is(error, Error)) {
+        err.error = error.message
+        err.stacktrace = error.stack.split("\n")
+    } else if (Type.is(error, String)) {
+        err.error = error
+    } else {
+        err = error
     }
-    res.status(400).send(error)
+    res.status(400).send(err)
 }
 
 function getID(num) {
@@ -33,360 +62,342 @@ function getID(num) {
         } else {
             return NaN
         }
+    } else if (num <= 0) {
+        return NaN
     }
     return num
 }
 
-function get(table, cols, id, res, callback) {
+function get(table, id, cols) {
     if (!Type.is(table, String)) {
-        res.status(400).send("Table name must be a string!")
-        return
-    }
-    if (!Type.is(cols, Array)) {
-        res.status(400).send("Columns must be an array!")
-        return
+        return Promise.reject("Table name must be a string!")
     }
     id = getID(id)
     if (!id) {
-        res.status(400).send("ID must be a positive integer!")
-        return
+        return Promise.reject(table + " ID must be a positive integer!")
+    }
+    if (!Type.is(cols, Array)) {
+        cols = [table + ".*"]
     }
 
-    var sql = "SELECT " + cols.join() + " FROM `" + table + "` WHERE id=?"
-    db.query(sql, [id], function (error, results, fields) {
-        if (error) {
-            handleError(res, error)
-            return
-        }
-        if (Type.is(results, Array) && results.length == 0) {
-            res.status(404).send(table + " '" + id + "' does not exist!")
-            return
-        }
-        callback(results[0])
+    var sql = "SELECT " + cols.join(",") + " FROM `" + table + "` WHERE id=?"
+    return new Promise((resolve, reject) => {
+        db.query(sql, [id], (error, results, fields) => {
+            if (error) {
+                return reject(error)
+            }
+            if (Type.is(results, Array) && results.length == 0) {
+                return reject(table + " '" + id + "' does not exist!")
+            }
+            return resolve(results[0])
+        })
     })
 }
 
-function getMany(table, cols, wheres, values, res, callback) {
+function getMany(table, cols, wheres, values, joins) {
     if (!Type.is(table, String)) {
-        res.status(400).send("Table name must be a string!")
-        return
+        return Promise.reject("Table name must be a string!")
     }
     if (!Type.is(cols, Array)) {
-        res.status(400).send("Columns must be an array!")
-        return
+        cols = [table + ".*"]
     }
     if (!Type.is(wheres, Array)) {
-        res.status(400).send("Wheres must be an array!")
-        return
+        wheres = []
     }
     if (!Type.is(values, Array)) {
-        res.status(400).send("Values must be an array!")
-        return
+        values = []
     }
     if (wheres.length != values.length) {
-        res.status(400).send("Wheres array length must match Values array length!")
-        return
+        return Promise.reject("Wheres array length must match Values array length!")
+    }
+    if (!Type.is(joins, Array)) {
+        joins = []
     }
 
-    var sql = "SELECT " + cols.join(",") + " FROM `" + table + "`"
+    var sql = "SELECT DISTINCT " + cols.join(",") + " FROM `" + table + "`"
+    if (joins.length > 0) {
+        sql += joins.join(" ")
+    }
     if (wheres.length > 0) {
         sql += " WHERE " + wheres.join("=? AND ") + "=?"
     }
-    db.query(sql, values, function (error, results, fields) {
-        if (error) {
-            handleError(res, error)
-            return
-        }
-        callback(results)
-    })
-}
-
-function getSeason(id, res, callback) {
-    get("season", ["*"], id, res, callback)
-}
-function getSeasons(res, callback) {
-    getMany("season", ["*"], [], [], res, callback)
-}
-function getSeasonsForCoach(coachID, res, callback) {
-    getCoach(coachID, res, function (coach) {
-        var sql = "SELECT season.* FROM season " +
-            "INNER JOIN team ON team.season_id = season.id " +
-            "WHERE team.coach_id=?"
-        db.query(sql, [coach.id], function (error, results, fields) {
+    sql += " ORDER BY " + table + ".id ASC"
+    return new Promise((resolve, reject) => {
+        db.query(sql, values, (error, results, fields) => {
             if (error) {
-                handleError(res, error)
-                return
+                return reject(error)
             }
-            callback(results)
+            resolve(results)
         })
     })
 }
 
-function getCoach(id, res, callback) {
-    get("coach", ["id", "name"], id, res, callback)
+function getSeason(id) {
+    return get("season", id)
 }
-function getCoaches(res, callback) {
-    getMany("coach", ["id", "name"], [], [], res, callback)
+function getSeasons(wheres, values, joins) {
+    return getMany("season", undefined, wheres, values, joins)
 }
-function getCoachesForSeason(seasonID, res, callback) {
-    getSeason(seasonID, res, function (season) {
-        var sql = "SELECT coach.id,coach.name FROM team " +
-            "INNER JOIN coach ON coach.id = team.coach_id " +
-            "WHERE team.season_id=?"
-        db.query(sql, [season.id], function (error, results, fields) {
-            if (error) {
-                handleError(res, error)
-                return
-            }
-            callback(results)
+function getSeasonsForCoach(coachID) {
+    return getCoach(coachID)
+        .then((coach) => {
+            return getSeasons(["team.coach_id"], [coach.id], ["INNER JOIN team ON team.season_id = season.id"])
         })
-    })
 }
 
-function getTeam(id, res, callback) {
-    get("team", ["*"], id, res, callback)
+function getCoach(id) {
+    return get("coach", id, ["coach.id", "coach.name"])
 }
-function getTeams(res, callback) {
-    getMany("team", ["*"], [], [], res, callback)
+function getCoaches(wheres, values, joins) {
+    return getMany("coach", ["coach.id", "coach.name"], wheres, values, joins)
 }
-function getTeamsForCoach(coachID, seasonID, res, callback) {
-    getCoach(coachID, res, function (coach) {
+function getCoachesForSeason(seasonID) {
+    return getSeason(seasonID)
+        .then((season) => {
+            return getCoaches(["team.season_id"], [season.id], ["INNER JOIN team ON team.coach_id = coach.id"])
+        })
+}
+
+function getTeam(id) {
+    return get("team", id)
+}
+function getTeams(wheres, values, joins) {
+    return getMany("team", ["*"], wheres, values, joins)
+}
+function getTeamsForCoach(coachID, seasonID) {
+    return getCoach(coachID).then((coach) => {
         wheres = ["coach_id"]
         values = [coach.id]
 
-        seasonID = getID(seasonID)
-        if (seasonID) {
-            getSeason(seasonID, res, function (season) {
-                wheres.push("season_id")
-                values.push(season.id)
-                getMany("team", ["*"], wheres, values, res, callback)
-            })
-        } else {
-            getMany("team", ["*"], wheres, values, res, callback)
-        }
-    })
-}
-function getTeamsForSeason(seasonID, res, callback) {
-    getSeason(seasonID, res, function (season) {
-        getMany("team", ["*"], ["season_id"], [season.id], res, callback)
-    })
-}
-
-function getPlayer(id, res, callback) {
-    get("player", ["*"], id, res, callback)
-}
-function getPlayers(res, callback) {
-    getMany("player", ["*"], [], [], res, callback)
-}
-function getPlayersForSeason(seasonID, res, callback) {
-    getSeason(seasonID, res, function (season) {
-        var sql = "SELECT player.* FROM team " +
-            "INNER JOIN team_player ON team_player.team_id=team.id " +
-            "INNER JOIN player ON player.id=team_player.player_id " +
-            "WHERE team.season_id=?"
-        db.query(sql, [season.id], function (error, results, fields) {
-            if (error) {
-                handleError(res, error)
-                return
+        return new Promise((resolve, reject) => {
+            if (seasonID !== undefined) {
+                return getSeason(seasonID).then((season) => {
+                    wheres.push("season_id")
+                    values.push(season.id)
+                    return resolve(season)
+                }).catch(reject)
             }
-            callback(results)
+            return resolve(null)
+        }).then((season) => {
+            return getTeams(wheres, values)
         })
     })
 }
+function getTeamsForSeason(seasonID) {
+    return getSeason(seasonID).then((season) => {
+        return getTeams(["season_id"], [season.id])
+    })
+}
 
-function getMatch(id, res, callback) {
-    get("match", ["*"], id, res, callback)
+function getPlayer(id) {
+    return get("player", id)
 }
-function getMatches(res, callback) {
-    getMany("match", ["*"], [], [], res, callback)
+function getPlayers(wheres, values, joins) {
+    return getMany("player", ["*"], wheres, values, joins)
 }
-function getMatchesForSeason(seasonID, matchTypeID, res, callback) {
-    getSeason(seasonID, res, function (season) {
+function getPlayersForSeason(seasonID) {
+    return getSeason(seasonID).then((season) => {
+        return getPlayers(["team.season_id"], [season.id], ["INNER JOIN team_player ON team_player.player_id=player.id", "INNER JOIN team ON team.id=team_player.team_id"])
+    })
+}
+
+function getMatch(id) {
+    return get("match", id)
+}
+function getMatches(wheres, values, joins) {
+    return getMany("match", ["*"], wheres, values, joins)
+}
+function getMatchesForSeason(seasonID, matchTypeID) {
+    return getSeason(seasonID).then((season) => {
         wheres = ["season_id"]
         values = [season.id]
 
-        matchTypeID = getID(matchTypeID)
-        if (matchTypeID) {
-            getMatchType(matchTypeID, res, function (matchType) {
-                wheres.push("match_type_id")
-                values.push(matchType.id)
-                getMany("match", ["*"], wheres, values, res, callback)
-            })
-        } else {
-            getMany("match", ["*"], wheres, values, res, callback)
-        }
-    })
-}
-function getMatchesForCoach(coachID, seasonID, teamID, matchTypeID, res, callback) {
-    getCoach(coachID, res, function (coach) {
-        wheres = ["coach_id"]
-        values = [coach.id]
-
-        seasonID = getID(seasonID)
-        teamID = getID(teamID)
-        matchTypeID = getID(matchTypeID)
-        async.series([
-            async.if(function (callback) { return callback(null, seasonID) },
-                function (callback) {
-                    getSeason(seasonID, res, function (season) {
-                        wheres.push("season_id")
-                        values.push(season.id)
-                        callback(null, season)
-                    }
-            }),
-            async.if(function (callback) { return callback(null, teamID) },
-                function (callback) {
-                    getTeam(teamID, res, function (team) {
-                        wheres.push("team_id")
-                        values.push(team.id)
-                        callback(null, team)
-                    }
-                }),
-            async.if(function (callback) { return callback(null, matchTypeID) },
-                function (callback) {
-                    getMatchType(matchTypeID, res, function (matchType) {
+        return new Promise((resolve, reject) => {
+            if (matchTypeID !== undefined) {
+                return getMatchType(matchTypeID)
+                    .then((matchType) => {
                         wheres.push("match_type_id")
                         values.push(matchType.id)
-                        callback(null, matchType)
-                    }
-            }),
-            function (callback) {
-                getMany("match", ["*"], wheres, values, res, callback)
+                        return resolve(matchType)
+                    }).catch(reject)
             }
-        ])
+            return resolve(null)
+        }).then((matchType) => {
+            return getMatches(wheres, values)
+        })
+    })
+}
+function getMatchesForCoach(coachID, seasonID, teamID, matchTypeID) {
+    return getCoach(coachID).then((coach) => {
+        wheres = ["team.coach_id"]
+        values = [coach.id]
+        joins = ["INNER JOIN team ON (team.id = match.team1_id OR team.id = match.team2_id)"]
+
+        return new Promise((resolve, reject) => {
+            if (seasonID !== undefined) {
+                return getSeason(seasonID)
+                    .then((season) => {
+                        wheres.push("match.season_id")
+                        values.push(season.id)
+                        return resolve(season)
+                    }).catch(reject)
+            }
+            return resolve(null)
+        }).then((season) => {
+            if (teamID !== undefined) {
+                return getTeam(teamID)
+                    .then((team) => {
+                        wheres.push("team.id")
+                        values.push(team.id)
+                        return resolve(team)
+                    }).catch(reject)
+            }
+            return resolve(null)
+        }).then((team) => {
+            if (matchTypeID !== undefined) {
+                return getMatchType(matchTypeID)
+                    .then((matchType) => {
+                        wheres.push("match.match_type_id")
+                        values.push(matchType.id)
+                        return resolve(matchType)
+                    }).catch(reject)
+            }
+            return resolve(null)
+        }).then((matchType) => {
+            return getMatches(wheres, values, joins)
+        })
     })
 }
 
-function getMatchType(id, res, callback) {
-    get("match_type", ["*"], id, res, callback)
+function getMatchType(id) {
+    return get("match_type", id)
 }
-function getMatchTypes(res, callback) {
-    getMany("match_type", ["*"], [], [], res, callback)
-}
-
-function getPurchase(id, res, callback) {
-    get("purchase", ["*"], id, res, callback)
-}
-function getPurchases(res, callback) {
-    getMany("purchase", ["*"], [], [], res, callback)
+function getMatchTypes(wheres, values, joins) {
+    return getMany("match_type", ["*"], wheres, values, joins)
 }
 
-function getInducement(id, res, callback) {
-    get("inducement", ["*"], id, res, callback)
+function getPurchase(id) {
+    return get("purchase", id)
 }
-function getInducements(res, callback) {
-    getMany("inducement", ["*"], [], [], res, callback)
-}
-
-function getPlayerType(id, res, callback) {
-    get("player_type", ["*"], id, res, callback)
-}
-function getPlayerTypes(res, callback) {
-    getMany("player_type", ["*"], [], [], res, callback)
+function getPurchases(wheres, values, joins) {
+    return getMany("purchase", ["*"], wheres, values, joins)
 }
 
-function getSkill(id, res, callback) {
-    get("skill", ["*"], id, res, callback)
+function getInducement(id) {
+    return get("inducement", id)
 }
-function getSkills(res, callback) {
-    getMany("skill", ["*"], [], [], res, callback)
+function getInducements(wheres, values, joins) {
+    return getMany("inducement", ["*"], wheres, values, joins)
 }
 
-app.get("/", function (req, res) {
-    console.log(req.url)
-    res.send("Hello World!")
+function getPlayerType(id) {
+    return get("player_type", id)
+}
+function getPlayerTypes(wheres, values, joins) {
+    return getMany("player_type", ["*"], wheres, values, joins)
+}
+
+function getSkill(id) {
+    return get("skill", id)
+}
+function getSkills(wheres, values, joins) {
+    return getMany("skill", ["*"], wheres, values, joins)
+}
+
+router.get("/", function (req, res) {
+    res.render("index", { title: "Hey!", message: "Hello World!" })
+})
+router.get("/about", function (req, res) {
+    res.sendFile(path + "about.html")
+})
+router.get("/contact", function (req, res) {
+    res.sendFile(path + "contact.html")
 })
 
-app.get("/seasons", function (req, res) {
-    console.log(req.url)
-    getSeasons(res, function (results) {
-        res.send(results)
-    })
+router.get("/seasons", function (req, res) {
+    getSeasons()
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/season/:id", function (req, res) {
-    console.log(req.url)
+router.get("/season/:id", function (req, res) {
     var id = req.params.id
-    getSeason(id, res, function (season) {
-        res.send(season)
-    })
+    getSeason(id)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/season/:id/teams", function (req, res) {
-    console.log(req.url)
+router.get("/season/:id/teams", function (req, res) {
     var id = req.params.id
-    getTeamsForSeason(id, res, function (results) {
-        res.send(results)
-    })
+    getTeamsForSeason(id)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/season/:id/matches", function (req, res) {
-    console.log(req.url)
+router.get("/season/:id/matches", function (req, res) {
     var id = req.params.id
     var matchTypeID = req.query.matchtype
-    getMatchesForSeason(id, matchTypeID, res, function (results) {
-        res.send(results)
-    })
+    getMatchesForSeason(id, matchTypeID)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/season/:id/coaches", function (req, res) {
-    console.log(req.url)
+router.get("/season/:id/coaches", function (req, res) {
     var id = req.params.id
-    getCoachesForSeason(id, res, function (results) {
-        res.send(results)
-    })
+    getCoachesForSeason(id)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/season/:id/players", function (req, res) {
-    console.log(req.url)
+router.get("/season/:id/players", function (req, res) {
     var id = req.params.id
-    getPlayersForSeason(id, res, function (results) {
-        res.send(results)
-    })
+    getPlayersForSeason(id)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/coaches", function (req, res) {
-    console.log(req.url)
-    getCoaches(res, function (results) {
-        res.send(results)
-    })
+router.get("/coaches", function (req, res) {
+    getCoaches()
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/coach/:id", function (req, res) {
-    console.log(req.url)
+router.get("/coach/:id", function (req, res) {
     var id = req.params.id
-    getCoach(id, res, function (results) {
-        res.send(results)
-    })
+    getCoach(id)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/coach/:id/seasons", function (req, res) {
-    console.log(req.url)
+router.get("/coach/:id/seasons", function (req, res) {
     var id = req.params.id
-    getSeasonsForCoach(id, res, function (results) {
-        res.send(results)
-    })
+    getSeasonsForCoach(id)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/coach/:id/teams", function (req, res) {
-    console.log(req.url)
+router.get("/coach/:id/teams", function (req, res) {
     var id = req.params.id
     var seasonID = req.query.season
-    getTeamsForCoach(id, seasonID, res, function (results) {
-        res.send(results)
-    })
+    getTeamsForCoach(id, seasonID)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
 
-app.get("/coach/:id/matches", function (req, res) {
-    console.log(req.url)
+router.get("/coach/:id/matches", function (req, res) {
     var id = req.params.id
     var seasonID = req.query.season
-    var team = req.query.team
+    var teamID = req.query.team
     var matchTypeID = req.query.matchType
-    getMatchesForCoach(id, seasonID, teamID, matchTypeID, res, function (results) {
-        res.send(results)
-    })
+    getMatchesForCoach(id, seasonID, teamID, matchTypeID)
+        .then((obj) => res.send(obj))
+        .catch((error) => handleError(res, error))
 })
+
+app.use("/", router)
+app.use("*", function (req, res) {
+    res.sendFile(path + "404.html");
+});
 
 var server = app.listen(8081, "localhost", function () {
     var host = server.address().address
