@@ -1,0 +1,16 @@
+extends ../_bootstrap
+append styles
+	// Custom styles for this template
+	link(href='css/starter-template.css', rel='stylesheet')
+block body
+	+navbar-fixed("KCBBL","navbar","inverse","/")
+		+nav_item("about") About
+		+nav_item("contact") Contact
+		+nav_item_dropdown("#")(label="Dropdown")
+			+nav_item("#") Action
+			+nav_item("#") Another Action
+			+nav_item("#") Something else here
+			+nav_divider
+			+nav_header Nav header
+			+nav_item("#") Separated link
+			+nav_item("#") One more separated link
