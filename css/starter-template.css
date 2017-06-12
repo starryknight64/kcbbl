@@ -10,5 +10,6 @@ body {
 }
 
 .logo {
+  min-height: 25vh;
   max-height: 80vh;
 }

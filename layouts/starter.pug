@@ -3,14 +3,28 @@ append styles
 	// Custom styles for this template
 	link(href='css/starter-template.css', rel='stylesheet')
 block body
-	+navbar-fixed("KCBBL","navbar","inverse","/")
-		+nav_item("about") About
-		+nav_item("contact") Contact
-		+nav_item_dropdown("#")(label="Dropdown")
-			+nav_item("#") Action
-			+nav_item("#") Another Action
-			+nav_item("#") Something else here
-			+nav_divider
-			+nav_header Nav header
-			+nav_item("#") Separated link
-			+nav_item("#") One more separated link
+	//- +navbar-fixed("KCBBL","navbar","inverse","/")
+	nav.navbar.navbar-fixed-top.navbar-inverse(role="navigation")
+		.container
+			.navbar-header
+				button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar")
+					span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand(href="/") KCBBL
+			.collapse.navbar-collapse#navbar
+				ul.nav.navbar-nav
+					li
+						a(href="seasons") Seasons
+					li
+						a(href="coaches") Coaches
+					li
+						a(href="matches") Matches
+					li
+						a(href="players") Players
+					li
+						a(href="stats") Stats
+				form.navbar-form.navbar-right
+					div.form-group
+						input.form-control(type="text" placeholder="Search...")
