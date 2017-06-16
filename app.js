@@ -45,11 +45,11 @@ app.use("/coaches", coaches)
 app.use("/players", players)
 app.use("/teams", teams)
 app.use("/search", search)
-app.use("/rest/coaches", coachesREST)
-app.use("/rest/seasons", seasonsREST)
-app.use("/rest/matches", matchesREST)
-app.use("/rest/players", playersREST)
-app.use("/rest/teams", teamsREST)
+app.use("/rest/coaches", coachesREST.router)
+app.use("/rest/seasons", seasonsREST.router)
+app.use("/rest/matches", matchesREST.router)
+app.use("/rest/players", playersREST.router)
+app.use("/rest/teams", teamsREST.router)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

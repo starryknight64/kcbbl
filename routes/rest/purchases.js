@@ -14,6 +14,8 @@ function getPurchases(wheres, values, joins) {
   return db.getMany("purchase", ["*"], wheres, values, joins)
 }
 
-module.exports = router
-module.exports = getPurchase
-module.exports = getPurchases
+module.exports = {
+  router: router,
+  getPurchase: getPurchase,
+  getPurchases: getPurchases
+}

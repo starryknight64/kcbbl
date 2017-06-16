@@ -21,7 +21,9 @@ function getCoachesForSeason(seasonID) {
     })
 }
 
-module.exports = router
-module.exports = getCoach
-module.exports = getCoaches
-module.exports = getCoachesForSeason
+module.exports = {
+  router: router,
+  getCoach: getCoach,
+  getCoaches: getCoaches,
+  getCoachesForSeason: getCoachesForSeason
+}

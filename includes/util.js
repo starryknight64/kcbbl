@@ -19,3 +19,16 @@ function getID(num) {
     }
     return num
 }
+
+function handleError(res, error) {
+    err = {}
+    if (Type.is(error, Error)) {
+        err.error = error.message
+        err.stacktrace = error.stack.split("\n")
+    } else if (Type.is(error, String)) {
+        err.error = error
+    } else {
+        err = error
+    }
+    res.status(400).send(err)
+}

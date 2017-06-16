@@ -14,6 +14,8 @@ function getPlayerTypes(wheres, values, joins) {
   return db.getMany("player_type", ["*"], wheres, values, joins)
 }
 
-module.exports = router
-module.exports = getPlayerType
-module.exports = getPlayerTypes
+module.exports = {
+  router: router,
+  getPlayerType: getPlayerType,
+  getPlayerTypes: getPlayerTypes
+}

@@ -20,7 +20,9 @@ function getPlayersForSeason(seasonID) {
   })
 }
 
-module.exports = router
-module.exports = getPlayer
-module.exports = getPlayers
-module.exports = getPlayersForSeason
+module.exports = {
+  router: router,
+  getPlayer: getPlayer,
+  getPlayers: getPlayers,
+  getPlayersForSeason: getPlayersForSeason
+}

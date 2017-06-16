@@ -79,8 +79,10 @@ function getMatchesForCoach(coachID, seasonID, teamID, matchTypeID) {
   })
 }
 
-module.exports = router
-module.exports = getMatch
-module.exports = getMatches
-module.exports = getMatchesForCoach
-module.exports = getMatchesForSeason
+module.exports = {
+  router: router,
+  getMatch: getMatch,
+  getMatches: getMatches,
+  getMatchesForCoach: getMatchesForCoach,
+  getMatchesForSeason: getMatchesForSeason
+}

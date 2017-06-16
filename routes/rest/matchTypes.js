@@ -14,6 +14,8 @@ function getMatchTypes(wheres, values, joins) {
   return db.getMany("match_type", ["*"], wheres, values, joins)
 }
 
-module.exports = router
-module.exports = getMatchType
-module.exports = getMatchTypes
+module.exports = {
+  router: router,
+  getMatchType: getMatchType,
+  getMatchTypes: getMatchTypes
+}

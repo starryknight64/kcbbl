@@ -14,6 +14,8 @@ function getInducements(wheres, values, joins) {
   return db.getMany("inducement", ["*"], wheres, values, joins)
 }
 
-module.exports = router
-module.exports = getInducement
-module.exports = getInducements
+module.exports = {
+  router: router,
+  getInducement: getInducement,
+  getInducements: getInducements
+}

@@ -1,3 +1,4 @@
+var Type = require("type-of-is")
 var mysql = require("mysql")
 var util = require("./util")
 
@@ -73,6 +74,8 @@ function getMany(table, cols, wheres, values, joins) {
     })
 }
 
-module.exports = db
-module.exports = get
-module.exports = getMany
+module.exports = {
+    db: db,
+    get: get,
+    getMany: getMany
+}

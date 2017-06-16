@@ -14,6 +14,8 @@ function getSkills(wheres, values, joins) {
   return db.getMany("skill", ["*"], wheres, values, joins)
 }
 
-module.exports = router
-module.exports = getSkill
-module.exports = getSkills
+module.exports = {
+  router: router,
+  getSkill: getSkill,
+  getSkills: getSkills
+}
