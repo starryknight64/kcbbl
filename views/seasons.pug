@@ -1,0 +1,8 @@
+extends ../layouts/starter
+
+append body
+	.container.body-container
+		h1 Seasons
+		.btn-group-vertical(role="group" aria-label="...")
+			each season, i in seasons
+				button.btn.btn-default(id="#{season.id}" type="button") #{season.name}
