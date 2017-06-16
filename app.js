@@ -6,12 +6,12 @@ var cookieParser = require("cookie-parser")
 var bodyParser = require("body-parser")
 
 var routes = require("./routes/index")
-var coaches = require("./routes/coaches")
-var seasons = require("./routes/seasons")
-var matches = require("./routes/matches")
-var players = require("./routes/players")
-var teams = require("./routes/teams")
 var search = require("./routes/search")
+var coaches = require("./routes/rest/coaches")
+var seasons = require("./routes/rest/seasons")
+var matches = require("./routes/rest/matches")
+var players = require("./routes/rest/players")
+var teams = require("./routes/rest/teams")
 
 var app = express()
 

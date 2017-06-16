@@ -1,7 +1,12 @@
-extends ../node_modules/pug-bootstrap/layouts/starter
+extends ../layouts/starter
+
 append styles
 	link(href="/css/style.css", rel="stylesheet")
-block body
-	h1= message
-	h2= error.status
-	pre #{error.stack}
+
+append body
+	div.col-sm-6.col-sm-offset-3
+		div.panel.panel-default
+			div.panel-body
+				img.img-responsive.center-block(src="/images/error.jpg")
+				h1.text-center #{error.status}: #{message}
+				pre.hidden #{error.stack}

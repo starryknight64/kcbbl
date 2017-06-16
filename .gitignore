@@ -3,3 +3,4 @@ obj/
 *.pyc
 .vs/
 .vs/*
+Thumbs.db
