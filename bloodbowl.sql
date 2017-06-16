@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 06, 2017 at 03:42 AM
+-- Generation Time: Jun 16, 2017 at 01:53 AM
 -- Server version: 5.5.27
 -- PHP Version: 7.1.2
 
@@ -28,7 +28,6 @@ USE `bloodbowl`;
 -- Table structure for table `coach`
 --
 
-DROP TABLE IF EXISTS `coach`;
 CREATE TABLE `coach` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -43,7 +42,6 @@ CREATE TABLE `coach` (
 -- Table structure for table `inducement`
 --
 
-DROP TABLE IF EXISTS `inducement`;
 CREATE TABLE `inducement` (
   `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -59,7 +57,6 @@ CREATE TABLE `inducement` (
 -- Table structure for table `match`
 --
 
-DROP TABLE IF EXISTS `match`;
 CREATE TABLE `match` (
   `id` int(11) NOT NULL,
   `season_id` int(11) NOT NULL,
@@ -83,7 +80,6 @@ CREATE TABLE `match` (
 -- Table structure for table `match_type`
 --
 
-DROP TABLE IF EXISTS `match_type`;
 CREATE TABLE `match_type` (
   `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL
@@ -95,7 +91,6 @@ CREATE TABLE `match_type` (
 -- Table structure for table `player`
 --
 
-DROP TABLE IF EXISTS `player`;
 CREATE TABLE `player` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -121,7 +116,6 @@ CREATE TABLE `player` (
 -- Table structure for table `player_report`
 --
 
-DROP TABLE IF EXISTS `player_report`;
 CREATE TABLE `player_report` (
   `id` int(11) NOT NULL,
   `player_id` int(11) NOT NULL,
@@ -147,7 +141,6 @@ CREATE TABLE `player_report` (
 -- Table structure for table `player_type`
 --
 
-DROP TABLE IF EXISTS `player_type`;
 CREATE TABLE `player_type` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -167,7 +160,6 @@ CREATE TABLE `player_type` (
 -- Table structure for table `player_type_skill`
 --
 
-DROP TABLE IF EXISTS `player_type_skill`;
 CREATE TABLE `player_type_skill` (
   `player_type_id` int(11) NOT NULL,
   `skill_id` int(11) NOT NULL
@@ -179,7 +171,6 @@ CREATE TABLE `player_type_skill` (
 -- Table structure for table `player_type_skill_type_double`
 --
 
-DROP TABLE IF EXISTS `player_type_skill_type_double`;
 CREATE TABLE `player_type_skill_type_double` (
   `player_type_id` int(11) NOT NULL,
   `skill_type_id` int(11) NOT NULL
@@ -191,7 +182,6 @@ CREATE TABLE `player_type_skill_type_double` (
 -- Table structure for table `player_type_skill_type_normal`
 --
 
-DROP TABLE IF EXISTS `player_type_skill_type_normal`;
 CREATE TABLE `player_type_skill_type_normal` (
   `player_type_id` int(11) NOT NULL,
   `skill_type_id` int(11) NOT NULL
@@ -203,7 +193,6 @@ CREATE TABLE `player_type_skill_type_normal` (
 -- Table structure for table `purchase`
 --
 
-DROP TABLE IF EXISTS `purchase`;
 CREATE TABLE `purchase` (
   `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -218,7 +207,6 @@ CREATE TABLE `purchase` (
 -- Table structure for table `race`
 --
 
-DROP TABLE IF EXISTS `race`;
 CREATE TABLE `race` (
   `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -231,7 +219,6 @@ CREATE TABLE `race` (
 -- Table structure for table `season`
 --
 
-DROP TABLE IF EXISTS `season`;
 CREATE TABLE `season` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -246,7 +233,6 @@ CREATE TABLE `season` (
 -- Table structure for table `skill`
 --
 
-DROP TABLE IF EXISTS `skill`;
 CREATE TABLE `skill` (
   `id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -260,7 +246,6 @@ CREATE TABLE `skill` (
 -- Table structure for table `skill_type`
 --
 
-DROP TABLE IF EXISTS `skill_type`;
 CREATE TABLE `skill_type` (
   `id` int(11) NOT NULL,
   `name` varchar(25) COLLATE utf8_unicode_ci NOT NULL
@@ -272,7 +257,6 @@ CREATE TABLE `skill_type` (
 -- Table structure for table `team`
 --
 
-DROP TABLE IF EXISTS `team`;
 CREATE TABLE `team` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -294,7 +278,6 @@ CREATE TABLE `team` (
 -- Table structure for table `team_player`
 --
 
-DROP TABLE IF EXISTS `team_player`;
 CREATE TABLE `team_player` (
   `team_id` int(11) NOT NULL,
   `player_id` int(11) NOT NULL
