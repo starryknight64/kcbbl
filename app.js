@@ -34,9 +34,10 @@ app.use(express.static(path.join(__dirname, "public")))
 
 app.use("/js", express.static(__dirname + "/node_modules/jquery/dist"))
 app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"))
+app.use("/js", express.static(__dirname + "/public/js"))
 app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"))
-app.use("/css", express.static(__dirname + "/css"))
-app.use("/images", express.static(__dirname + "/images"))
+app.use("/css", express.static(__dirname + "/public/css"))
+app.use("/images", express.static(__dirname + "/public/images"))
 
 app.use("/", index)
 app.use("/seasons", seasons)

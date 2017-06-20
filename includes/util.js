@@ -32,3 +32,8 @@ function handleError(res, error) {
     }
     res.status(400).send(err)
 }
+
+module.exports = {
+    getID: getID,
+    handleError: handleError
+}

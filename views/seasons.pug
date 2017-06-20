@@ -2,7 +2,20 @@ extends ../layouts/starter
 
 append body
 	.container.body-container
-		h1 Seasons
-		.btn-group-vertical(role="group" aria-label="...")
-			each season, i in seasons
-				button.btn.btn-default(id="#{season.id}" type="button") #{season.name}
+		.row
+			.col-md-2
+				h1 Seasons
+			.col-md-4
+				nav
+					ul.pagination
+						li
+							a(href=prev)
+								span &laquo;
+						each seasonPaged, i in seasonsPaged
+							li
+								a.season(id=seasonPaged.id href="/seasons/"+seasonPaged.id)
+									span #{seasonPaged.id}
+						li
+							a(href=next)
+								span &raquo;
+		.row.season-body

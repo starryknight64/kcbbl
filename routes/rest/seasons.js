@@ -15,6 +15,9 @@ router.get("/", function (req, res) {
 
 router.get("/:id", function (req, res) {
   var id = req.params.id
+  if (id == "current") {
+    id = 2
+  }
   getSeason(id)
     .then((obj) => res.send(obj))
     .catch((error) => util.handleError(res, error))
