@@ -1,5 +1,9 @@
 extends ../layouts/starter
 
+//- append head
+//- 	script(src="js/jquery.min.js")
+//- 	script(src="js/seasons.js")
+
 append body
 	.container.body-container
 		.row
@@ -15,6 +19,8 @@ append body
 							li
 								a.season(id=seasonPaged.id href="/seasons/"+seasonPaged.id)
 									span #{seasonPaged.id}
+									//- if seasonPaged.id == season.id
+									//- 	(current)
 						li
 							a(href=next)
 								span &raquo;

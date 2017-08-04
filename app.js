@@ -4,6 +4,7 @@ var favicon = require("serve-favicon")
 var logger = require("morgan")
 var cookieParser = require("cookie-parser")
 var bodyParser = require("body-parser")
+var Type = require("type-of-is")
 
 var index = require("./routes/index")
 var seasons = require("./routes/seasons")
@@ -76,10 +77,14 @@ if (app.get("env") === "development") {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
+  if (Type.is(err, String)) {
+    err = new Error(err)
+  }
+
   res.status(err.status || 500)
   res.render("error", {
     message: err.message,
-    error: {}
+    error: err
   })
 })
 

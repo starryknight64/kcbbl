@@ -1,5 +1,6 @@
 var express = require("express")
 var router = express.Router()
+var util = require("../includes/util")
 var seasonsREST = require("./rest/seasons")
 
 /* GET home page. */
@@ -10,58 +11,61 @@ router.get("/", function (req, res, next) {
   })
 })
 
-router.get("/:id", function (req, res) {
+function getPage(things, thing, restURLPrefix) {
+  var maxID = 0
+  for (var i in things) {
+    var thisThing = things[i]
+    if (thisThing.id > maxID) {
+      maxID = thisThing.id
+    }
+  }
+
+  var prev = "#"
+  var nxt = "#"
+  if (thing.id > 1) {
+    prev = restURLPrefix + (thing.id - 1)
+  }
+  if (thing.id < maxID) {
+    nxt = restURLPrefix + (thing.id + 1)
+  }
+
+  var maxPages = 5
+  var pagePad = Math.floor(maxPages / 2)
+  var thingsPaged = []
+  for (var i in things) {
+    var thingPaged = things[i]
+    if (thingPaged.id < thing.id) {
+      if (thingPaged.id >= thing.id - pagePad) {
+        thingsPaged.push(thingPaged)
+      }
+    } else if (thingPaged.id > thing.id) {
+      if (thingPaged.id <= thing.id + pagePad) {
+        thingsPaged.push(thingPaged)
+      }
+    } else {
+      thingsPaged.push(thingPaged)
+    }
+  }
+
+  return { prev: prev, thingsPaged: thingsPaged, thing: thing, next: nxt }
+}
+
+router.get("/:id", function (req, res, next) {
   var id = req.params.id
-  return seasonsREST.getSeasons().then((seasons) => {
-    var season = null
-    var curSeason = null
-    var maxID = 0
-    for (var i in seasons) {
-      var thisSeason = seasons[i]
-      if (thisSeason.id == id) {
-        season = thisSeason
-      } else if (thisSeason.id == 2) {
-        curSeason = thisSeason
-      }
-
-      if (thisSeason.id > maxID) {
-        maxID = thisSeason.id
-      }
-    }
-
-    if (season == null) {
-      season = curSeason
-    }
-
-    var prev = "#"
-    var nxt = "#"
-    if (season.id > 1) {
-      prev = "/seasons/" + (season.id - 1)
-    }
-    if (season.id < maxID) {
-      nxt = "/seasons/" + (season.id + 1)
-    }
-
-    var maxPages = 5
-    var pagePad = Math.floor(maxPages / 2)
-    var seasonsPaged = []
-    for (var i in seasons) {
-      var seasonPaged = seasons[i]
-      if (seasonPaged.id < season.id) {
-        if (seasonPaged.id >= season.id - pagePad) {
-          seasonsPaged.push(seasonPaged)
+  return seasonsREST.getSeason(id)
+    .then(seasonsREST.getSeasons())
+    .then((season, seasons) => {
+      var curSeason = null
+      for (var i in seasons) {
+        var thisSeason = seasons[i]
+        if (thisSeason.id == 2) {
+          curSeason = thisSeason
         }
-      } else if (seasonPaged.id > season.id) {
-        if (seasonPaged.id <= season.id + pagePad) {
-          seasonsPaged.push(seasonPaged)
-        }
-      } else {
-        seasonsPaged.push(seasonPaged)
       }
-    }
 
-    res.render("seasons", { prev: prev, seasonsPaged: seasonsPaged, season: season, next: nxt })
-  })
+      var page = getPage(seasons, season, "/seasons/")
+      res.render("seasons", { prev: page.prev, seasonsPaged: page.thingsPaged, season: season, next: page.next })
+    }).catch(next)
 })
 
 module.exports = router

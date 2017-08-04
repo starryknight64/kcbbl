@@ -10,7 +10,7 @@ var playersREST = require("./players")
 router.get("/", function (req, res) {
   getSeasons()
     .then((obj) => res.send(obj))
-    .catch((error) => util.handleError(res, error))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
 router.get("/:id", function (req, res) {
@@ -20,14 +20,14 @@ router.get("/:id", function (req, res) {
   }
   getSeason(id)
     .then((obj) => res.send(obj))
-    .catch((error) => util.handleError(res, error))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
 router.get("/:id/teams", function (req, res) {
   var id = req.params.id
   teamsREST.getTeamsForSeason(id)
     .then((obj) => res.send(obj))
-    .catch((error) => util.handleError(res, error))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
 router.get("/:id/matches", function (req, res) {
@@ -35,21 +35,21 @@ router.get("/:id/matches", function (req, res) {
   var matchTypeID = req.query.matchtype
   matchesREST.getMatchesForSeason(id, matchTypeID)
     .then((obj) => res.send(obj))
-    .catch((error) => util.handleError(res, error))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
 router.get("/:id/coaches", function (req, res) {
   var id = req.params.id
   coachesREST.getCoachesForSeason(id)
     .then((obj) => res.send(obj))
-    .catch((error) => util.handleError(res, error))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
 router.get("/:id/players", function (req, res) {
   var id = req.params.id
   playersREST.getPlayersForSeason(id)
     .then((obj) => res.send(obj))
-    .catch((error) => util.handleError(res, error))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
 

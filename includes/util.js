@@ -20,7 +20,7 @@ function getID(num) {
     return num
 }
 
-function handleError(res, error) {
+function handleRESTError(res, error) {
     err = {}
     if (Type.is(error, Error)) {
         err.error = error.message
@@ -33,7 +33,11 @@ function handleError(res, error) {
     res.status(400).send(err)
 }
 
+function handleError(res,error){
+    
+}
+
 module.exports = {
     getID: getID,
-    handleError: handleError
+    handleRESTError: handleRESTError
 }
