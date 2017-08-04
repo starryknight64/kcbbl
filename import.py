@@ -130,6 +130,7 @@ SKILLS = [
     ["Thick Skull", "Strength", "This player treats a roll of 8 on the Injury table, after any modifiers have been applied, as a Stunned result rather than a KO'd result. This skill may be used even if the player is Prone or Stunned."],
     ["Throw Team-Mate", "Extraordinary",
      "A player with this skill has the ability to throw a player from the same team instead of the ball! (This includes the ball if the player thrown already has it!) The throwing player must end the movement of his Pass Action standing next to the intended team-mate to be thrown, who must have the Right Stuff skill and be standing. The pass is worked out exactly the same as if the player with Throw Team-Mate was passing a ball, except the player must subtract 1 from the D6 roll when he passes the player, fumbles are not automatically turnovers, and Long Pass or Long Bomb range passes are not possible. In addition, accurate passes are treated instead as inaccurate passes thus scattering the thrown player three times as players are heavier and harder to pass than a ball. The thrown player cannot be intercepted. A fumbled team-mate will land in the square he originally occupied. If the thrown player scatters off the pitch, he is beaten up by the crowd in the same manner as a player who has been pushed off the pitch. If the final square he scatters into is occupied by another player, treat the player landed on as Knocked Down and roll for Armour (even if already Prone or Stunned), and then the player being thrown will scatter one more square. If the thrown player would land on another player, continue to scatter the thrown player until he ends up in an empty square or off the pitch (i.e., he cannot land on more than one player). See the Right Stuff entry to see if the player lands on his feet or head-down in a crumpled heap!"],
+    ["Timmm-ber!", "Extraordinary", "This player spends so much time on the floor that their teammates have developed a knack for helping them up. If a player with this skill attempts to stand up after being knocked over, other players from their team can assist if they are adjacent, standing, and not in any enemy tackle zones. Each player that assists in this way adds 1 to the result of the dice roll to see whether the player stands up, but remember that a 1 is always a failure, no matter how many players are helping! Assisting a player to stand up does not count as an Action, and a player can assist regardless of whether they have taken an Action."],
     ["Titchy", "Extraordinary", "Titchy players tend to be even smaller and more nimble than other Stunty players. To represent this, the player may add 1 to any Dodge roll he attempts. On the other hand, while opponents do have to dodge to leave any of a Titchy player's tackle zones, a Titchy player is so small that he does not exert a -1 modifier when opponents dodge into any of his tackle zones."],
     ["Two Heads", "Mutation", "Having two heads enables this player to watch where he is going and the opponent trying to make sure he does not get there at the same time. Add 1 to all Dodge rolls the player makes."],
     ["Very Long Legs", "Mutation", "The player is allowed to add 1 to the D6 roll whenever he attempts to intercept or uses the Leap skill. In addition, the Safe Throw skill may not be used to affect any Interception rolls made by this player."],
@@ -181,7 +182,7 @@ PLAYER_TYPES = [
     ["Chaos", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "SM", "GAP"],
 
     ["Chaos Dwarf", 16, "Hobgoblin", 40, 6, 3, 3, 7, [], "G", "ASP"],
-    ["Chaos Dwarf", 6, "Chaos Dwarf Blocker", 70, 4, 3, 2, 9, ["Block", "Tackle", "Thick Skull"], "GS", "APM"],
+    ["Chaos Dwarf", 6, "Blocker", 70, 4, 3, 2, 9, ["Block", "Tackle", "Thick Skull"], "GS", "APM"],
     ["Chaos Dwarf", 2, "Bull Centaur", 130, 6, 4, 2, 9, ["Sprint", "Sure Feet", "Thick Skull"], "GS", "AP"],
     ["Chaos Dwarf", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "S", "GAPM"],
 
@@ -209,8 +210,8 @@ PLAYER_TYPES = [
     ["Goblin", 1, "Pogoer", 110, 7, 2, 3, 7, ["Dodge", "Leap", "Stunty", "Very Long Legs"], "A", "GSP"],
     ["Goblin", 2, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAP"],
 
-    ["Halfling", 16, "Halfling", 30, 5, 2, 3, 6, ["Dodge", "Right Stuff", "Stunty"], "A", "GSP"],
-    ["Halfling", 2, "Treeman", 120, 2, 6, 1, 10, ["Mighty Blow", "Stand Firm", "Strong Arm", "Take Root", "Thick Skull", "Throw Team-Mate"], "S", "GAP"],
+    ["Halfling", 16, "Hopeful", 30, 5, 2, 3, 6, ["Dodge", "Right Stuff", "Stunty"], "A", "GSP"],
+    ["Halfling", 2, "Treeman", 120, 2, 6, 1, 10, ["Mighty Blow", "Stand Firm", "Strong Arm", "Take Root", "Thick Skull", "Throw Team-Mate", "Timmm-ber!"], "S", "GAP"],
 
     ["High Elf", 16, "Lineman", 70, 6, 3, 4, 8, [], "GA", "SP"],
     ["High Elf", 2, "Thrower", 90, 6, 3, 4, 8, ["Pass", "Safe Throw"], "GAP", "S"],
@@ -218,7 +219,7 @@ PLAYER_TYPES = [
     ["High Elf", 2, "Blitzer", 100, 7, 3, 4, 8, ["Block"], "GA", "SP"],
 
     ["Human", 16, "Lineman", 50, 6, 3, 3, 8, [], "G", "ASP"],
-    ["Human", 4, "Catcher", 70, 8, 2, 3, 7, ["Catch", "Dodge"], "GA", "SP"],
+    ["Human", 4, "Catcher", 60, 8, 2, 3, 7, ["Catch", "Dodge"], "GA", "SP"],
     ["Human", 2, "Thrower", 70, 6, 3, 3, 8, ["Sure Hands", "Pass"], "GP", "AS"],
     ["Human", 4, "Blitzer", 90, 7, 3, 3, 8, ["Block"], "GS", "AP"],
     ["Human", 1, "Ogre", 140, 5, 5, 2, 9, ["Loner", "Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAP"],
@@ -247,8 +248,8 @@ PLAYER_TYPES = [
 
     ["Nurgle", 16, "Rotter", 40, 5, 3, 3, 8, ["Decay", "Nurgle's Rot"], "GM", "ASP"],
     ["Nurgle", 4, "Pestigor", 80, 6, 3, 3, 8, ["Horns", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
-    ["Nurgle", 4, "Nurgle Warrior", 110, 4, 4, 2, 9, ["Disturbing Presence", "Foul Appearance", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
-    ["Nurgle", 1, "Beast of Nurgle", 140, 4, 5, 1, 9, ["Loner", "Disturbing Presence", "Foul Appearance", "Mighty Blow", "Nurgle's Rot", "Really Stupid", "Regeneration", "Tentacles"], "S", "GAPM"],
+    ["Nurgle", 4, "Warrior", 110, 4, 4, 2, 9, ["Disturbing Presence", "Foul Appearance", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
+    ["Nurgle", 1, "Beast", 140, 4, 5, 1, 9, ["Loner", "Disturbing Presence", "Foul Appearance", "Mighty Blow", "Nurgle's Rot", "Really Stupid", "Regeneration", "Tentacles"], "S", "GAPM"],
 
     ["Ogre", 16, "Snotling", 20, 5, 1, 3, 5, ["Dodge", "Right Stuff", "Side Step", "Stunty", "Titchy"], "A", "GSP"],
     ["Ogre", 6, "Ogre", 140, 5, 5, 2, 9, ["Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAP"],
@@ -286,8 +287,8 @@ PLAYER_TYPES = [
     ["Bretonnian", 4, "Blitzer", 110, 7, 3, 3, 8, ["Block", "Catch", "Dauntless"], "GAP", "S"],
 
     ["Daemons of Khorne", 16, "Pit Fighter", 60, 6, 3, 4, 8, ["Frenzy"], "GP", "AS"],
-    ["Daemons of Khorne", 4, "Bloodletter Daemon", 80, 6, 3, 3, 7, ["Horns", "Juggernaught", "Regeneration"], "GAS", "P"],
-    ["Daemons of Khorne", 2, "Khorne Herald", 90, 6, 3, 3, 8, ["Frenzy", "Horns", "Juggernaught"], "GS", "AP"],
+    ["Daemons of Khorne", 4, "Bloodletter", 80, 6, 3, 3, 7, ["Horns", "Juggernaught", "Regeneration"], "GAS", "P"],
+    ["Daemons of Khorne", 2, "Herald", 90, 6, 3, 3, 8, ["Frenzy", "Horns", "Juggernaught"], "GS", "AP"],
     ["Daemons of Khorne", 1, "Bloodthirster", 180, 6, 5, 1, 9, ["Loner", "Frenzy", "Wild Animal", "Claws", "Horns", "Juggernaught", "Regeneration"], "S", "GAP"],
 
     ["Simyin", 12, "Bonobo", 50, 6, 3, 3, 7, ["Extra Arms"], "G", "ASP"],
@@ -300,8 +301,8 @@ PLAYER_TYPES = [
     ["Chaos Pact", 1, "Goblin Renegade", 40, 6, 2, 3, 7, ["Animosity", "Dodge", "Right Stuff", "Stunty"], "AM", "GSP"],
     ["Chaos Pact", 1, "Skaven Renegade", 50, 7, 3, 3, 7, ["Animosity"], "GM", "ASP"],
     ["Chaos Pact", 1, "Dark Elf Renegade", 70, 6, 3, 4, 8, ["Animosity"], "GAM", "SP"],
-    ["Chaos Pact", 1, "Chaos Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAPM"],
-    ["Chaos Pact", 1, "Chaos Ogre", 140, 5, 5, 2, 9, ["Loner", "Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAPM"],
+    ["Chaos Pact", 1, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAPM"],
+    ["Chaos Pact", 1, "Ogre", 140, 5, 5, 2, 9, ["Loner", "Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAPM"],
     ["Chaos Pact", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "S", "GAPM"],
 
     ["Slann", 16, "Lineman", 60, 6, 3, 3, 8, ["Leap", "Very Long Legs"], "G", "ASP"],
@@ -309,11 +310,11 @@ PLAYER_TYPES = [
     ["Slann", 4, "Blitzer", 110, 7, 3, 3, 8, ["Diving Tackle", "Jump Up", "Leap", "Very Long Legs"], "GAS", "P"],
     ["Slann", 1, "Kroxigor", 140, 6, 5, 1, 9, ["Loner", "Bone-head", "Mighty Blow", "Prehensile Tail", "Thick Skull"], "S", "GAP"],
 
-    ["Underworld", 12, "Underworld Goblin", 40, 6, 2, 3, 7, ["Right Stuff", "Dodge", "Stunty"], "AM", "GSP"],
+    ["Underworld", 12, "Goblin", 40, 6, 2, 3, 7, ["Right Stuff", "Dodge", "Stunty"], "AM", "GSP"],
     ["Underworld", 2, "Skaven Lineman", 50, 7, 3, 3, 7, ["Animosity"], "GM", "ASP"],
     ["Underworld", 2, "Skaven Thrower", 70, 7, 3, 3, 7, ["Animosity", "Pass", "Sure Hands"], "GPM", "AS"],
     ["Underworld", 2, "Skaven Blitzer", 90, 7, 3, 3, 8, ["Animosity", "Block"], "GSM", "AP"],
-    ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
+    ["Underworld", 1, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
 ]
 STAR_PLAYERS = [
     ["Barik Farblast", ["Dwarf"], ["Loner", "Hail Mary Pass", "Pass", "Secret Weapon", "Strong Arm", "Sure Hands", "Thick Skull"], 60, 6, 3, 3, 8, ""],
