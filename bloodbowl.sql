@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 16, 2017 at 01:53 AM
+-- Generation Time: Aug 04, 2017 at 06:36 AM
 -- Server version: 5.5.27
 -- PHP Version: 7.1.2
 
@@ -19,8 +19,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `bloodbowl`
 --
-CREATE DATABASE IF NOT EXISTS `bloodbowl` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `bloodbowl`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `card`
+--
+
+CREATE TABLE `card` (
+  `id` int(11) NOT NULL,
+  `deck_id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `aka` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `timing` text COLLATE utf8_unicode_ci NOT NULL,
+  `effect` text COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -34,6 +48,18 @@ CREATE TABLE `coach` (
   `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `username` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deck`
+--
+
+CREATE TABLE `deck` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `cost` smallint(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -288,12 +314,27 @@ CREATE TABLE `team_player` (
 --
 
 --
+-- Indexes for table `card`
+--
+ALTER TABLE `card`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `aka` (`aka`);
+
+--
 -- Indexes for table `coach`
 --
 ALTER TABLE `coach`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`,`email`),
   ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `deck`
+--
+ALTER TABLE `deck`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
 
 --
 -- Indexes for table `inducement`

@@ -6,7 +6,9 @@ Created on Apr 22, 2017
 
 @author: Phillip
 
+TRUNCATE `card`;
 TRUNCATE `coach`;
+TRUNCATE `deck`;
 TRUNCATE `inducement`;
 TRUNCATE `match`;
 TRUNCATE `match_type`;
@@ -24,7 +26,9 @@ TRUNCATE `skill_type`;
 TRUNCATE `team`;
 TRUNCATE `team_player`;
 
+ALTER Table `card` AUTO_INCREMENT=1;
 ALTER Table `coach` AUTO_INCREMENT=1;
+ALTER Table `deck` AUTO_INCREMENT=1;
 ALTER Table `inducement` AUTO_INCREMENT=1;
 ALTER Table `match` AUTO_INCREMENT=1;
 ALTER Table `match_type` AUTO_INCREMENT=1;
@@ -383,16 +387,19 @@ INDUCEMENTS = [
     ["Halfling Master Chef", 1, {"Halfling": 100, "Otherwise": 300}, "Halfling teams may hire a Halfling Master Chef for 100,000 gold pieces; any other team can hire the Chef for 300,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."],
     ["Igor", 1, {"All": 100}, "Any team that cannot purchase a permanent Apothecary can hire an Igor for 100,000 gold pieces to assist the team. An Igor is a master of needle and thread on rotting flesh, connecting hip bone to leg bone, rewrapping funeral wraps and so on. He can really get the boys shambling back to the pitch. An Igor may only be used once per a game to re-roll one failed Regeneration roll for a player."],
     ["Wandering Apothecary", 2, {"All": 100}, "Any team may hire a Wandering Apothecary or two to help during the match for 100,000 gold pieces each, if the team can normally purchase a permanent Apothecary. Often these Apothecaries are powerful priests of the local deity. While they would never allow themselves to be a permanent part of a heathen Blood Bowl team, they have been known to assist for a single match for a generous donation to their faith. The rules for Wandering Apothecaries are identical to the rules for purchased Apothecaries on page 17. Only one Apothecary may be used to re-roll each Casualty roll."],
-    ["Wizard", 1, {"All": 150},
-     "A team may hire a Wizard to help your team during the match for 150,000 gold pieces. Wizards, just like everybody else in the Old World, are keen sports fans and many are fanatically loyal in support of their chosen team. It is not surprising, then, that soon after the game was born, Wizards started 'helping out' the team they supported with carefully selected spells. Soon games were awash with magic as rival Wizards battled to give their team the edge. In the end, the Colleges of Magic were forced to insist that only teams that had bought a special license from the Colleges of Magic were allowed to have magical assistance. They limited this assistance to one spell per match, and even this had to be chosen from a very limited selection and cast by an officially appointed Colleges of Magic team Wizard. Wizards and fans alike soon realised that they really wanted to see a proper Blood Bowl match rather than a spellcasting contest, so the new rules were soon universally accepted.\nAny team is allowed to hire a Wizard for a match, as long as they can afford the whopping licensing fee charged by the College of Magic concerned. No team may hire more than one Wizard per match. Wizards can be represented in games with one of the Wizard models from the range of Citadel miniatures for Warhammer. This isn't strictly necessary, but looks a lot better than representing a Wizard with a bottle top or tiddlywink!\nOnce per game, the Wizard is allowed to cast either a Fireball spell or a Lightning Bolt spell. Wizards may only cast spells at the start of his own turn before any player performs an Action or immediately after his own team's turn has ended even if it ended with a turnover.\nFireball: Choose a target square anywhere on the pitch. Roll one dice to hit each standing player (from either team) that is either in the target square or a square adjacent to it. If the 'to hit' roll is a 4 or more then the target is Knocked Down. If it is a 3 or less he manages to dodge the fireball's blast. Make an Armour roll (and possible Injury as well) for any player that is Knocked Down as if they had been Knocked Down by a player with the Mighty Blow skill. If a player on the moving team is Knocked Down by a fireball, then the moving team does not suffer a turnover unless the player was carrying the ball at the time.\nLightning Bolt: Pick a standing player anywhere on the pitch, and roll one dice. If the score is a 2 or higher, then he has been hit by the lightning bolt. If the roll is a 1 then he manages to dodge out of the way. A player hit by a lightning bolt is Knocked Down and must make an Armour roll (and possible Injury as well) as if hit by a player with the Mighty Blow skill."]
+    ["Wizard", 1, {"All": 150}, "A team may hire a Wizard to help your team during the match for 150,000 gold pieces. Wizards, just like everybody else in the Old World, are keen sports fans and many are fanatically loyal in support of their chosen team. It is not surprising, then, that soon after the game was born, Wizards started 'helping out' the team they supported with carefully selected spells. Soon games were awash with magic as rival Wizards battled to give their team the edge. In the end, the Colleges of Magic were forced to insist that only teams that had bought a special license from the Colleges of Magic were allowed to have magical assistance. They limited this assistance to one spell per match, and even this had to be chosen from a very limited selection and cast by an officially appointed Colleges of Magic team Wizard. Wizards and fans alike soon realised that they really wanted to see a proper Blood Bowl match rather than a spellcasting contest, so the new rules were soon universally accepted.\nAny team is allowed to hire a Wizard for a match, as long as they can afford the whopping licensing fee charged by the College of Magic concerned. No team may hire more than one Wizard per match. Wizards can be represented in games with one of the Wizard models from the range of Citadel miniatures for Warhammer. This isn't strictly necessary, but looks a lot better than representing a Wizard with a bottle top or tiddlywink!\nOnce per game, the Wizard is allowed to cast either a Fireball spell or a Lightning Bolt spell. Wizards may only cast spells at the start of his own turn before any player performs an Action or immediately after his own team's turn has ended even if it ended with a turnover.\nFireball: Choose a target square anywhere on the pitch. Roll one dice to hit each standing player (from either team) that is either in the target square or a square adjacent to it. If the 'to hit' roll is a 4 or more then the target is Knocked Down. If it is a 3 or less he manages to dodge the fireball's blast. Make an Armour roll (and possible Injury as well) for any player that is Knocked Down as if they had been Knocked Down by a player with the Mighty Blow skill. If a player on the moving team is Knocked Down by a fireball, then the moving team does not suffer a turnover unless the player was carrying the ball at the time.\nLightning Bolt: Pick a standing player anywhere on the pitch, and roll one dice. If the score is a 2 or higher, then he has been hit by the lightning bolt. If the roll is a 1 then he manages to dodge out of the way. A player hit by a lightning bolt is Knocked Down and must make an Armour roll (and possible Injury as well) as if hit by a player with the Mighty Blow skill."],
+    ["Cheerleader", 3, {"All": 20}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
+    ["Assistant Coach", 3, {"All": 20}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
+    ["Marketing Blitz", 5, {"All": 20}, ""]
 ]
 
 PURCHASES = [
-    ["Cheerleader", 10, ["All"], "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
-    ["Assistant Coach", 10, ["All"], "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
-    ["Apothecary", 50, ["All Except", "Khemri", "Necromantic", "Nurgle", "Undead"],
-     "An Apothecary is a healer wise in the ways of medicine and the healing arts who looks after the injured players in a Blood Bowl team - and so has a strenuous and full-time job! It costs 50,000 gold pieces to purchase an Apothecary to permanently look after your team during a match. He may be represented by an appropriate Citadel miniature if you wish. A team may not have more than one purchased Apothecary. Khemri, Necromantic, Nurgle and Undead teams may not purchase or use an Apothecary.\nDuring a match, an Apothecary may attempt to cure a player who has suffered a Casualty or been KO'd. An Apothecary can be used only once per match. If the player was KO'd leave him on the pitch Stunned, or, if he was not on the pitch, put him in the Reserves box. Otherwise immediately after the player suffers the Casualty, you can use the Apothecary to make your opponent roll again on the Casualty table (see page 25) and then you choose which of the two results to apply. If the player is only Badly Hurt after this roll (even if it was the original Casualty roll) the Apothecary has managed to patch him up and pump him full of painkillers so that the player may be moved into the Reserves box."],
-    # ["Team Re-roll", ]
+    ["Cheerleader", {"All":10}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
+    ["Assistant Coach", {"All":10}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
+    ["Apothecary", {"All":50, "Exceptions":["Khemri", "Necromantic", "Nurgle", "Undead"]}, "An Apothecary is a healer wise in the ways of medicine and the healing arts who looks after the injured players in a Blood Bowl team - and so has a strenuous and full-time job! It costs 50,000 gold pieces to purchase an Apothecary to permanently look after your team during a match. He may be represented by an appropriate Citadel miniature if you wish. A team may not have more than one purchased Apothecary. Khemri, Necromantic, Nurgle and Undead teams may not purchase or use an Apothecary.\nDuring a match, an Apothecary may attempt to cure a player who has suffered a Casualty or been KO'd. An Apothecary can be used only once per match. If the player was KO'd leave him on the pitch Stunned, or, if he was not on the pitch, put him in the Reserves box. Otherwise immediately after the player suffers the Casualty, you can use the Apothecary to make your opponent roll again on the Casualty table (see page 25) and then you choose which of the two results to apply. If the player is only Badly Hurt after this roll (even if it was the original Casualty roll) the Apothecary has managed to patch him up and pump him full of painkillers so that the player may be moved into the Reserves box."],
+    ["Team Re-roll", {"Amazon": 50, "Chaos": 60, "Chaos Dwarf": 70, "Dark Elf": 50, "Dwarf": 50, "Elf": 50, "Goblin": 60, "Halfling": 60, "High Elf": 50, "Human": 50, "Khemri": 70, "Lizardman": 60, "Necromantic": 70, "Norse": 60, "Nurgle": 70, "Ogre": 70, "Orc": 60, "Skaven": 60, "Undead": 70, "Vampire": 70, "Wood Elf": 50, "Chaos Pact": 70, "Slann": 50, "Underworld": 70, "Bretonnian": 70, "Daemons of Khorne": 70, "Simyin": 60}, ""],
+    ["Bribe", {"Goblin":100, "Otherwise":200}, "Goblin teams may buy a bribe for 50,000 gold pieces; any other team can buy a bribe for 100,000 gold pieces. Each bribe allows a team to attempt to ignore one call by the referee for a player who has committed a foul to be sent off, or a player armed with a secret weapon to be banned from the match. Roll a D6: on a roll of 2-6 the bribe is effective (preventing a turnover if the player was ejected for fouling), but on a roll of 1 the bribe is wasted and the call still stands! Each bribe may be used once per match."],
+    ["Halfling Master Chef", {"Halfling":200,"Otherwise":600}, "Halfling teams may hire a Halfling Master Chef for 100,000 gold pieces; any other team can hire the Chef for 300,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."]
 ]
 
 MATCH_TYPES = ["Pre-season", "Regular", "Post-season", "Championship"]
@@ -423,6 +430,24 @@ TEAMS = [
     ["The Replacements", "Trevor", "Human", "Season 2"],
     ["Turtle Isle Typhoons", "Chris", "Simyin", "Season 2"],
     ["The Sleeping Giants", "Troy", "Undead", "Season 2"]
+]
+
+DECKS = [
+    ["Misc Mayhem", 50 ],
+    ["Special Team Plays", 50 ],
+    ["Magic Items", 50 ],
+    ["Dirty Tricks", 50 ],
+    ["Good Karma", 100 ],
+    ["Random Events", 200 ],
+    ["Desperate Measures", 400 ]
+]
+
+CARDS = [
+    ["Badyear Git", "2H", "Misc Mayhem", "A goblin doom diver who was too cheap to pay for admission is hit by the kick-off while flying over the stadium.", "Play at any kick-off after all players have been set up and the ball placed, but before any scatter has been rolled.", "The ball scatters 2d6, instead of 1d6, on this kick-off."],
+    # ["", "", "", ""],
+    # ["", "", "", ""],
+    # ["", "", "", ""],
+    # ["", "", "", ""],
 ]
 
 if __name__ == '__main__':
@@ -526,10 +551,11 @@ if __name__ == '__main__':
             for skill in skills:
                 cursor.execute("INSERT IGNORE INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
 
-                # ["Bloodweiser Babe", 2, {"All": 50}, "The team
+                
 
     print
     print "Inducements"
+    # ["Bloodweiser Babe", 2, {"All": 50}, "The team
     for inducement in INDUCEMENTS:
         name = inducement[0]
         maxAmt = inducement[1]
@@ -547,22 +573,54 @@ if __name__ == '__main__':
             # ["Cheerleader", 10, ["All"], "Most Blood Bow
     print
     print "Purchases"
+    # ["Apothecary", {"All":50, "Exceptions":["Khemri", "Necromantic", "Nurgle", "Undead"]}, "An Apothecary is a
     for purchase in PURCHASES:
         name = purchase[0]
-        cost = purchase[1]
-        raceNames = purchase[2]
-        desc = purchase[3]
+        raceCosts = purchase[1]
+        desc = purchase[2]
 
-        raceNames2 = []
-        if "All" in raceNames:
-            print "    %s: All" % name
-            cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
-        elif "All Except" in raceNames:
-            for raceName in raceNames[1:]:
-                for raceName2, raceID in raceIDs.iteritems():
-                    if raceName != raceName2:
+        for raceNameCost, cost in raceCosts.iteritems():
+            if raceNameCost == "All":
+                if "Exceptions" in raceCosts:
+                    raceNames = raceIDs.keys()
+                    exceptRaceNames = raceCosts["Exceptions"]
+                    for exceptRaceName in exceptRaceNames:
+                        raceNames.remove(exceptRaceName)
+
+                    for raceName in raceNames:
                         print "    %s: %s" % (name, raceName)
+                        raceID = raceIDs[raceName]
                         cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                    break
+                else:
+                    print "    All: %s" % name
+                    cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
+            elif raceNameCost != "Exceptions":
+                print "    %s: %s" % (name, raceName)
+                raceID = raceIDs[raceNameCost]
+                cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+
+                if "Otherwise" in raceCosts:
+                    raceNames = raceIDs.keys()
+                    raceNames.remove(raceNameCost)
+
+                    for raceName in raceNames:
+                        print "    %s: %s" % (name, raceName)
+                        raceID = raceIDs[raceName]
+                        cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                    break
+            
+
+        # raceNames2 = []
+        # if "All" in raceNames:
+        #     if "Exceptions" in raceNames:
+        #         for raceName in raceNames[1:]:
+        #             for raceName2, raceID in raceIDs.iteritems():
+        #                 if raceName != raceName2:
+        #                     print "    %s: %s" % (name, raceName)
+        #                     cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+        #     print "    %s: All" % name
+        #     cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
 
     print
     print "Match Types"
@@ -594,6 +652,7 @@ if __name__ == '__main__':
     print
     print "Teams"
     for team in TEAMS:
+
         name = team[0]
         coachName = team[1]
         raceName = team[2]
@@ -606,8 +665,31 @@ if __name__ == '__main__':
 
         cursor.execute("INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,0,0,0,NULL,NULL,NULL,NULL)", (name, coachID, raceID, seasonID))
 
-    # cursor.execute( "SELECT * FROM user" )
-    # users = cursor.fetchall()
+    deckIDs = {}
+    print
+    print "Decks"
+    for deck in DECKS:
+        name = deck[0]
+        cost = deck[1]
+        print "    %s" % name
+        cursor.execute("INSERT IGNORE INTO deck VALUES(NULL,%s,%s)", (name, cost))
+        deckID = cursor.lastrowid
+        deckIDs[name] = deckID
+    
+    print
+    print "Cards"
+    for card in CARDS:
+        name = card[0]
+        aka = card[1]
+        deckName = card[2]
+        desc = card[3]
+        timing = card[4]
+        effect = card[5]
+        print "    %s" % name
 
+        deckID = deckIDs[deckName]
+        cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
+
+    
     print
     print "Done!"
