@@ -47,12 +47,18 @@ ALTER Table `team` AUTO_INCREMENT=1;
 ALTER Table `team_player` AUTO_INCREMENT=1;
 
 '''
+TROPHIES = [
+    ["Spike Bowl", "spike bowl.png"],
+    ["Chaos Cup", "chaos cup.png"],
+    ["Dungeon Bowl", "dungeon bowl.png"],
+    ["Blood Bowl", "blood bowl.png"]
+]
 
 SEASONS = [
-    ["Season 1", "2017-01-01", "2017-03-31"],
-    ["Season 2", "2017-04-01", "2017-06-30"],
-    ["Season 3", "2017-07-01", "2017-09-30"],
-    ["Season 4", "2017-10-01", "2017-12-31"]
+    ["Season 1", "2017-01-01", "2017-03-31", "Spike Bowl"],
+    ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup"],
+    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl"],
+    ["Season 4", "2017-10-01", "2017-12-31", "Blood Bowl"]
 ]
 
 SKILL_TYPES = ["General", "Agility", "Passing", "Strength", "Mutation", "Extraordinary", "Improvement"]
@@ -441,13 +447,112 @@ DECKS = [
     ["Random Events", 200 ],
     ["Desperate Measures", 400 ]
 ]
-
+# 13+13+13+13+26+18+8 = 104
 CARDS = [
     ["Badyear Git", "2H", "Misc Mayhem", "A goblin doom diver who was too cheap to pay for admission is hit by the kick-off while flying over the stadium.", "Play at any kick-off after all players have been set up and the ball placed, but before any scatter has been rolled.", "The ball scatters 2d6, instead of 1d6, on this kick-off."],
-    # ["", "", "", ""],
-    # ["", "", "", ""],
-    # ["", "", "", ""],
-    # ["", "", "", ""],
+    ["Sprinkler Malfunction", "3H", "Misc Mayhem", "", "", ""],
+    ["Eclipse", "4H", "Misc Mayhem", "", "", ""],
+    ["Fanatic Invasion", "5H", "Misc Mayhem", "", "", ""],
+    ["Friendly Fans", "6H", "Misc Mayhem", "", "", ""],
+    ["Rowdy Fans", "7H", "Misc Mayhem", "", "", ""],
+    ["Heckler", "8H", "Misc Mayhem", "", "", ""],
+    ["Hometown Fans", "9H", "Misc Mayhem", "", "", ""],
+    ["Incoming!", "10H", "Misc Mayhem", "", "", ""],
+    ["Rogue Wizard", "JH", "Misc Mayhem", "", "", ""],
+    ["Ball Clone", "QH", "Misc Mayhem", "", "", ""],
+    ["Johnny Waterboy", "KH", "Misc Mayhem", "", "", ""],
+    ["That Babe's Got Talent!", "AH", "Misc Mayhem", "", "", ""],
+    ["Come To Papa!", "2D", "Special Team Plays", "", "", ""],
+    ["Dogged Defense", "3D", "Special Team Plays", "", "", ""],
+    ["Flea Flicker", "4D", "Special Team Plays", "", "", ""],
+    ["Going the Extra Mile", "5D", "Special Team Plays", "", "", ""],
+    ["Heroic Leap", "6D", "Special Team Plays", "", "", ""],
+    ["New Blocking Scheme", "7D", "Special Team Plays", "", "", ""],
+    ["Perfect Kick", "8D", "Special Team Plays", "", "", ""],
+    ["Option Play", "9D", "Special Team Plays", "", "", ""],
+    ["Punt", "10D", "Special Team Plays", "", "", ""],
+    ["Spectacular Catch", "JD", "Special Team Plays", "", "", ""],
+    ["Suicide Blitz", "QD", "Special Team Plays", "", "", ""],
+    ["Wake Up Call", "KD", "Special Team Plays", "", "", ""],
+    ["Beguiling Bracers", "AD", "Special Team Plays", "", "", ""],
+    ["Belt of Invulnerability", "2C", "Magic Items", "", "", ""],
+    ["Beguiling Bracers", "3C", "Magic Items", "", "", ""],
+    ["Fawndough's Headband", "4C", "Magic Items", "", "", ""],
+    ["Force Shield", "5C", "Magic Items", "", "", ""],
+    ["Gikta's Strength of da Bear", "6C", "Magic Items", "", "", ""],
+    ["Gloves of Holding", "7C", "Magic Items", "", "", ""],
+    ["Inertia Dampner", "8C", "Magic Items", "", "", ""],
+    ["Lucky Charm", "9C", "Magic Items", "", "", ""],
+    ["Magic Gloves of Jark Longarm", "10C", "Magic Items", "", "", ""],
+    ["Good Old Magic Codpiece", "JC", "Magic Items", "", "", ""],
+    ["Rabbit's Foot", "QC", "Magic Items", "", "", ""],
+    ["Ring of Teleportation", "KC", "Magic Items", "", "", ""],
+    ["Wand of Smashing", "AC", "Magic Items", "", "", ""],
+    ["Blatant Foul", "2S", "Dirty Tricks", "", "", ""],
+    ["Chop Block", "3S", "Dirty Tricks", "", "", ""],
+    ["Custard Pie", "4S", "Dirty Tricks", "", "", ""],
+    ["Distract", "5S", "Dirty Tricks", "", "", ""],
+    ["Greased Shoes", "6S", "Dirty Tricks", "", "", ""],
+    ["Gromskull's Exploding Runes", "7S", "Dirty Tricks", "", "", ""],
+    ["Illegal Substitution", "8S", "Dirty Tricks", "", "", ""],
+    ["Kicking Boots", "9S", "Dirty Tricks", "", "", ""],
+    ["Pit Trap", "10S", "Dirty Tricks", "", "", ""],
+    ["Spiked Ball", "JS", "Dirty Tricks", "", "", ""],
+    ["Stolen Playbook", "QS", "Dirty Tricks", "", "", ""],
+    ["Trampoline Trap", "KS", "Dirty Tricks", "", "", ""],
+    ["Witch's Brew", "AS", "Dirty Tricks", "", "", ""],
+    ["All Out Blitz", "2H", "Good Karma", "", "", ""],
+    ["Banana Skin", "3H", "Good Karma", "", "", ""],
+    ["Butterfingers", "4H", "Good Karma", "", "", ""],
+    ["Chainsaw", "5H", "Good Karma", "", "", ""],
+    ["Dazed and Confused", "6H", "Good Karma", "", "", ""],
+    ["Doc Bonesaw", "7H", "Good Karma", "", "", ""],
+    ["Extra Training", "8H", "Good Karma", "", "", ""],
+    ["Fan Uproar", "9H", "Good Karma", "", "", ""],
+    ["Hurry Up Offense", "10H", "Good Karma", "", "", ""],
+    ["Intensive Training", "JH", "Good Karma", "", "", ""],
+    ["Unsportsmanlike Conduct", "QH", "Good Karma", "", "", ""],
+    ["Knutt's Spell of Awesome Strength", "KH", "Good Karma", "", "", ""],
+    ["Lewd Maneuvers", "AH", "Good Karma", "", "", ""],
+    ["Lurve Potion", "2D", "Good Karma", "", "", ""],
+    ["Magic Helmet", "3D", "Good Karma", "", "", ""],
+    ["Miracle Worker", "4D", "Good Karma", "", "", ""],
+    ["One with the Kicker", "5D", "Good Karma", "", "", ""],
+    ["Razzle Dazzle", "6D", "Good Karma", "", "", ""],
+    ["Suitable Pitch", "7D", "Good Karma", "", "", ""],
+    ["Rune of Fear", "8D", "Good Karma", "", "", ""],
+    ["Scutt's Scroll of Weather Magic", "9D", "Good Karma", "", "", ""],
+    ["Stiletto", "10D", "Good Karma", "", "", ""],
+    ["Team Anthem", "JD", "Good Karma", "", "", ""],
+    ["The Fan", "QD", "Good Karma", "", "", ""],
+    ["The Wall", "KD", "Good Karma", "", "", ""],
+    ["Woof Woof!", "AD", "Good Karma", "", "", ""],
+    ["Bad Habits", "2C", "Random Events", "", "", ""],
+    ["Ballista", "3C", "Random Events", "", "", ""],
+    ["Blackmail", "4C", "Random Events", "", "", ""],
+    ["Buzzing", "5C", "Random Events", "", "", ""],
+    ["Duh, Where am I?", "6C", "Random Events", "", "", ""],
+    ["Ego Trip", "7C", "Random Events", "", "", ""],
+    ["Zap!", "8C", "Random Events", "", "", ""],
+    ["Gimme That!", "9C", "Random Events", "", "", ""],
+    ["Iron Man", "10C", "Random Events", "", "", ""],
+    ["Kid Gloves", "2S", "Random Events", "", "", ""],
+    ["Knuckledusters", "3S", "Random Events", "", "", ""],
+    ["Magic Sponge", "4S", "Random Events", "", "", ""],
+    ["Mine", "5S", "Random Events", "", "", ""],
+    ["Not-so-Secret Weapon", "6S", "Random Events", "", "", ""],
+    ["Orcidas Sponsorship", "7S", "Random Events", "", "", ""],
+    ["Rakarth's Curse of Petty Spite", "8S", "Random Events", "", "", ""],
+    ["Tackling Machine", "9S", "Random Events", "", "", ""],
+    ["Get 'em Lads!", "10S", "Random Events", "", "", ""],
+    ["Assassin", "JC", "Desperate Measures", "", "", ""],
+    ["Doom and Gloom", "QC", "Desperate Measures", "", "", ""],
+    ["Da Freight Train", "KC", "Desperate Measures", "", "", ""],
+    ["Morley's Revenge", "AC", "Desperate Measures", "", "", ""],
+    ["I am the Greatest", "JS", "Desperate Measures", "", "", ""],
+    ["Mindblow", "QS", "Desperate Measures", "", "", ""],
+    ["Come on Boys!", "KS", "Desperate Measures", "", "", ""],
+    ["Mysterious Old Medicine Man", "AS", "Desperate Measures", "", "", ""]
 ]
 
 if __name__ == '__main__':
@@ -609,18 +714,6 @@ if __name__ == '__main__':
                         raceID = raceIDs[raceName]
                         cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                     break
-            
-
-        # raceNames2 = []
-        # if "All" in raceNames:
-        #     if "Exceptions" in raceNames:
-        #         for raceName in raceNames[1:]:
-        #             for raceName2, raceID in raceIDs.iteritems():
-        #                 if raceName != raceName2:
-        #                     print "    %s: %s" % (name, raceName)
-        #                     cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
-        #     print "    %s: All" % name
-        #     cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
 
     print
     print "Match Types"
@@ -637,6 +730,17 @@ if __name__ == '__main__':
         coachID = cursor.lastrowid
         coachIDs[coach] = coachID
 
+    trophyIDs = {}
+    print
+    print "Trophies"
+    for trophy in TROPHIES:
+        name = trophy[0]
+        img = trophy[1]
+        print "    %s" % name
+        cursor.execute("INSERT IGNORE INTO trophy VALUES(NULL,%s,%s)", (name, img))
+        trophyID = cursor.lastrowid
+        trophyIDs[name] = trophyID
+
     seasonIDs = {}
     print
     print "Seasons"
@@ -645,7 +749,9 @@ if __name__ == '__main__':
         print "    %s" % name
         startDate = season[1]
         endDate = season[2]
-        cursor.execute("INSERT IGNORE INTO season VALUES(NULL,%s,%s,%s,NULL)", (name, startDate, endDate))
+        trophyName = season[3]
+        trophyID = trophyIDs[trophyName]
+        cursor.execute("INSERT IGNORE INTO season VALUES(NULL,%s,%s,%s,NULL,%s)", (name, startDate, endDate, trophyID))
         seasonID = cursor.lastrowid
         seasonIDs[name] = seasonID
 

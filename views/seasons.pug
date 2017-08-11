@@ -8,20 +8,75 @@ append body
 	.container.body-container
 		.row
 			.col-md-2
-				h1 Seasons
+				h1 Season #{selectedSeasonID}
 			.col-md-4
 				nav
 					ul.pagination
 						li
 							a(href=prev)
 								span &laquo;
-						each seasonPaged, i in seasonsPaged
+						each season, i in seasons
 							li
-								a.season(id=seasonPaged.id href="/seasons/"+seasonPaged.id)
-									span #{seasonPaged.id}
-									//- if seasonPaged.id == season.id
-									//- 	(current)
+								a.season(id=season.id href="/seasons/"+season.id)
+									if currentSeasonID == season.id
+										span #{season.id} (in progress)
+									else
+										span #{season.id}
 						li
 							a(href=next)
 								span &raquo;
 		.row.season-body
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						.panel-title
+							img.img-responsive.center-block(src="/images/trophies/"+trophyImage)
+					.panel-body.list-group
+						a.list-group-item.active(href="#") 
+							h4.list-group-item-heading Winner
+							h5.list-group-item-heading The Dodgeball All-Stars
+							p.list-group-item-text Chris
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Stats
+					.panel-body
+						.list-group
+							a.list-group-item(href="#") 
+								h4.list-group-item-heading Most Casualties (15)
+								h5.list-group-item-heading Population: Orc
+								p.list-group-item-text Phillip
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Most TDs (29)
+								h5.list-group-item-heading Fink Foulers
+								p.list-group-item-text Daniel
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Most Kills (5)
+								h5.list-group-item-heading GoldDiggers
+								p.list-group-item-text Flagg
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Most SPPs (87)
+								h5.list-group-item-heading Blood Mountain Berserkers
+								p.list-group-item-text David
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Coaches
+					.panel-body
+						.list-group
+							a.list-group-item(href="#") Phillip
+							a.list-group-item(href="#") Chris
+							a.list-group-item(href="#") Randy
+							a.list-group-item(href="#") David
+							a.list-group-item(href="#") Daniel
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Teams
+					.panel-body
+						.list-group
+							a.list-group-item(href="#") Population: Orc
+							a.list-group-item(href="#") The Dodgeball All-Stars
+							a.list-group-item(href="#") Komodo Sinodons
+							a.list-group-item(href="#") Blood Mountain Berserkers
+							a.list-group-item(href="#") Fink Foulers
