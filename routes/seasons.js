@@ -12,10 +12,10 @@ router.get("/", function (req, res, next) {
       seasons: seasons,
       currentSeasonID: curSeason.id,
       selectedSeasonID: curSeason.id,
-      trophyImage: season.trophy.img
+      trophyImage: curSeason.trophy.img
     }
     res.render("seasons", renderJSON)
-  })
+  }).catch(next)
 })
 
 router.get("/:id", function (req, res, next) {

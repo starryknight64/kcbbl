@@ -17,7 +17,7 @@ append body
 								span &laquo;
 						each season, i in seasons
 							li
-								a.season(id=season.id href="/seasons/"+season.id)
+								a(id=season.id href="/seasons/"+season.id)
 									if currentSeasonID == season.id
 										span #{season.id} (in progress)
 									else

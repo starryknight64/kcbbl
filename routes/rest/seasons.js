@@ -10,7 +10,7 @@ var trophiesREST = require("./trophies")
 
 router.get("/", function (req, res) {
   getSeasons()
-    .then((seasons) => res.send(seasons))
+    .then((obj) => res.send(obj))
     .catch((error) => util.handleRESTError(res, error))
 })
 
@@ -20,7 +20,7 @@ router.get("/:id", function (req, res) {
     id = 3
   }
   getSeason(id)
-    .then((season) => res.send(season))
+    .then((obj) => res.send(obj))
     .catch((error) => util.handleRESTError(res, error))
 })
 
@@ -57,32 +57,28 @@ router.get("/:id/players", function (req, res) {
 function getSeason(id) {
   return db.get("season", id)
     .then((season) => {
-      return new Promise((resolve, reject) => {
-        trophiesREST.getTrophy(season.trophy_id).then((trophy) => {
-          delete season.trophy_id
-          season["trophy"] = trophy
-          return resolve(season)
-        }).catch(reject)
+      return trophiesREST.getTrophy(season.trophy_id).then((trophy) => {
+        delete season.trophy_id
+        season["trophy"] = trophy
+        return Promise.resolve(season)
       })
     })
 }
 function getSeasons(wheres, values, joins) {
   return db.getMany("season", undefined, wheres, values, joins)
     .then((seasons) => {
-      return new Promise((resolve, reject) => {
-        trophiesREST.getTrophies().then((trophies) => {
-          for (var i in seasons) {
-            var trophyID = seasons[i].trophy_id
-            for (var j in trophies) {
-              if (trophies[j].id == trophyID) {
-                delete seasons[i].trophy_id
-                seasons[i]["trophy"] = trophies[j]
-                break
-              }
+      return trophiesREST.getTrophies().then((trophies) => {
+        for (var i in seasons) {
+          var trophyID = seasons[i].trophy_id
+          for (var j in trophies) {
+            if (trophies[j].id == trophyID) {
+              delete seasons[i].trophy_id
+              seasons[i]["trophy"] = trophies[j]
+              break
             }
           }
-          return resolve(seasons)
-        }).catch(reject)
+        }
+        return Promise.resolve(seasons)
       })
     })
 }
