@@ -1,21 +1,20 @@
 var express = require("express")
 var router = express.Router()
-var db = require("../../includes/db")
+var calls = require("./calls")
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource")
+router.get("/", function (req, res) {
+  calls.getMatchTypes()
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
-function getMatchType(id) {
-  return db.get("match_type", id)
-}
-function getMatchTypes(wheres, values, joins) {
-  return db.getMany("match_type", ["*"], wheres, values, joins)
-}
+router.get("/:id", function (req, res) {
+  var id = req.params.id
+  calls.getMatchType(id)
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
+})
 
 module.exports = {
-  router: router,
-  getMatchType: getMatchType,
-  getMatchTypes: getMatchTypes
+  router: router
 }

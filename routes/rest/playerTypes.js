@@ -1,21 +1,20 @@
 var express = require("express")
 var router = express.Router()
-var db = require("../../includes/db")
+var calls = require("./calls")
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource")
+router.get("/", function (req, res) {
+  calls.getPlayerTypes()
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
-function getPlayerType(id) {
-  return db.get("player_type", id)
-}
-function getPlayerTypes(wheres, values, joins) {
-  return db.getMany("player_type", ["*"], wheres, values, joins)
-}
+router.get("/:id", function (req, res) {
+  var id = req.params.id
+  calls.getPlayerType(id)
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
+})
 
 module.exports = {
-  router: router,
-  getPlayerType: getPlayerType,
-  getPlayerTypes: getPlayerTypes
+  router: router
 }

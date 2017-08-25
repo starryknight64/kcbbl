@@ -1,21 +1,20 @@
 var express = require("express")
 var router = express.Router()
-var db = require("../../includes/db")
+var calls = require("./calls")
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource")
+router.get("/", function (req, res) {
+  calls.getInducements()
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
-function getInducement(id) {
-  return db.get("inducement", id)
-}
-function getInducements(wheres, values, joins) {
-  return db.getMany("inducement", ["*"], wheres, values, joins)
-}
+router.get("/:id", function (req, res) {
+  var id = req.params.id
+  calls.getInducement(id)
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
+})
 
 module.exports = {
-  router: router,
-  getInducement: getInducement,
-  getInducements: getInducements
+  router: router
 }

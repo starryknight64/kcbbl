@@ -19,6 +19,7 @@ var matchesREST = require("./routes/rest/matches")
 var playersREST = require("./routes/rest/players")
 var teamsREST = require("./routes/rest/teams")
 var trophiesREST = require("./routes/rest/trophies")
+var racesREST = require("./routes/rest/races")
 
 var app = express()
 
@@ -54,6 +55,7 @@ app.use("/rest/matches", matchesREST.router)
 app.use("/rest/players", playersREST.router)
 app.use("/rest/teams", teamsREST.router)
 app.use("/rest/trophies", trophiesREST.router)
+app.use("/rest/races", racesREST.router)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

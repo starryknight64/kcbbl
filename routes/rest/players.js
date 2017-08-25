@@ -1,28 +1,20 @@
 var express = require("express")
 var router = express.Router()
-var db = require("../../includes/db")
-var seasonsREST = require("./seasons")
+var calls = require("./calls")
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource")
+router.get("/", function (req, res) {
+  calls.getPlayers()
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
-function getPlayer(id) {
-  return db.get("player", id)
-}
-function getPlayers(wheres, values, joins) {
-  return db.getMany("player", ["*"], wheres, values, joins)
-}
-function getPlayersForSeason(seasonID) {
-  return seasonsREST.getSeason(seasonID).then((season) => {
-    return getPlayers(["team.season_id"], [season.id], ["INNER JOIN team_player ON team_player.player_id=player.id", "INNER JOIN team ON team.id=team_player.team_id"])
-  })
-}
+router.get("/:id", function (req, res) {
+  var id = req.params.id
+  calls.getPlayer(id)
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
+})
 
 module.exports = {
-  router: router,
-  getPlayer: getPlayer,
-  getPlayers: getPlayers,
-  getPlayersForSeason: getPlayersForSeason
+  router: router
 }

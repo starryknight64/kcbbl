@@ -1,0 +1,69 @@
+extends ../layouts/starter
+
+//- append head
+//- 	script(src="js/jquery.min.js")
+//- 	script(src="js/seasons.js")
+
+append body
+	.container.body-container
+		.row
+			.col-md-4
+				h1 #{curTeam.name}
+			.col-md-4
+				h1.btn-group
+					button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") #{curTeam.name}&nbsp;
+						span.caret
+					ul.dropdown-menu
+						each season, i in seasons
+							li
+								if season.id == curSeason.id
+									a(href="#") #{season.name}
+								else
+									a(href="/seasons/"+season.id) #{season.name}
+					ul.dropdown-menu
+						each team, i in teams
+							li
+								if team.id == curTeam.id
+									a(href="#") #{team.name}
+								else
+									a(href="/teams/"+team.id) #{team.name}
+		.row
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Stats
+					.panel-body
+						.list-group
+							a.list-group-item(href="#") 
+								h4.list-group-item-heading Most Casualties (9)
+								h5.list-group-item-heading Mad'zug
+								p.list-group-item-text Population: Orc
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Most TDs (7)
+								h5.list-group-item-heading Bad'zug
+								p.list-group-item-text Population: Orc
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Most Kills (1)
+								h5.list-group-item-heading Mad'zug
+								p.list-group-item-text Population: Orc
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Most SPPs (33)
+								h5.list-group-item-heading Bad'zug
+								p.list-group-item-text Population: Orc
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Teams
+					.panel-body
+						.list-group
+							a.list-group-item(href="#") Population: Orc
+							a.list-group-item(href="#") Byrchwood Blodgers
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Seasons
+					.panel-body
+						.list-group
+							a.list-group-item(href="/seasons/1") Season 1
+							a.list-group-item(href="/seasons/2") Season 2
+							a.list-group-item(href="/seasons/3") Season 3

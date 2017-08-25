@@ -7,7 +7,7 @@ extends ../layouts/starter
 append body
 	.container.body-container
 		.row
-			.col-md-2
+			.col-md-3
 				h1 Season #{selectedSeasonID}
 			.col-md-4
 				nav
@@ -30,7 +30,7 @@ append body
 				.panel.panel-default
 					.panel-heading
 						.panel-title
-							img.img-responsive.center-block(src="/images/trophies/"+trophyImage)
+							img.img-responsive.center-block.trophy(src="/images/trophies/"+trophyImage)
 					.panel-body.list-group
 						a.list-group-item.active(href="#") 
 							h4.list-group-item-heading Winner

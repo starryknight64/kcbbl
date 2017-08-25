@@ -410,7 +410,7 @@ PURCHASES = [
 
 MATCH_TYPES = ["Pre-season", "Regular", "Post-season", "Championship"]
 
-COACHES = ["Randy", "Phillip", "Matthew", "Joe R", "David", "Kendal", "Daniel", "Joe H", "Trevor", "Chris", "Troy"]
+COACHES = ["Randy", "Phillip", "Matthew", "Joe R", "David", "Kendal", "Daniel", "Joe H", "Trever", "Chris", "Troy"]
 
 TEAMS = [
     ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1"],
@@ -423,7 +423,7 @@ TEAMS = [
     ["Ashtown Villains", "Joe H", "Undead", "Season 1"],
     ["Aedra & Daedra", "Kendal", "Dark Elf", "Season 1"],
     ["Hellions of Troy", "Troy", "Human", "Season 1"],
-    ["Comodo Sinodons", "Randy", "Lizardman", "Season 2"],
+    ["Komodo Sinodons", "Randy", "Lizardman", "Season 2"],
     ["Population: Orc", "Phillip", "Orc", "Season 2"],
     ["Quixotic Crushers", "Matthew", "Bretonnian", "Season 2"],
     ["Tatooine Technographers", "Joe R", "Goblin", "Season 2"],

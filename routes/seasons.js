@@ -1,13 +1,12 @@
 var express = require("express")
 var router = express.Router()
 var util = require("../includes/util")
-var seasonsREST = require("./rest/seasons")
+var calls = require("./rest/calls")
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  //res.render("seasons", { seasons: [{ id: 1, name: "Season 1" }, { id: 2, name: "Season 2" }] })
-  return seasonsREST.getSeasons().then((seasons) => {
-    var curSeason = getCurrentSeason(seasons)
+  return calls.getSeasons().then((seasons) => {
+    var curSeason = calls.getCurrentSeason(seasons)
     var renderJSON = {
       seasons: seasons,
       currentSeasonID: curSeason.id,
@@ -20,9 +19,9 @@ router.get("/", function (req, res, next) {
 
 router.get("/:id", function (req, res, next) {
   var id = req.params.id
-  return seasonsREST.getSeason(id).then((season) => {
-    return seasonsREST.getSeasons().then((seasons) => {
-      var curSeason = getCurrentSeason(seasons)
+  return calls.getSeason(id).then((season) => {
+    return calls.getSeasons().then((seasons) => {
+      var curSeason = calls.getCurrentSeason(seasons)
       var renderJSON = {
         seasons: seasons,
         currentSeasonID: curSeason.id,
@@ -33,17 +32,5 @@ router.get("/:id", function (req, res, next) {
     })
   }).catch(next)
 })
-
-function getCurrentSeason(seasons) {
-  var today = new Date()
-  for (var i in seasons) {
-    var startDate = new Date(seasons[i].start_date)
-    var endDate = new Date(seasons[i].end_date)
-    if (startDate <= today && today <= endDate) {
-      return seasons[i]
-    }
-  }
-  return null
-}
 
 module.exports = router

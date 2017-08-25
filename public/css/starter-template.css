@@ -16,3 +16,7 @@ body {
   min-height: 25vh;
   max-height: 80vh;
 }
+
+.trophy {
+  max-height: 348px;
+}

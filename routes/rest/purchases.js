@@ -1,21 +1,20 @@
 var express = require("express")
 var router = express.Router()
-var db = require("../../includes/db")
+var calls = require("./calls")
 
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("respond with a resource")
+router.get("/", function (req, res) {
+  calls.getPurchases()
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
 })
 
-function getPurchase(id) {
-  return db.get("purchase", id)
-}
-function getPurchases(wheres, values, joins) {
-  return db.getMany("purchase", ["*"], wheres, values, joins)
-}
+router.get("/:id", function (req, res) {
+  var id = req.params.id
+  calls.getPurchase(id)
+    .then((obj) => res.send(obj))
+    .catch((error) => util.handleRESTError(res, error))
+})
 
 module.exports = {
-  router: router,
-  getPurchase: getPurchase,
-  getPurchases: getPurchases
+  router: router
 }

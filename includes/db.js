@@ -14,8 +14,8 @@ function get(table, id, cols) {
     if (!Type.is(table, String)) {
         return Promise.reject("Table name must be a string!")
     }
-    id = util.getID(id)
-    if (!id) {
+    idClean = util.getID(id)
+    if (!idClean) {
         return Promise.reject(table + " ID must be a positive integer!")
     }
     if (!Type.is(cols, Array)) {
@@ -24,12 +24,12 @@ function get(table, id, cols) {
 
     var sql = "SELECT " + cols.join(",") + " FROM `" + table + "` WHERE id=?"
     return new Promise((resolve, reject) => {
-        db.query(sql, [id], (error, results, fields) => {
+        db.query(sql, [idClean], (error, results, fields) => {
             if (error) {
                 return reject(error)
             }
             if (Type.is(results, Array) && results.length == 0) {
-                return reject(table + " '" + id + "' does not exist!")
+                return reject(table + " '" + idClean + "' does not exist!")
             }
             return resolve(results[0])
         })

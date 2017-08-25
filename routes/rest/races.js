@@ -3,14 +3,14 @@ var router = express.Router()
 var calls = require("./calls")
 
 router.get("/", function (req, res) {
-  calls.getMatches()
+  calls.getRaces()
     .then((obj) => res.send(obj))
     .catch((error) => util.handleRESTError(res, error))
 })
 
 router.get("/:id", function (req, res) {
   var id = req.params.id
-  calls.getMatch(id)
+  calls.getRace(id)
     .then((obj) => res.send(obj))
     .catch((error) => util.handleRESTError(res, error))
 })
