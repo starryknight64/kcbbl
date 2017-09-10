@@ -1,5 +1,22 @@
 var Type = require("type-of-is")
 
+function toTitleCase(text) {
+    return text.replace(/\w\S*/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+        })
+}
+
+function toPlural(text) {
+    if (text.endsWith("y")) {
+        return text.substring(0, text.length - 1) + "ies"
+    } else if (text.endsWith("h")) {
+        return text + "es"
+    } else {
+        return text + "s"
+    }
+}
+
 function getID(num) {
     if (!Type.is(num, Number)) {
         if (Type.is(num, String)) {
@@ -33,11 +50,13 @@ function handleRESTError(res, error) {
     res.status(400).send(err)
 }
 
-function handleError(res,error){
-    
+function handleError(res, error) {
+
 }
 
 module.exports = {
+    toTitleCase: toTitleCase,
+    toPlural: toPlural,
     getID: getID,
     handleRESTError: handleRESTError
 }

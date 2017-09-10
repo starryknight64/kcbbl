@@ -11,13 +11,22 @@ router.get("/", function (req, res) {
 router.get("/:id", function (req, res) {
   var id = req.params.id
   if (id == "current") {
-    id = 3
+    calls.getCurrentSeason()
+      .then((obj) => res.send(obj))
+      .catch((error) => util.handleRESTError(res, error))
+  } else {
+    calls.getSeason(id)
+      .then((obj) => res.send(obj))
+      .catch((error) => util.handleRESTError(res, error))
   }
-  calls.getSeason(id)
+})
+
+router.get("/:id/winner", function (req, res) {
+  var id = req.params.id
+  calls.getWinningTeamForSeason(id)
     .then((obj) => res.send(obj))
     .catch((error) => util.handleRESTError(res, error))
 })
-
 router.get("/:id/teams", function (req, res) {
   var id = req.params.id
   calls.getTeamsForSeason(id)

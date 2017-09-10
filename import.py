@@ -12,6 +12,7 @@ TRUNCATE `deck`;
 TRUNCATE `inducement`;
 TRUNCATE `match`;
 TRUNCATE `match_type`;
+TRUNCATE `meta`;
 TRUNCATE `player`;
 TRUNCATE `player_report`;
 TRUNCATE `player_type`;
@@ -25,6 +26,7 @@ TRUNCATE `skill`;
 TRUNCATE `skill_type`;
 TRUNCATE `team`;
 TRUNCATE `team_player`;
+TRUNCATE `trophy`;
 
 ALTER Table `card` AUTO_INCREMENT=1;
 ALTER Table `coach` AUTO_INCREMENT=1;
@@ -32,6 +34,7 @@ ALTER Table `deck` AUTO_INCREMENT=1;
 ALTER Table `inducement` AUTO_INCREMENT=1;
 ALTER Table `match` AUTO_INCREMENT=1;
 ALTER Table `match_type` AUTO_INCREMENT=1;
+ALTER Table `meta` AUTO_INCREMENT=1;
 ALTER Table `player` AUTO_INCREMENT=1;
 ALTER Table `player_report` AUTO_INCREMENT=1;
 ALTER Table `player_type` AUTO_INCREMENT=1;
@@ -45,6 +48,7 @@ ALTER Table `skill` AUTO_INCREMENT=1;
 ALTER Table `skill_type` AUTO_INCREMENT=1;
 ALTER Table `team` AUTO_INCREMENT=1;
 ALTER Table `team_player` AUTO_INCREMENT=1;
+ALTER Table `trophy` AUTO_INCREMENT=1;
 
 '''
 TROPHIES = [
@@ -55,10 +59,10 @@ TROPHIES = [
 ]
 
 SEASONS = [
-    ["Season 1", "2017-01-01", "2017-03-31", "Spike Bowl"],
-    ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup"],
-    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl"],
-    ["Season 4", "2017-10-01", "2017-12-31", "Blood Bowl"]
+    ["Season 1", "2017-01-01", "2017-03-31", "Spike Bowl", "Guardians of the Nile"],
+    ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup", "Alliance of the Old Gods"],
+    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", None],
+    ["Season 4", "2017-10-01", "2017-12-31", "Blood Bowl", None]
 ]
 
 SKILL_TYPES = ["General", "Agility", "Passing", "Strength", "Mutation", "Extraordinary", "Improvement"]
@@ -433,7 +437,7 @@ TEAMS = [
     ["Fink Foulers", "Daniel", "Skaven", "Season 2"],
     ["Hellions of Troy", "Troy", "Human", "Season 2"],
     ["Mile High Maulers", "Joe H", "Norse", "Season 2"],
-    ["The Replacements", "Trevor", "Human", "Season 2"],
+    ["The Replacements", "Trever", "Human", "Season 2"],
     ["Turtle Isle Typhoons", "Chris", "Simyin", "Season 2"],
     ["The Sleeping Giants", "Troy", "Undead", "Season 2"]
 ]
@@ -555,6 +559,8 @@ CARDS = [
     ["Mysterious Old Medicine Man", "AS", "Desperate Measures", "", "", ""]
 ]
 
+
+
 if __name__ == '__main__':
     cnx = mysql.connector.connect(user=settings.mysql_username, password=settings.mysql_password, host=settings.mysql_server, database=settings.mysql_db)
     cnx.autocommit = True
@@ -591,6 +597,97 @@ if __name__ == '__main__':
         cursor.execute("INSERT IGNORE INTO race VALUES(NULL,%s,%s)", (name, desc))
         raceID = cursor.lastrowid
         raceIDs[name] = raceID
+
+    coachIDs = {}
+    print
+    print "Coaches"
+    for coach in COACHES:
+        print "    %s" % coach
+        cursor.execute("INSERT IGNORE INTO coach VALUES(NULL,%s,%s,NULL,NULL)", (coach, ""))
+        coachID = cursor.lastrowid
+        coachIDs[coach] = coachID
+
+    trophyIDs = {}
+    print
+    print "Trophies"
+    for trophy in TROPHIES:
+        name = trophy[0]
+        img = trophy[1]
+        print "    %s" % name
+        cursor.execute("INSERT IGNORE INTO trophy VALUES(NULL,%s,%s)", (name, img))
+        trophyID = cursor.lastrowid
+        trophyIDs[name] = trophyID
+
+    seasonIDs = {}
+    print
+    print "Seasons"
+    for season in SEASONS:
+        name = season[0]
+        print "    %s" % name
+        startDate = season[1]
+        endDate = season[2]
+        trophyName = season[3]
+        trophyID = trophyIDs[trophyName]
+        cursor.execute("INSERT IGNORE INTO season VALUES(NULL,%s,%s,%s,NULL,%s)", (name, startDate, endDate, trophyID))
+        seasonID = cursor.lastrowid
+        seasonIDs[name] = seasonID
+
+    teamIDs={}
+    print
+    print "Teams"
+    for team in TEAMS:
+        name = team[0]
+        coachName = team[1]
+        raceName = team[2]
+        seasonName = team[3]
+        print "    %s" % name
+
+        coachID = coachIDs[coachName]
+        raceID = raceIDs[raceName]
+        seasonID = seasonIDs[seasonName]
+        prevTeamID = None
+        if name in teamIDs:
+            prevTeamID = teamIDs[name]
+
+        cursor.execute("INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,%s,0,0,0,NULL,NULL,NULL,NULL)", (name, coachID, raceID, seasonID, prevTeamID))
+        teamID = cursor.lastrowid
+        teamIDs[name] = teamID
+
+    print
+    print "Updating Season Winners..."
+    for season in SEASONS:
+        name = season[0]
+        winnerTeamName = season[4]
+        print "    %s: %s" % (name, winnerTeamName)
+        if winnerTeamName:
+            seasonID = seasonIDs[name]
+            winnerTeamID = teamIDs[winnerTeamName]
+            cursor.execute("UPDATE season SET winner_team_id=%s WHERE id=%s", (winnerTeamID, seasonID))
+
+    deckIDs = {}
+    print
+    print "Decks"
+    for deck in DECKS:
+        name = deck[0]
+        cost = deck[1]
+        print "    %s" % name
+        cursor.execute("INSERT IGNORE INTO deck VALUES(NULL,%s,%s)", (name, cost))
+        deckID = cursor.lastrowid
+        deckIDs[name] = deckID
+    
+    print
+    print "Cards"
+    for card in CARDS:
+        name = card[0]
+        aka = card[1]
+        deckName = card[2]
+        desc = card[3]
+        timing = card[4]
+        effect = card[5]
+        print "    %s" % name
+
+        deckID = deckIDs[deckName]
+        cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
 
     # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
     print
@@ -721,81 +818,8 @@ if __name__ == '__main__':
         print "    %s" % matchType
         cursor.execute("INSERT IGNORE INTO match_type VALUES(NULL,%s)", (matchType,))
 
-    coachIDs = {}
-    print
-    print "Coaches"
-    for coach in COACHES:
-        print "    %s" % coach
-        cursor.execute("INSERT IGNORE INTO coach VALUES(NULL,%s,%s,NULL,NULL)", (coach, ""))
-        coachID = cursor.lastrowid
-        coachIDs[coach] = coachID
 
-    trophyIDs = {}
-    print
-    print "Trophies"
-    for trophy in TROPHIES:
-        name = trophy[0]
-        img = trophy[1]
-        print "    %s" % name
-        cursor.execute("INSERT IGNORE INTO trophy VALUES(NULL,%s,%s)", (name, img))
-        trophyID = cursor.lastrowid
-        trophyIDs[name] = trophyID
-
-    seasonIDs = {}
-    print
-    print "Seasons"
-    for season in SEASONS:
-        name = season[0]
-        print "    %s" % name
-        startDate = season[1]
-        endDate = season[2]
-        trophyName = season[3]
-        trophyID = trophyIDs[trophyName]
-        cursor.execute("INSERT IGNORE INTO season VALUES(NULL,%s,%s,%s,NULL,%s)", (name, startDate, endDate, trophyID))
-        seasonID = cursor.lastrowid
-        seasonIDs[name] = seasonID
-
-    print
-    print "Teams"
-    for team in TEAMS:
-
-        name = team[0]
-        coachName = team[1]
-        raceName = team[2]
-        seasonName = team[3]
-        print "    %s" % name
-
-        coachID = coachIDs[coachName]
-        raceID = raceIDs[raceName]
-        seasonID = seasonIDs[seasonName]
-
-        cursor.execute("INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,0,0,0,NULL,NULL,NULL,NULL)", (name, coachID, raceID, seasonID))
-
-    deckIDs = {}
-    print
-    print "Decks"
-    for deck in DECKS:
-        name = deck[0]
-        cost = deck[1]
-        print "    %s" % name
-        cursor.execute("INSERT IGNORE INTO deck VALUES(NULL,%s,%s)", (name, cost))
-        deckID = cursor.lastrowid
-        deckIDs[name] = deckID
-    
-    print
-    print "Cards"
-    for card in CARDS:
-        name = card[0]
-        aka = card[1]
-        deckName = card[2]
-        desc = card[3]
-        timing = card[4]
-        effect = card[5]
-        print "    %s" % name
-
-        deckID = deckIDs[deckName]
-        cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
-
+    cursor.execute("INSERT IGNORE INTO meta VALUES(NULL,%s,%s)", ("season.current", "3"))
     
     print
     print "Done!"

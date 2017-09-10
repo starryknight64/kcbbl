@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2017 at 06:36 AM
+-- Generation Time: Sep 10, 2017 at 03:49 AM
 -- Server version: 5.5.27
 -- PHP Version: 7.1.2
 
@@ -114,26 +114,39 @@ CREATE TABLE `match_type` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `meta`
+--
+
+CREATE TABLE `meta` (
+  `id` int(11) NOT NULL,
+  `mkey` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `value` text COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `player`
 --
 
 CREATE TABLE `player` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `team_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
-  `miss_next_game` tinyint(1) DEFAULT NULL,
-  `niggling_injury` tinyint(1) DEFAULT NULL,
-  `movement_injuries` tinyint(3) UNSIGNED DEFAULT NULL,
-  `strength_injuries` tinyint(3) UNSIGNED DEFAULT NULL,
-  `agility_injuries` tinyint(3) UNSIGNED DEFAULT NULL,
-  `armor_injuries` tinyint(3) UNSIGNED DEFAULT NULL,
-  `interceptions` tinyint(3) UNSIGNED DEFAULT NULL,
-  `completions` tinyint(3) UNSIGNED DEFAULT NULL,
-  `touchdowns` tinyint(3) UNSIGNED DEFAULT NULL,
-  `casualties` tinyint(3) UNSIGNED DEFAULT NULL,
-  `kills` tinyint(3) UNSIGNED DEFAULT NULL,
-  `mvps` tinyint(3) UNSIGNED DEFAULT NULL,
-  `killed` tinyint(1) DEFAULT NULL
+  `miss_next_game` tinyint(1) NOT NULL DEFAULT '0',
+  `niggling_injury` tinyint(1) NOT NULL DEFAULT '0',
+  `movement_injuries` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `strength_injuries` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `agility_injuries` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `armor_injuries` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `interceptions` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `completions` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `touchdowns` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `casualties` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `kills` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `mvps` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `dead` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -159,6 +172,17 @@ CREATE TABLE `player_report` (
   `kills` tinyint(3) UNSIGNED DEFAULT NULL,
   `mvp` tinyint(1) DEFAULT NULL,
   `killed_by_player_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `player_skill`
+--
+
+CREATE TABLE `player_skill` (
+  `player_id` int(11) NOT NULL,
+  `skill_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -250,7 +274,8 @@ CREATE TABLE `season` (
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `winner` int(11) DEFAULT NULL
+  `winner_team_id` int(11) DEFAULT NULL,
+  `trophy_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -289,24 +314,26 @@ CREATE TABLE `team` (
   `coach_id` int(11) NOT NULL,
   `race_id` int(11) NOT NULL,
   `season_id` int(11) NOT NULL,
+  `prev_team_id` int(11) DEFAULT NULL,
   `value` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `treasury` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `rerolls` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
-  `fan_factor` tinyint(3) UNSIGNED DEFAULT NULL,
-  `assistant_coaches` tinyint(3) UNSIGNED DEFAULT NULL,
-  `cheerleaders` tinyint(3) UNSIGNED DEFAULT NULL,
-  `apothecary` tinyint(1) DEFAULT NULL
+  `fan_factor` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `assistant_coaches` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `cheerleaders` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+  `apothecary` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `team_player`
+-- Table structure for table `trophy`
 --
 
-CREATE TABLE `team_player` (
-  `team_id` int(11) NOT NULL,
-  `player_id` int(11) NOT NULL
+CREATE TABLE `trophy` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `img` varchar(20) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -318,8 +345,7 @@ CREATE TABLE `team_player` (
 --
 ALTER TABLE `card`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`),
-  ADD UNIQUE KEY `aka` (`aka`);
+  ADD UNIQUE KEY `name` (`name`,`aka`) USING BTREE;
 
 --
 -- Indexes for table `coach`
@@ -363,13 +389,21 @@ ALTER TABLE `match_type`
   ADD KEY `id` (`id`);
 
 --
+-- Indexes for table `meta`
+--
+ALTER TABLE `meta`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `mkey` (`mkey`);
+
+--
 -- Indexes for table `player`
 --
 ALTER TABLE `player`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`,`type_id`),
+  ADD UNIQUE KEY `name` (`name`,`type_id`,`team_id`) USING BTREE,
   ADD KEY `id` (`id`),
-  ADD KEY `type_id` (`type_id`);
+  ADD KEY `type_id` (`type_id`),
+  ADD KEY `team_id` (`team_id`);
 
 --
 -- Indexes for table `player_report`
@@ -379,6 +413,13 @@ ALTER TABLE `player_report`
   ADD KEY `player_id` (`player_id`),
   ADD KEY `match_id` (`match_id`),
   ADD KEY `killed_by_player_id` (`killed_by_player_id`);
+
+--
+-- Indexes for table `player_skill`
+--
+ALTER TABLE `player_skill`
+  ADD UNIQUE KEY `player_id` (`player_id`,`skill_id`),
+  ADD KEY `skill_id` (`skill_id`);
 
 --
 -- Indexes for table `player_type`
@@ -431,7 +472,9 @@ ALTER TABLE `race`
 ALTER TABLE `season`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
-  ADD KEY `id` (`id`);
+  ADD KEY `id` (`id`),
+  ADD KEY `trophy_id` (`trophy_id`),
+  ADD KEY `winner_team_id` (`winner_team_id`);
 
 --
 -- Indexes for table `skill`
@@ -454,33 +497,44 @@ ALTER TABLE `skill_type`
 --
 ALTER TABLE `team`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`,`coach_id`),
+  ADD UNIQUE KEY `name` (`name`,`season_id`) USING BTREE,
   ADD KEY `id` (`id`),
   ADD KEY `coach_id` (`coach_id`),
   ADD KEY `race_id` (`race_id`),
   ADD KEY `season_id` (`season_id`);
 
 --
--- Indexes for table `team_player`
+-- Indexes for table `trophy`
 --
-ALTER TABLE `team_player`
-  ADD UNIQUE KEY `team_id` (`team_id`,`player_id`),
-  ADD KEY `player_id` (`player_id`);
+ALTER TABLE `trophy`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `img` (`img`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
+-- AUTO_INCREMENT for table `card`
+--
+ALTER TABLE `card`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+--
 -- AUTO_INCREMENT for table `coach`
 --
 ALTER TABLE `coach`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
+-- AUTO_INCREMENT for table `deck`
+--
+ALTER TABLE `deck`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
 -- AUTO_INCREMENT for table `inducement`
 --
 ALTER TABLE `inducement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `match`
 --
@@ -492,10 +546,15 @@ ALTER TABLE `match`
 ALTER TABLE `match_type`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT for table `meta`
+--
+ALTER TABLE `meta`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `player`
 --
 ALTER TABLE `player`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `player_report`
 --
@@ -510,7 +569,7 @@ ALTER TABLE `player_type`
 -- AUTO_INCREMENT for table `purchase`
 --
 ALTER TABLE `purchase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 --
 -- AUTO_INCREMENT for table `race`
 --
@@ -525,7 +584,7 @@ ALTER TABLE `season`
 -- AUTO_INCREMENT for table `skill`
 --
 ALTER TABLE `skill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 --
 -- AUTO_INCREMENT for table `skill_type`
 --
@@ -536,6 +595,11 @@ ALTER TABLE `skill_type`
 --
 ALTER TABLE `team`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+--
+-- AUTO_INCREMENT for table `trophy`
+--
+ALTER TABLE `trophy`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --
@@ -559,6 +623,7 @@ ALTER TABLE `match`
 -- Constraints for table `player`
 --
 ALTER TABLE `player`
+  ADD CONSTRAINT `player_ibfk_2` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`),
   ADD CONSTRAINT `player_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `player_type` (`id`);
 
 --
@@ -568,6 +633,13 @@ ALTER TABLE `player_report`
   ADD CONSTRAINT `player_report_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`),
   ADD CONSTRAINT `player_report_ibfk_2` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`),
   ADD CONSTRAINT `player_report_ibfk_3` FOREIGN KEY (`killed_by_player_id`) REFERENCES `player` (`id`);
+
+--
+-- Constraints for table `player_skill`
+--
+ALTER TABLE `player_skill`
+  ADD CONSTRAINT `player_skill_ibfk_2` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`),
+  ADD CONSTRAINT `player_skill_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`);
 
 --
 -- Constraints for table `player_type`
@@ -597,6 +669,13 @@ ALTER TABLE `player_type_skill_type_normal`
   ADD CONSTRAINT `player_type_skill_type_normal_ibfk_2` FOREIGN KEY (`skill_type_id`) REFERENCES `skill_type` (`id`);
 
 --
+-- Constraints for table `season`
+--
+ALTER TABLE `season`
+  ADD CONSTRAINT `season_ibfk_1` FOREIGN KEY (`trophy_id`) REFERENCES `trophy` (`id`),
+  ADD CONSTRAINT `season_ibfk_2` FOREIGN KEY (`winner_team_id`) REFERENCES `team` (`id`);
+
+--
 -- Constraints for table `skill`
 --
 ALTER TABLE `skill`
@@ -609,13 +688,6 @@ ALTER TABLE `team`
   ADD CONSTRAINT `team_ibfk_1` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`),
   ADD CONSTRAINT `team_ibfk_2` FOREIGN KEY (`race_id`) REFERENCES `race` (`id`),
   ADD CONSTRAINT `team_ibfk_3` FOREIGN KEY (`season_id`) REFERENCES `season` (`id`);
-
---
--- Constraints for table `team_player`
---
-ALTER TABLE `team_player`
-  ADD CONSTRAINT `team_player_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`),
-  ADD CONSTRAINT `team_player_ibfk_2` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

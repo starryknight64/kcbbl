@@ -1,0 +1,91 @@
+extends ../layouts/starter
+
+//- append head
+//- 	script(src="js/jquery.min.js")
+//- 	script(src="js/seasons.js")
+
+append body
+	.container.body-container
+		.row
+			.col-md-12
+				h1 You searched for "#{q}"
+		.row
+			if !results
+				h2.col-md-12 No Results Found
+			each result, title in results
+				.col-md-4
+					.panel.panel-default
+						.panel-heading
+							h3 #{title} (#{result.length})
+						.panel-body
+							.list-group
+								if title == "Cards"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name} (#{obj.aka})
+											h5.ellipsis #{obj.description}
+								else if title == "Coaches"
+									each obj in result
+										a.list-group-item(href="/coaches/"+obj.id) 
+											h4 #{obj.name}
+								else if title == "Decks"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+								else if title == "Inducements"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+											h5.ellipsis #{obj.description}
+								else if title == "Players"
+									each obj in result
+										a.list-group-item(href="/players/"+obj.id) 
+											h4 #{obj.name}
+								else if title == "Player Types"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+								else if title == "Purchases"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+											h5.ellipsis #{obj.description}
+								else if title == "Races"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+											h5.ellipsis #{obj.description}
+								else if title == "Seasons"
+									each obj in result
+										a.list-group-item(href="/seasons/"+obj.id) 
+											h4 #{obj.name}
+											h5 #{obj.start_date} - #{obj.end_date}
+								else if title == "Skills"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+											h5.ellipsis #{obj.description}
+								else if title == "Skill Types"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+								else if title == "Teams"
+									each obj in result
+										a.list-group-item(href="/teams/"+obj.id) 
+											h4 #{obj.name}
+								else if title == "Trophies"
+									each obj in result
+										a.list-group-item(href="#") 
+											h4 #{obj.name}
+		//- .row
+		//- 	.col-md-4
+		//- 		.panel.panel-default
+		//- 			.panel-heading
+		//- 				h3.panel-title Stats
+		//- 			.panel-body
+		//- 				.list-group
+		//- 					a.list-group-item(href="#") 
+		//- 						h4.list-group-item-heading Casualties: #{curPlayer.casualties}
+		//- 						h5.list-group-item-heading Kills: #{curPlayer.kills}
+
+

@@ -36,7 +36,7 @@ function get(table, id, cols) {
     })
 }
 
-function getMany(table, cols, wheres, values, joins) {
+function getMany(table, cols, wheres, values, joins, cmp, tail) {
     if (!Type.is(table, String)) {
         return Promise.reject("Table name must be a string!")
     }
@@ -55,15 +55,29 @@ function getMany(table, cols, wheres, values, joins) {
     if (!Type.is(joins, Array)) {
         joins = []
     }
+    if (!cmp) {
+        cmp = "AND"
+    }
+    if (!tail) {
+        tail = ""
+    }
 
     var sql = "SELECT DISTINCT " + cols.join(",") + " FROM `" + table + "`"
     if (joins.length > 0) {
         sql += joins.join(" ")
     }
     if (wheres.length > 0) {
-        sql += " WHERE " + wheres.join("=? AND ") + "=?"
+        wheresCmp = {
+            "AND": ["=? AND ", "=?"],
+            "OR": ["=? OR ", "=?"],
+            "SEARCH": [" LIKE ? OR ", " LIKE ?"]
+        }
+        wheresJoin = wheresCmp[cmp][0]
+        wheresEnd = wheresCmp[cmp][1]
+
+        sql += " WHERE " + wheres.join(wheresJoin) + wheresEnd
     }
-    sql += " ORDER BY " + table + ".id ASC"
+    sql += tail + " ORDER BY " + table + ".id ASC"
     return new Promise((resolve, reject) => {
         db.query(sql, values, (error, results, fields) => {
             if (error) {

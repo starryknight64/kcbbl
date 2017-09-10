@@ -2,6 +2,7 @@ body {
   padding-top: 60px;
   background-image: url("/images/field.jpg");
   background-size: 100%;
+  background-attachment: fixed;
 }
 
 .body-container {
@@ -19,4 +20,19 @@ body {
 
 .trophy {
   max-height: 348px;
+}
+
+.race-portrait {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0; 
+  background-color: white; 
+  padding: 5px;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    max-width: 296px;
 }

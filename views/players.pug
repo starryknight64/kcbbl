@@ -1,0 +1,88 @@
+extends ../layouts/starter
+
+//- append head
+//- 	script(src="js/jquery.min.js")
+//- 	script(src="js/seasons.js")
+
+append body
+	.container.body-container
+		.row
+			.jumbotron
+				.container
+					.row
+						.col-md-8
+							h1 #{curPlayer.name}
+							p 
+								| #{curPlayer.team.race.name} #{curPlayer.type.name} on the 
+								a(href="/teams/"+curPlayer.team.id) #{curPlayer.team.name}
+								| &nbsp;team coached by 
+								a(href="/coaches/"+curPlayer.team.coach.id) #{curPlayer.team.coach.name}
+							p
+								.col-md-3
+									table.table-bordered.table-condensed
+										thead
+											tr
+												th MV
+												th ST
+												th AG
+												th AV
+												th SPP
+										tbody
+											tr
+												td.text-center #{curPlayer.type.movement}
+												td.text-center #{curPlayer.type.strength}
+												td.text-center #{curPlayer.type.agility}
+												td.text-center #{curPlayer.type.armor}
+												td.text-center #{curPlayer.spp}
+								.col-md-9
+									table.table-bordered.table-condensed
+										thead
+											tr
+												th Skills
+										tbody
+											tr
+												td 
+													each skill, i in curPlayerSkills
+														if i+1 < curPlayerSkills.length
+															| #{skill.name.replace(" "," ")}, 
+														else
+															| #{skill.name.replace(" "," ")}
+								.col-md-12
+									h1.btn-group
+										button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a player...&nbsp;
+											span.caret
+										ul.dropdown-menu
+											each player, i in players
+												li
+													if player.id == curPlayer.id
+														a(href="#") #{player.team.name} - #{player.name}
+													else
+														a(href="/teams/"+player.id) #{player.team.name} - #{player.name}
+						.col-md-4
+							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curPlayer.team.race.name.replace(" ","%20")+".png")
+		.row
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Stats
+					.panel-body
+						.list-group
+							a.list-group-item(href="#") 
+								h4.list-group-item-heading Casualties: #{curPlayer.casualties}
+								h5.list-group-item-heading Kills: #{curPlayer.kills}
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Touchdowns: #{curPlayer.touchdowns}
+							a.list-group-item(href="#")
+								h4.list-group-item-heading Interceptions: #{curPlayer.interceptions}
+							a.list-group-item(href="#")
+								h4.list-group-item-heading MVPs: #{curPlayer.mvps}
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Seasons
+					.panel-body
+						.list-group
+							//- each season, i in seasons
+							//- 	a.list-group-item(href="/seasons/"+season.id) #{season.name}
+							//- 		if season.id == curSeason.id
+							//- 			| &nbsp;(in progress)
