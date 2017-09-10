@@ -1,4 +1,5 @@
 var db = require("../../includes/db")
+var Type = require("type-of-is")
 
 function search(query, filter) {
   var queries = {
@@ -19,9 +20,20 @@ function search(query, filter) {
   var queryTables = Object.keys(queries)
 
   var queryPromiseParams = queries
-  if (filter in queries) {
-    queryPromiseParams[filter] = queries[filter]
-    queryTables = [filter]
+  if (Type.is(filter, Array)) {
+    var found = false
+    for (var i in filter) {
+      var tableName = filter[i]
+      if (tableName in queries) {
+        if (!found) {
+          found = true
+          queryPromiseParams = []
+          queryTables = []
+        }
+        queryPromiseParams[tableName] = queries[tableName]
+        queryTables.push(tableName)
+      }
+    }
   }
 
   var promises = []

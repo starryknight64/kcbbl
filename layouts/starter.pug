@@ -31,6 +31,6 @@ block body
 						a(href="/matches") Matches
 					li
 						a(href="/stats") Stats
-				form.navbar-form.navbar-right(action="/search" method="GET")
+				form.navbar-form.navbar-right#search(action="/search" method="GET")
 					div.form-group
-						input.form-control(type="text" placeholder="Search..." id="search" name="q")
+						input.form-control#search(type="text" placeholder="Search..." name="q")

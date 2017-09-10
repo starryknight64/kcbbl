@@ -36,3 +36,11 @@ body {
     -webkit-box-orient: vertical;
     max-width: 296px;
 }
+
+a:hover.no-underline, a:link.no-underline {
+  text-decoration: none;
+}
+
+.panel-heading[data-toggle="collapse"] {
+  cursor: pointer;
+}

@@ -3,17 +3,19 @@ var router = express.Router()
 var calls = require("./rest/calls")
 var util = require("../includes/util")
 
-/* GET users listing. */
 router.get("/", function (req, res, next) {
   var query = req.query.q
-  calls.search(query).then((results) => {
-    var data = null
-    if (results) {
-      data = {}
-      for (var tableName in results) {
-        var tableProper = util.toPlural(util.toTitleCase(tableName.replace("_", " ")))
-        data[tableProper] = results[tableName]
-      }
+  var filter = Object.keys(req.query).filter((param) => { return param !== "q" })
+  calls.search(query, filter).then((results) => {
+    var data = {}
+    var hasData = false
+    for (var tableName in results) {
+      hasData = true
+      var tableProper = util.toPlural(util.toTitleCase(tableName.replace("_", " ")))
+      data[tableProper] = results[tableName]
+    }
+    if (!hasData) {
+      data = null
     }
     res.render("search", { q: query, results: data })
   })
