@@ -56,10 +56,6 @@ append body
 									button.btn.btn-warning#reset(type="button") Reset
 									button.btn.btn-success#apply(type="submit") Apply
 								input.form-control#q(type="hidden" name="q" value=q)
-
-							//- form.navbar-form.navbar-right(action="/search" method="GET")
-								div.form-group
-									input.form-control(type="text" placeholder="Search..." id="search" name="q")
 		.row
 			if !results
 				h2.col-md-12 No Results Found
@@ -129,15 +125,3 @@ append body
 										each obj in result
 											a.list-group-item(href="#") 
 												h4 #{obj.name}
-		//- .row
-		//- 	.col-md-4
-		//- 		.panel.panel-default
-		//- 			.panel-heading
-		//- 				h3.panel-title Stats
-		//- 			.panel-body
-		//- 				.list-group
-		//- 					a.list-group-item(href="#") 
-		//- 						h4.list-group-item-heading Casualties: #{curPlayer.casualties}
-		//- 						h5.list-group-item-heading Kills: #{curPlayer.kills}
-
-

@@ -1,5 +1,7 @@
+import collections
 import mysql.connector
 import settings
+from openpyxl import load_workbook
 
 '''
 Created on Apr 22, 2017
@@ -14,6 +16,7 @@ TRUNCATE `match`;
 TRUNCATE `match_type`;
 TRUNCATE `meta`;
 TRUNCATE `player`;
+TRUNCATE `player_skill`;
 TRUNCATE `player_report`;
 TRUNCATE `player_type`;
 TRUNCATE `player_type_skill`;
@@ -25,7 +28,6 @@ TRUNCATE `season`;
 TRUNCATE `skill`;
 TRUNCATE `skill_type`;
 TRUNCATE `team`;
-TRUNCATE `team_player`;
 TRUNCATE `trophy`;
 
 ALTER Table `card` AUTO_INCREMENT=1;
@@ -47,7 +49,6 @@ ALTER Table `season` AUTO_INCREMENT=1;
 ALTER Table `skill` AUTO_INCREMENT=1;
 ALTER Table `skill_type` AUTO_INCREMENT=1;
 ALTER Table `team` AUTO_INCREMENT=1;
-ALTER Table `team_player` AUTO_INCREMENT=1;
 ALTER Table `trophy` AUTO_INCREMENT=1;
 
 '''
@@ -60,7 +61,7 @@ TROPHIES = [
 
 SEASONS = [
     ["Season 1", "2017-01-01", "2017-03-31", "Spike Bowl", "Guardians of the Nile"],
-    ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup", "Alliance of the Old Gods"],
+    ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup", "Riverdale Ravagers"],
     ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", None],
     ["Season 4", "2017-10-01", "2017-12-31", "Blood Bowl", None]
 ]
@@ -102,7 +103,7 @@ SKILLS = [
     ["Hail Mary Pass", "Passing", "The player may throw the ball to any square on the playing pitch, no matter what the range: the range ruler is not used. Roll a D6. On a roll of 1 the player fumbles the throw, and the ball will bounce once from the thrower's square. On a roll of 2-6, the player may make the pass. The Hail Mary pass may not be intercepted, but it is never accurate - the ball automatically misses and scatters three squares. Note that if you are lucky, the ball will scatter back into the target square! This skill may not be used in a Blizzard or with the Throw Team-Mate skill."],
     ["Horns", "Mutation", "A player with Horns may use them to butt an opponent. Horns adds 1 to the player's Strength for any block(s) he makes during a Blitz Action."],
     ["Hypnotic Gaze", "Extraordinary", "The player has a powerful telepathic ability that he can use to stun an opponent into immobility. The player may use hypnotic gaze at the end of his Move Action on one opposing player who is in an adjacent square. Make an Agility roll for the player with hypnotic gaze, with a -1 modifier for each opposing tackle zone on the player with hypnotic gaze other than the victim's. If the Agility roll is successful, then the opposing player loses his tackle zones and may not catch, intercept or pass the ball, assist another player on a block or foul, or move voluntarily until the start of his next Action or the drive ends. If the roll fails, then the hypnotic gaze has no effect."],
-    ["Juggernaught", "Strength", "A player with this skill is virtually impossible to stop once he is in motion. If this player takes a Blitz Action, the opposing player may not use his Fend, Stand Firm or Wrestle skills against the Juggernaught player's blocks. The Juggernaught player may also choose to treat a 'Both Down' result as if a 'Pushed' result has been rolled instead for blocks he makes during a Blitz Action."],
+    ["Juggernaut", "Strength", "A player with this skill is virtually impossible to stop once he is in motion. If this player takes a Blitz Action, the opposing player may not use his Fend, Stand Firm or Wrestle skills against the Juggernaut player's blocks. The Juggernaut player may also choose to treat a 'Both Down' result as if a 'Pushed' result has been rolled instead for blocks he makes during a Blitz Action."],
     ["Jump Up", "Agility", "A player with this skill is able to quickly get back into the game. If the player declares any Action other than a Block Action he may stand up for free without paying the three squares of movement. The player may also declare a Block Action while Prone which requires an Agility roll with a +2 modifier to see if he can complete the Action. A successful roll means the player can stand up for free and block an adjacent opponent. A failed roll means the Block Action is wasted and the player may not stand up."],
     ["Kick", "General", "The player is an expert at kicking the ball and can place the kick with great precision. In order to use this skill the player must be set up on the pitch when his team kicks off. The player may not be set up in either wide zone or on the line of scrimmage. Only if all these conditions are met is the player then allowed to take the kick-off. Because his kick is so accurate, you may choose to halve the number of squares that the ball scatters on kick-off, rounding any fractions down (i.e., 1 = 0, 2-3 = 1, 4- 5 = 2, 6 = 3)."],
     ["Kick-Off Return", "General", "A player on the receiving team that is not on the Line of Scrimmage or in an opposing tackle zone may use this skill when the ball has been kicked. It allows the player to move up to 3 squares after the ball has been scattered but before rolling on the Kick-Off table. Only one player may use this skill each kick-off. This skill may not be used for a touchback kick-off and does not allow the player to cross into the opponent's half of the pitch."],
@@ -150,10 +151,10 @@ SKILLS = [
     ["Very Long Legs", "Mutation", "The player is allowed to add 1 to the D6 roll whenever he attempts to intercept or uses the Leap skill. In addition, the Safe Throw skill may not be used to affect any Interception rolls made by this player."],
     ["Wild Animal", "Extraordinary", "Wild Animals are uncontrollable creatures that rarely do exactly what a coach wants of them. In fact, just about all you can really rely on them to do is lash out at opposing players that move too close to them! To represent this, immediately after declaring an Action with a Wild Animal, roll a D6, adding 2 to the roll if taking a Block or Blitz Action. On a roll of 1-3, the Wild Animal does not move and roars in rage instead, and the Action is wasted."],
     ["Wrestle", "General", "The player is specially trained in grappling techniques. This player may use Wrestle when he blocks or is blocked and a 'Both Down' result on the Block dice is chosen by either coach. Instead of applying the 'Both Down' result, both players are wrestled to the ground. Both players are Placed Prone in their respective squares even if one or both have the Block skill. Do not make Armour rolls for either player. Use of this skill does not cause a turnover unless the active player was holding the ball."],
-    ["+1 MA", "Improvement", ""],
-    ["+1 AV", "Improvement", ""],
-    ["+1 AG", "Improvement", ""],
-    ["+1 ST", "Improvement", ""]
+    ["+MA", "Improvement", ""],
+    ["+AV", "Improvement", ""],
+    ["+AG", "Improvement", ""],
+    ["+ST", "Improvement", ""]
 ]
 RACES = [
     ["Amazon", "Long ago, driven by a desire for adventure, the Valkyries of the Norse settlement in Lustria sailed away from their men-folk and founded a colony deep within the estuary of the river Amaxon. Now these ferocious warriors have taken to the Blood Bowl pitch - and Nuffle save those who dare play against them!"],
@@ -210,7 +211,7 @@ PLAYER_TYPES = [
     ["Dwarf", 2, "Runner", 80, 6, 3, 3, 8, ["Sure Hands", "Thick Skull"], "GP", "AS"],
     ["Dwarf", 2, "Blitzer", 80, 5, 3, 3, 9, ["Block", "Thick Skull"], "GS", "AP"],
     ["Dwarf", 2, "Troll Slayer", 90, 5, 3, 2, 8, ["Block", "Dauntless", "Frenzy", "Thick Skull"], "GS", "AP"],
-    ["Dwarf", 1, "Deathroller", 160, 4, 7, 1, 10, ["Loner", "Break Tackle", "Dirty Player", "Juggernaught", "Mighty Blow", "No Hands", "Secret Weapon", "Stand Firm"], "S", "GAP"],
+    ["Dwarf", 1, "Deathroller", 160, 4, 7, 1, 10, ["Loner", "Break Tackle", "Dirty Player", "Juggernaut", "Mighty Blow", "No Hands", "Secret Weapon", "Stand Firm"], "S", "GAP"],
 
     ["Elf", 16, "Lineman", 60, 6, 3, 4, 7, [], "GA", "SP"],
     ["Elf", 2, "Thrower", 70, 6, 3, 4, 7, ["Pass"], "GAP", "S"],
@@ -301,9 +302,9 @@ PLAYER_TYPES = [
     ["Bretonnian", 4, "Blitzer", 110, 7, 3, 3, 8, ["Block", "Catch", "Dauntless"], "GAP", "S"],
 
     ["Daemons of Khorne", 16, "Pit Fighter", 60, 6, 3, 4, 8, ["Frenzy"], "GP", "AS"],
-    ["Daemons of Khorne", 4, "Bloodletter", 80, 6, 3, 3, 7, ["Horns", "Juggernaught", "Regeneration"], "GAS", "P"],
-    ["Daemons of Khorne", 2, "Herald", 90, 6, 3, 3, 8, ["Frenzy", "Horns", "Juggernaught"], "GS", "AP"],
-    ["Daemons of Khorne", 1, "Bloodthirster", 180, 6, 5, 1, 9, ["Loner", "Frenzy", "Wild Animal", "Claws", "Horns", "Juggernaught", "Regeneration"], "S", "GAP"],
+    ["Daemons of Khorne", 4, "Bloodletter", 80, 6, 3, 3, 7, ["Horns", "Juggernaut", "Regeneration"], "GAS", "P"],
+    ["Daemons of Khorne", 2, "Herald", 90, 6, 3, 3, 8, ["Frenzy", "Horns", "Juggernaut"], "GS", "AP"],
+    ["Daemons of Khorne", 1, "Bloodthirster", 180, 6, 5, 1, 9, ["Loner", "Frenzy", "Wild Animal", "Claws", "Horns", "Juggernaut", "Regeneration"], "S", "GAP"],
 
     ["Simyin", 12, "Bonobo", 50, 6, 3, 3, 7, ["Extra Arms"], "G", "ASP"],
     ["Simyin", 2, "Orangutan", 70, 5, 3, 3, 8, ["Extra Arms", "Strong Arm"], "GP", "AS"],
@@ -345,7 +346,7 @@ STAR_PLAYERS = [
     ["Fezglitch", ["Skaven", "Underworld"], ["Loner", "Ball & Chain", "Disturbing Presence", "Foul Appearance", "No Hands", "Secret Weapon"], 100, 4, 7, 3, 7, ""],
     ["Flint Churnblade", ["Dwarf"], ["Loner", "Block", "Chainsaw", "Secret Weapon", "Thick Skull"], 130, 5, 3, 2, 8, ""],
     ["Fungus the Loon", ["Goblin"], ["Loner", "Ball & Chain", "Mighty Blow", "No Hands", "Secret Weapon", "Stunty"], 80, 4, 7, 3, 7, ""],
-    ["Glart Smashrip Jr.", ["Skaven", "Underworld"], ["Loner", "Block", "Claws", "Juggernaught"], 210, 7, 4, 3, 8, ""],
+    ["Glart Smashrip Jr.", ["Skaven", "Underworld"], ["Loner", "Block", "Claws", "Juggernaut"], 210, 7, 4, 3, 8, ""],
     ["Grashnak Blackhoof", ["Chaos", "Chaos Dwarf", "Nurgle", "Daemons of Khorne"], ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull"], 310, 6, 6, 2, 8, ""],
     ["Griff Oberwald", ["Human", "Bretonnian"], ["Loner", "Block", "Dodge", "Fend", "Sprint", "Sure Feet"], 320, 7, 4, 4, 8, ""],
     ["Grim Ironjaw", ["Dwarf"], ["Loner", "Block", "Dauntless", "Frenzy", "Multiple Block", "Thick Skull"], 220, 5, 4, 3, 8, ""],
@@ -355,7 +356,7 @@ STAR_PLAYERS = [
     ["Helmut Wulf", ["Amazon", "Human", "Lizardman", "Norse", "Vampire", "Slann"], ["Loner", "Chainsaw", "Secret Weapon", "Stand Firm"], 110, 6, 3, 3, 8, ""],
     ["Hemlock", ["Lizardman", "Slann"], ["Loner", "Block", "Dodge", "Side Step", "Jump Up", "Stab", "Stunty"], 170, 8, 2, 3, 7, ""],
     ["Horkon Heartripper", ["Dark Elf"], ["Loner", "Dodge", "Leap", "Multiple Block", "Shadowing", "Stab"], 210, 7, 3, 4, 7, ""],
-    ["Hthark the Unstoppable", ["Chaos Dwarf"], ["Loner", "Block", "Break Tackle", "Juggernaught", "Sprint", "Sure Feet", "Thick Skull"], 330, 6, 5, 2, 9, ""],
+    ["Hthark the Unstoppable", ["Chaos Dwarf"], ["Loner", "Block", "Break Tackle", "Juggernaut", "Sprint", "Sure Feet", "Thick Skull"], 330, 6, 5, 2, 9, ""],
     ["Hubris Rakarth", ["Dark Elf", "Elf"], ["Loner", "Block", "Dirty Player", "Jump Up", "Mighty Blow", "Strip Ball"], 260, 7, 4, 4, 8, ""],
     ["Humerus Carpal", ["Khemri"], ["Loner", "Catch", "Dodge", "Regeneration", "Nerves of Steel"], 130, 7, 2, 3, 7, ""],
     ["Icepelt Hammerblow", ["Norse"], ["Loner", "Claws", "Disturbing Presence", "Frenzy", "Regeneration", "Thick Skull"], 330, 5, 6, 1, 8, ""],
@@ -375,9 +376,9 @@ STAR_PLAYERS = [
     ["Ramtut III", ["Khemri", "Necromantic", "Undead"], ["Loner", "Break Tackle", "Mighty Blow", "Regeneration", "Wrestle"], 380, 5, 6, 1, 7, ""],
     ["Rashnak Backstabber", ["Chaos Dwarf"], ["Loner", "Dodge", "Side Step", "Sneaky Git", "Stab"], 200, 7, 3, 3, 7, ""],
     ["Ripper", ["Goblin", "Orc"], ["Loner", "Grab", "Mighty Blow", "Regeneration", "Throw Team-Mate"], 270, 4, 6, 1, 9, ""],
-    ["Roxanna Darknail", ["Amazon", "Dark Elf"], ["Loner", "Dodge", "Frenzy", "Jump Up", "Juggernaught", "Leap"], 250, 8, 3, 5, 7, ""],
+    ["Roxanna Darknail", ["Amazon", "Dark Elf"], ["Loner", "Dodge", "Frenzy", "Jump Up", "Juggernaut", "Leap"], 250, 8, 3, 5, 7, ""],
     ["Scrappa Sorehead", ["Goblin", "Ogre", "Orc"], ["Loner", "Dirty Player", "Dodge", "Leap", "Right Stuff", "Sprint", "Stunty", "Sure Feet", "Very Long Legs"], 150, 7, 4, 1, 9, ""],
-    ["Setekh", ["Khemri", "Necromantic", "Undead"], ["Loner", "Block", "Break Tackle", "Juggernaught", "Regeneration", "Strip Ball"], 220, 6, 4, 2, 8, ""],
+    ["Setekh", ["Khemri", "Necromantic", "Undead"], ["Loner", "Block", "Break Tackle", "Juggernaut", "Regeneration", "Strip Ball"], 220, 6, 4, 2, 8, ""],
     ["Slibli", ["Lizardman", "Slann"], ["Loner", "Block", "Grab", "Guard", "Stand Firm"], 250, 7, 4, 1, 8, ""],
     ["Sinnedbad", ["Khemri", "Undead"], ["Loner", "Block", "Jump Up", "Pass Block", "Regeneration", "Secret Weapon", "Side Step", "Stab"], 80, 6, 3, 2, 7, ""],
     ["Skitter Stab-Stab", ["Skaven", "Underworld"], ["Loner", "Dodge", "Prehensile Tail", "Shadowing", "Stab"], 160, 9, 2, 4, 7, ""],
@@ -397,59 +398,76 @@ INDUCEMENTS = [
     ["Halfling Master Chef", 1, {"Halfling": 100, "Otherwise": 300}, "Halfling teams may hire a Halfling Master Chef for 100,000 gold pieces; any other team can hire the Chef for 300,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."],
     ["Igor", 1, {"All": 100}, "Any team that cannot purchase a permanent Apothecary can hire an Igor for 100,000 gold pieces to assist the team. An Igor is a master of needle and thread on rotting flesh, connecting hip bone to leg bone, rewrapping funeral wraps and so on. He can really get the boys shambling back to the pitch. An Igor may only be used once per a game to re-roll one failed Regeneration roll for a player."],
     ["Wandering Apothecary", 2, {"All": 100}, "Any team may hire a Wandering Apothecary or two to help during the match for 100,000 gold pieces each, if the team can normally purchase a permanent Apothecary. Often these Apothecaries are powerful priests of the local deity. While they would never allow themselves to be a permanent part of a heathen Blood Bowl team, they have been known to assist for a single match for a generous donation to their faith. The rules for Wandering Apothecaries are identical to the rules for purchased Apothecaries on page 17. Only one Apothecary may be used to re-roll each Casualty roll."],
-    ["Wizard", 1, {"All": 150}, "A team may hire a Wizard to help your team during the match for 150,000 gold pieces. Wizards, just like everybody else in the Old World, are keen sports fans and many are fanatically loyal in support of their chosen team. It is not surprising, then, that soon after the game was born, Wizards started 'helping out' the team they supported with carefully selected spells. Soon games were awash with magic as rival Wizards battled to give their team the edge. In the end, the Colleges of Magic were forced to insist that only teams that had bought a special license from the Colleges of Magic were allowed to have magical assistance. They limited this assistance to one spell per match, and even this had to be chosen from a very limited selection and cast by an officially appointed Colleges of Magic team Wizard. Wizards and fans alike soon realised that they really wanted to see a proper Blood Bowl match rather than a spellcasting contest, so the new rules were soon universally accepted.\nAny team is allowed to hire a Wizard for a match, as long as they can afford the whopping licensing fee charged by the College of Magic concerned. No team may hire more than one Wizard per match. Wizards can be represented in games with one of the Wizard models from the range of Citadel miniatures for Warhammer. This isn't strictly necessary, but looks a lot better than representing a Wizard with a bottle top or tiddlywink!\nOnce per game, the Wizard is allowed to cast either a Fireball spell or a Lightning Bolt spell. Wizards may only cast spells at the start of his own turn before any player performs an Action or immediately after his own team's turn has ended even if it ended with a turnover.\nFireball: Choose a target square anywhere on the pitch. Roll one dice to hit each standing player (from either team) that is either in the target square or a square adjacent to it. If the 'to hit' roll is a 4 or more then the target is Knocked Down. If it is a 3 or less he manages to dodge the fireball's blast. Make an Armour roll (and possible Injury as well) for any player that is Knocked Down as if they had been Knocked Down by a player with the Mighty Blow skill. If a player on the moving team is Knocked Down by a fireball, then the moving team does not suffer a turnover unless the player was carrying the ball at the time.\nLightning Bolt: Pick a standing player anywhere on the pitch, and roll one dice. If the score is a 2 or higher, then he has been hit by the lightning bolt. If the roll is a 1 then he manages to dodge out of the way. A player hit by a lightning bolt is Knocked Down and must make an Armour roll (and possible Injury as well) as if hit by a player with the Mighty Blow skill."],
+    ["Wizard", 1, {"All": 150},
+     "A team may hire a Wizard to help your team during the match for 150,000 gold pieces. Wizards, just like everybody else in the Old World, are keen sports fans and many are fanatically loyal in support of their chosen team. It is not surprising, then, that soon after the game was born, Wizards started 'helping out' the team they supported with carefully selected spells. Soon games were awash with magic as rival Wizards battled to give their team the edge. In the end, the Colleges of Magic were forced to insist that only teams that had bought a special license from the Colleges of Magic were allowed to have magical assistance. They limited this assistance to one spell per match, and even this had to be chosen from a very limited selection and cast by an officially appointed Colleges of Magic team Wizard. Wizards and fans alike soon realised that they really wanted to see a proper Blood Bowl match rather than a spellcasting contest, so the new rules were soon universally accepted.\nAny team is allowed to hire a Wizard for a match, as long as they can afford the whopping licensing fee charged by the College of Magic concerned. No team may hire more than one Wizard per match. Wizards can be represented in games with one of the Wizard models from the range of Citadel miniatures for Warhammer. This isn't strictly necessary, but looks a lot better than representing a Wizard with a bottle top or tiddlywink!\nOnce per game, the Wizard is allowed to cast either a Fireball spell or a Lightning Bolt spell. Wizards may only cast spells at the start of his own turn before any player performs an Action or immediately after his own team's turn has ended even if it ended with a turnover.\nFireball: Choose a target square anywhere on the pitch. Roll one dice to hit each standing player (from either team) that is either in the target square or a square adjacent to it. If the 'to hit' roll is a 4 or more then the target is Knocked Down. If it is a 3 or less he manages to dodge the fireball's blast. Make an Armour roll (and possible Injury as well) for any player that is Knocked Down as if they had been Knocked Down by a player with the Mighty Blow skill. If a player on the moving team is Knocked Down by a fireball, then the moving team does not suffer a turnover unless the player was carrying the ball at the time.\nLightning Bolt: Pick a standing player anywhere on the pitch, and roll one dice. If the score is a 2 or higher, then he has been hit by the lightning bolt. If the roll is a 1 then he manages to dodge out of the way. A player hit by a lightning bolt is Knocked Down and must make an Armour roll (and possible Injury as well) as if hit by a player with the Mighty Blow skill."],
     ["Cheerleader", 3, {"All": 20}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
     ["Assistant Coach", 3, {"All": 20}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
     ["Marketing Blitz", 5, {"All": 20}, ""]
 ]
 
 PURCHASES = [
-    ["Cheerleader", {"All":10}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
-    ["Assistant Coach", {"All":10}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
-    ["Apothecary", {"All":50, "Exceptions":["Khemri", "Necromantic", "Nurgle", "Undead"]}, "An Apothecary is a healer wise in the ways of medicine and the healing arts who looks after the injured players in a Blood Bowl team - and so has a strenuous and full-time job! It costs 50,000 gold pieces to purchase an Apothecary to permanently look after your team during a match. He may be represented by an appropriate Citadel miniature if you wish. A team may not have more than one purchased Apothecary. Khemri, Necromantic, Nurgle and Undead teams may not purchase or use an Apothecary.\nDuring a match, an Apothecary may attempt to cure a player who has suffered a Casualty or been KO'd. An Apothecary can be used only once per match. If the player was KO'd leave him on the pitch Stunned, or, if he was not on the pitch, put him in the Reserves box. Otherwise immediately after the player suffers the Casualty, you can use the Apothecary to make your opponent roll again on the Casualty table (see page 25) and then you choose which of the two results to apply. If the player is only Badly Hurt after this roll (even if it was the original Casualty roll) the Apothecary has managed to patch him up and pump him full of painkillers so that the player may be moved into the Reserves box."],
+    ["Cheerleader", {"All": 10}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
+    ["Assistant Coach", {"All": 10}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
+    ["Apothecary", {"All": 50, "Exceptions": ["Khemri", "Necromantic", "Nurgle", "Undead"]},
+     "An Apothecary is a healer wise in the ways of medicine and the healing arts who looks after the injured players in a Blood Bowl team - and so has a strenuous and full-time job! It costs 50,000 gold pieces to purchase an Apothecary to permanently look after your team during a match. He may be represented by an appropriate Citadel miniature if you wish. A team may not have more than one purchased Apothecary. Khemri, Necromantic, Nurgle and Undead teams may not purchase or use an Apothecary.\nDuring a match, an Apothecary may attempt to cure a player who has suffered a Casualty or been KO'd. An Apothecary can be used only once per match. If the player was KO'd leave him on the pitch Stunned, or, if he was not on the pitch, put him in the Reserves box. Otherwise immediately after the player suffers the Casualty, you can use the Apothecary to make your opponent roll again on the Casualty table (see page 25) and then you choose which of the two results to apply. If the player is only Badly Hurt after this roll (even if it was the original Casualty roll) the Apothecary has managed to patch him up and pump him full of painkillers so that the player may be moved into the Reserves box."],
     ["Team Re-roll", {"Amazon": 50, "Chaos": 60, "Chaos Dwarf": 70, "Dark Elf": 50, "Dwarf": 50, "Elf": 50, "Goblin": 60, "Halfling": 60, "High Elf": 50, "Human": 50, "Khemri": 70, "Lizardman": 60, "Necromantic": 70, "Norse": 60, "Nurgle": 70, "Ogre": 70, "Orc": 60, "Skaven": 60, "Undead": 70, "Vampire": 70, "Wood Elf": 50, "Chaos Pact": 70, "Slann": 50, "Underworld": 70, "Bretonnian": 70, "Daemons of Khorne": 70, "Simyin": 60}, ""],
-    ["Bribe", {"Goblin":100, "Otherwise":200}, "Goblin teams may buy a bribe for 50,000 gold pieces; any other team can buy a bribe for 100,000 gold pieces. Each bribe allows a team to attempt to ignore one call by the referee for a player who has committed a foul to be sent off, or a player armed with a secret weapon to be banned from the match. Roll a D6: on a roll of 2-6 the bribe is effective (preventing a turnover if the player was ejected for fouling), but on a roll of 1 the bribe is wasted and the call still stands! Each bribe may be used once per match."],
-    ["Halfling Master Chef", {"Halfling":200,"Otherwise":600}, "Halfling teams may hire a Halfling Master Chef for 100,000 gold pieces; any other team can hire the Chef for 300,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."]
+    ["Bribe", {"Goblin": 100, "Otherwise": 200}, "Goblin teams may buy a bribe for 50,000 gold pieces; any other team can buy a bribe for 100,000 gold pieces. Each bribe allows a team to attempt to ignore one call by the referee for a player who has committed a foul to be sent off, or a player armed with a secret weapon to be banned from the match. Roll a D6: on a roll of 2-6 the bribe is effective (preventing a turnover if the player was ejected for fouling), but on a roll of 1 the bribe is wasted and the call still stands! Each bribe may be used once per match."],
+    ["Halfling Master Chef", {"Halfling": 200, "Otherwise": 600}, "Halfling teams may hire a Halfling Master Chef for 100,000 gold pieces; any other team can hire the Chef for 300,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."]
 ]
 
-MATCH_TYPES = ["Pre-season", "Regular", "Post-season", "Championship"]
+MATCH_TYPES = ["Preseason", "Regular", "Postseason", "Championship"]
 
-COACHES = ["Randy", "Phillip", "Matthew", "Joe R", "David", "Kendal", "Daniel", "Joe H", "Trever", "Chris", "Troy"]
+COACHES = set(["Randy", "Phillip", "Matthew", "Joe R", "David", "Kendal", "Daniel", "Joe H", "Trever", "Chris", "Troy"])
+
+COACH_MAP = {
+    "Randy": ["Randy Cummins"],
+    "Phillip": ["Phillip Ponzer", "Phil"],
+    "Matthew": ["Matthew Quinn"],
+    "Joe R": ["Joe Roberts", "Joe \"profgoldfinch\" Roberts"],
+    "David": ["David J Harshman"],
+    "Kendal": ["Kendal Bowser"],
+    "Daniel": ["Daniel Connors"],
+    "Joe H": ["Joe Hudgens"],
+    "Trever": ["Trever Leikam"],
+    "Chris": ["The Spirit of Harambe", "Chris Thomason", "Patches O'Houlihan"],
+    "Troy": ["TDC", "Troy Chrisman"],
+    "Flagg": ["Flagg Thorin"]
+}
 
 TEAMS = [
-    ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1"],
-    ["Jacksonville Thrillers", "Joe R", "Necromantic", "Season 1"],
-    ["Population: Orc", "Phillip", "Orc", "Season 1"],
-    ["Wrath of the Month", "Chris", "Amazon", "Season 1"],
-    ["OrCares", "Troy", "Orc", "Season 1"],
-    ["Guardians of the Nile", "Kendal", "Lizardman", "Season 1"],
-    ["Skyhaven Silverfoxes", "Chris", "Elf", "Season 1"],
-    ["Ashtown Villains", "Joe H", "Undead", "Season 1"],
-    ["Aedra & Daedra", "Kendal", "Dark Elf", "Season 1"],
-    ["Hellions of Troy", "Troy", "Human", "Season 1"],
-    ["Komodo Sinodons", "Randy", "Lizardman", "Season 2"],
-    ["Population: Orc", "Phillip", "Orc", "Season 2"],
-    ["Quixotic Crushers", "Matthew", "Bretonnian", "Season 2"],
-    ["Tatooine Technographers", "Joe R", "Goblin", "Season 2"],
-    ["Alliance of the Old Gods", "Joe R", "Chaos Pact", "Season 2"],
-    ["Blood Mountain Berserkers", "David", "Dwarf", "Season 2"],
-    ["Bows and Bandannas", "Kendal", "Necromantic", "Season 2"],
-    ["Fink Foulers", "Daniel", "Skaven", "Season 2"],
-    ["Hellions of Troy", "Troy", "Human", "Season 2"],
-    ["Mile High Maulers", "Joe H", "Norse", "Season 2"],
-    ["The Replacements", "Trever", "Human", "Season 2"],
-    ["Turtle Isle Typhoons", "Chris", "Simyin", "Season 2"],
-    ["The Sleeping Giants", "Troy", "Undead", "Season 2"]
+    ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1", []],
+    ["Jacksonville Thrillers", "Joe R", "Necromantic", "Season 1", []],
+    ["Population: Orc", "Phillip", "Orc", "Season 1", []],
+    ["Wrath of the Month", "Chris", "Amazon", "Season 1", []],
+    ["OrCares", "Troy", "Orc", "Season 1", []],
+    ["Guardians of the Nile", "Kendal", "Lizardman", "Season 1", []],
+    ["Skyhaven Silverfoxes", "Chris", "Elf", "Season 1", []],
+    ["Ashtown Villains", "Joe H", "Undead", "Season 1", []],
+    ["Aedra & Daedra", "Kendal", "Dark Elf", "Season 1", []],
+    ["Hellions of Troy", "Troy", "Human", "Season 1", []],
+    ["Komodo Sinodons", "Randy", "Lizardman", "Season 2", []],
+    ["Population: Orc", "Phillip", "Orc", "Season 2", []],
+    ["Quixotic Crushers", "Matthew", "Bretonnian", "Season 2", []],
+    ["Tatooine Technographers", "Joe R", "Goblin", "Season 2", []],
+    ["Riverdale Ravagers", "Joe R", "Chaos Pact", "Season 2", []],
+    ["Blood Mountain Berserkers", "David", "Dwarf", "Season 2", []],
+    ["Bows and Bandannas", "Kendal", "Necromantic", "Season 2", []],
+    ["Fink Foulers", "Daniel", "Skaven", "Season 2", []],
+    ["Hellions of Troy", "Troy", "Human", "Season 2", []],
+    ["Mile High Maulers", "Joe H", "Norse", "Season 2", []],
+    ["The Replacements", "Trever", "Human", "Season 2", []],
+    ["Turtle Isle Typhoons", "Chris", "Simyin", "Season 2", []],
+    ["The Sleeping Giants", "Troy", "Undead", "Season 2", []]
 ]
 
 DECKS = [
-    ["Misc Mayhem", 50 ],
-    ["Special Team Plays", 50 ],
-    ["Magic Items", 50 ],
-    ["Dirty Tricks", 50 ],
-    ["Good Karma", 100 ],
-    ["Random Events", 200 ],
-    ["Desperate Measures", 400 ]
+    ["Misc Mayhem", 50],
+    ["Special Team Plays", 50],
+    ["Magic Items", 50],
+    ["Dirty Tricks", 50],
+    ["Good Karma", 100],
+    ["Random Events", 200],
+    ["Desperate Measures", 400]
 ]
 # 13+13+13+13+26+18+8 = 104
 CARDS = [
@@ -559,9 +577,308 @@ CARDS = [
     ["Mysterious Old Medicine Man", "AS", "Desperate Measures", "", "", ""]
 ]
 
-
-
 if __name__ == '__main__':
+    TEAMS = []
+    if False:
+        print "Loading Season 1 Rosters..."
+        s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True)
+        print "    Sheet loaded! Now loading teams/players..."
+        # sheetNames = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]  # , "T9", "T10"]
+        sheetNames = s1.get_sheet_names()[5:13]
+        for sheetName in sheetNames:
+            rosterSheet = s1[sheetName]
+            rows = []
+            for row in rosterSheet.rows:
+                rows.append([cell.value for cell in row])
+
+            teamInfo = rows[2]
+            raceName = teamInfo[4]
+            teamName = teamInfo[9]
+            coachName = teamInfo[13]
+
+            treasury = rows[38][12]
+            rerolls = rows[33][12]
+            fanFactor = rows[34][12]
+            assistantCoaches = rows[35][12]
+            cheerleaders = rows[36][12]
+            apothecary = rows[37][12]
+
+            players = []
+            for row in rows[5:21]:
+                playerName = row[3]
+                playerPosition = row[4]
+                ma = row[6]
+                st = row[7]
+                ag = row[8]
+                av = row[9]
+                skillsTemp = row[10].split(",") if row[10] else []
+                skills = [skill.strip() for skill in skillsTemp]
+                skillReplace = [
+                    ["MA+", "+MA"],
+                    ["ST+", "+ST"],
+                    ["AG+", "+AG"],
+                    ["AV+", "+AV"],
+                    ["MA-", "-MA"],
+                    ["ST-", "-ST"],
+                    ["AG-", "-AG"],
+                    ["AV-", "-AV"],
+                ]
+                for skillRepl in skillReplace:
+                    skill1 = skillRepl[0]
+                    skill2 = skillRepl[1]
+                    if skill1 in skills:
+                        skills.remove(skill1)
+                        skills.append(skill2)
+
+                status = row[11]
+                completions = row[12]
+                touchdowns = row[13]
+                interceptions = row[14]
+                casualties = row[15]
+                kills = None
+                mvps = row[16]
+                players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+
+                # ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1", []],
+            print "        %s" % teamName
+            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players])
+
+            for coachNameKey, coachAliases in COACH_MAP.iteritems():
+                if coachNameKey == coachName:
+                    COACHES.add(coachName)
+                elif coachName in coachAliases:
+                    COACHES.add(coachNameKey)
+
+        print
+        print "Loading Season 2 Rosters..."
+        s2 = load_workbook("imports/S2 Rosters.xlsx", data_only=True)
+        print "    Sheet loaded! Now loading teams/players..."
+        # sheetNames = ["DC1", "CT1", "MQ1", "MQ2", "TL1", "DH1", "DH2", "JR1", "JR2", "PP1", "RC1", "KB1", "JH1", "TC1", "TC2", "FT1"]
+        sheetNames = s2.get_sheet_names()[4:20]
+        for sheetName in sheetNames:
+            rosterSheet = s2[sheetName]
+            rows = []
+            for row in rosterSheet.rows:
+                rows.append([cell.value for cell in row])
+
+            teamName = rows[19][8]
+            raceName = rows[20][8]
+            coachName = rows[21][8]
+            treasury = rows[22][8]
+            rerolls = rows[19][19]
+            fanFactor = rows[20][19]
+            assistantCoaches = rows[21][19]
+            cheerleaders = rows[21][19]
+            apothecary = rows[21][19]
+
+            players = []
+            for row in rows[2:18]:
+                playerName = row[2]
+                playerPosition = row[3]
+                ma = row[4]
+                st = row[5]
+                ag = row[6]
+                av = row[7]
+                skillsTemp = row[8].split(",") if row[8] else []
+                skills = [skill.strip() for skill in skillsTemp]
+                injuryNiggling = row[12]
+                injuryMA = row[13]
+                injuryST = row[14]
+                injuryAG = row[15]
+                injuryAV = row[16]
+                if injuryNiggling:
+                    skills.append("Niggling")
+                if injuryMA:
+                    skills.append("-MA")
+                if injuryST:
+                    skills.append("-ST")
+                if injuryAG:
+                    skills.append("-AG")
+                if injuryAV:
+                    skills.append("-AV")
+                status = "MNG" if row[11] else None
+                completions = row[18]
+                touchdowns = row[19]
+                interceptions = row[17]
+                casualties = row[20]
+                kills = row[21]
+                mvps = row[22]
+                players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+
+            print "        %s" % teamName
+            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 2", players])
+
+            for coachNameKey, coachAliases in COACH_MAP.iteritems():
+                if coachNameKey == coachName:
+                    COACHES.add(coachName)
+                elif coachName in coachAliases:
+                    COACHES.add(coachNameKey)
+
+        print
+        print "Loading Season 3 Rosters..."
+        s3 = load_workbook("imports/S3 Rosters.xlsx", data_only=True)
+        print "    Sheet loaded! Now loading teams/players..."
+        sheetNames = s3.get_sheet_names()[0:22]
+        for sheetName in sheetNames:
+            rosterSheet = s3[sheetName]
+            rows = []
+            for row in rosterSheet.rows:
+                rows.append([cell.value for cell in row])
+
+            teamName = rows[20][8]
+            raceName = rows[21][8]
+            coachName = rows[22][8]
+            treasury = rows[23][8]
+            rerolls = rows[20][19]
+            fanFactor = rows[21][19]
+            assistantCoaches = rows[22][19]
+            cheerleaders = rows[22][19]
+            apothecary = rows[22][19]
+
+            players = []
+            for row in rows[3:19]:
+                playerName = row[2]
+                playerPosition = row[3]
+                ma = row[4]
+                st = row[5]
+                ag = row[6]
+                av = row[7]
+                skillsTemp = row[8].split(",") if row[8] else []
+                skills = [skill.strip() for skill in skillsTemp]
+                injuryNiggling = row[12]
+                injuryMA = row[13]
+                injuryST = row[14]
+                injuryAG = row[15]
+                injuryAV = row[16]
+                if injuryNiggling:
+                    skills.append("Niggling")
+                if injuryMA:
+                    skills.append("-MA")
+                if injuryST:
+                    skills.append("-ST")
+                if injuryAG:
+                    skills.append("-AG")
+                if injuryAV:
+                    skills.append("-AV")
+                status = "MNG" if row[11] else None
+                completions = row[18]
+                touchdowns = row[19]
+                interceptions = row[17]
+                casualties = row[20]
+                kills = row[21]
+                mvps = row[22]
+                players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+
+            print "        %s" % teamName
+            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
+
+            for coachNameKey, coachAliases in COACH_MAP.iteritems():
+                if coachNameKey == coachName:
+                    COACHES.add(coachName)
+                elif coachName in coachAliases:
+                    COACHES.add(coachNameKey)
+
+    MATCHES = []
+    print
+    print "Loading Season 2 Matches..."
+    s3 = load_workbook("imports/S2 Matches.xlsx", data_only=True)
+    print "    Sheet loaded! Now loading matches..."
+    sheetNames = s3.get_sheet_names()[3:]
+    for sheetName in sheetNames:
+        matchSheet = s3[sheetName]
+        rows = []
+        for row in matchSheet.rows:
+            rows.append([cell.value for cell in row])
+
+        team1 = rows[2][1]
+        team1TV = rows[2][25]
+        team1InducementGP = rows[6][1]
+        team1Gate = rows[6][13]
+        team1Fame = rows[6][25]
+        team1Inducements = [rows[i][1] for i in range(9, 16)]
+        team1Inducements.extend([rows[i][13] for i in range(9, 16)])
+        team1TDs = 0
+        team1Cas = 0
+        team1Kills = 0
+        team1Players = []
+        for i in range(22, 53, 2):
+            team1Players.append([rows[i][j] for j in range(3, 26, 2)])
+            team1TDs += rows[i][5] if rows[i][5] else 0
+            team1Cas += rows[i][9] if rows[i][9] else 0
+            team1Kills += rows[i][11] if rows[i][11] else 0
+
+        team1Winnings = rows[56][1]
+        team1ExpMistakes = rows[56][14]
+        team1EndFanFactor = rows[56][27]
+        team1Purchases = rows[60][1]
+        team1Notes = rows[60][19]
+
+        team2 = rows[2][39]
+        team2TV = rows[2][63]
+        team2InducementGP = rows[6][39]
+        team2Gate = rows[6][51]
+        team2Fame = rows[6][63]
+        team2Inducements = [rows[i][39] for i in range(9, 16)]
+        team2Inducements.extend([rows[i][52] for i in range(9, 16)])
+        team2TDs = 0
+        team2Cas = 0
+        team2Kills = 0
+        team2Players = []
+        for i in range(22, 53, 2):
+            team2Players.append([rows[i][j] for j in range(41, 64, 2)])
+            team2TDs += rows[i][43] if rows[i][43] else 0
+            team2Cas += rows[i][47] if rows[i][47] else 0
+            team2Kills += rows[i][49] if rows[i][49] else 0
+
+        team2Winnings = rows[56][39]
+        team2ExpMistakes = rows[56][14]
+        team2EndFanFactor = rows[56][52]
+        team2Purchases = rows[60][39]
+        team2Notes = rows[60][57]
+
+        match = {
+            "type": "Regular",
+            "date": None,
+            "season": "Season 2",
+            "teams": [
+                {
+                    "name": team1,
+                    "tv": team1TV,
+                    "inducementsGP": team1InducementGP.replace(" gp", "") if type(team1InducementGP) is str else team1InducementGP,
+                    "gate": team1Gate,
+                    "fame": int(team1Fame) if team1Fame else 0,
+                    "inducements": list(filter(lambda x: x is not None, team1Inducements)),
+                    "tds": team1TDs,
+                    "cas": team1Cas,
+                    "kills": team1Kills,
+                    "players": team1Players,
+                    "winnings": team1Winnings,
+                    "expMistakes": team1ExpMistakes,
+                    "fanFactor": team1EndFanFactor,
+                    "purchases": team1Purchases,
+                    "notes": team1Notes
+                },
+                {
+                    "name": team2,
+                    "tv": team2TV,
+                    "inducementsGP": team2InducementGP.replace(" gp", "") if type(team2InducementGP) is str else team2InducementGP,
+                    "gate": team2Gate,
+                    "fame": int(team2Fame) if team2Fame else 0,
+                    "inducements": list(filter(lambda x: x is not None, team2Inducements)),
+                    "tds": team2TDs,
+                    "cas": team2Cas,
+                    "kills": team2Kills,
+                    "players": team2Players,
+                    "winnings": team2Winnings,
+                    "expMistakes": team2ExpMistakes,
+                    "fanFactor": team2EndFanFactor,
+                    "purchases": team2Purchases,
+                    "notes": team2Notes
+                }
+            ]
+        }
+        MATCHES.append(match)
+
     cnx = mysql.connector.connect(user=settings.mysql_username, password=settings.mysql_password, host=settings.mysql_server, database=settings.mysql_db)
     cnx.autocommit = True
     cursor = cnx.cursor()
@@ -607,6 +924,9 @@ if __name__ == '__main__':
         coachID = cursor.lastrowid
         coachIDs[coach] = coachID
 
+        for coachAlias in COACH_MAP[coach]:
+            coachIDs[coachAlias] = coachID
+
     trophyIDs = {}
     print
     print "Trophies"
@@ -632,14 +952,60 @@ if __name__ == '__main__':
         seasonID = cursor.lastrowid
         seasonIDs[name] = seasonID
 
-    teamIDs={}
+    # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
+    playerTypeIDs = {}
+    print
+    print "Players Types"
+    for playerType in PLAYER_TYPES:
+        race = playerType[0]
+        maxAmt = playerType[1]
+        name = playerType[2]
+        value = playerType[3]
+        ma = playerType[4]
+        st = playerType[5]
+        ag = playerType[6]
+        av = playerType[7]
+        skills = playerType[8]
+        normal = playerType[9]
+        double = playerType[10]
+
+        print "    %s: %s" % (race, name)
+        cursor.execute("INSERT IGNORE INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 0, raceIDs[race], value, None))
+        playerTypeID = cursor.lastrowid
+        if race not in playerTypeIDs:
+            playerTypeIDs[race] = {}
+        playerTypeIDs[race][name] = playerTypeID
+
+        for skill in skills:
+            cursor.execute("INSERT IGNORE INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
+
+        for initial in normal:
+            for skillType in skillTypeIDs.keys():
+                if skillType.startswith(initial):
+                    cursor.execute("INSERT IGNORE INTO player_type_skill_type_normal VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
+
+        for initial in double:
+            for skillType in skillTypeIDs.keys():
+                if skillType.startswith(initial):
+                    cursor.execute("INSERT IGNORE INTO player_type_skill_type_double VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
+
+    teamIDs = {}
     print
     print "Teams"
     for team in TEAMS:
-        name = team[0]
-        coachName = team[1]
-        raceName = team[2]
-        seasonName = team[3]
+        # TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
+        name = team[0].strip()
+        coachName = team[1].strip()
+        raceName = team[2].strip()
+        treasury = team[3]
+        rerolls = team[4]
+        fanFactor = team[5]
+        assistantCoaches = team[6]
+        cheerleaders = team[7]
+        apothecary = team[8]
+        seasonName = team[9]
+        players = team[10]
+        value = 0
         print "    %s" % name
 
         coachID = coachIDs[coachName]
@@ -649,9 +1015,90 @@ if __name__ == '__main__':
         if name in teamIDs:
             prevTeamID = teamIDs[name]
 
-        cursor.execute("INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,%s,0,0,0,NULL,NULL,NULL,NULL)", (name, coachID, raceID, seasonID, prevTeamID))
+        cursor.execute(
+                "INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                (name, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary)
+        )
         teamID = cursor.lastrowid
         teamIDs[name] = teamID
+
+        for i, player in enumerate(players):
+            # players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+            number = i + 1
+            playerName = player[0].strip() if player[0] else None
+            playerPosition = player[1].strip() if player[1] else None
+            if not playerName and playerPosition:
+                playerName = "Player %s" % number
+            print "        (%s/%s): %s" % (number, len(players), playerName)
+            if not playerPosition:
+                continue
+
+            playerTypeID = playerTypeIDs[raceName][playerPosition]
+            ma = player[2]
+            st = player[3]
+            ag = player[4]
+            av = player[5]
+
+            skills = player[6]
+            mng = "1" if player[7] == "MNG" else "0"
+            niggling = "1" if "Niggling" in skills else "0"
+            injCount = collections.Counter(skills)
+            maInjuries = injCount["-MA"] if "-MA" in injCount else 0
+            stInjuries = injCount["-ST"] if "-ST" in injCount else 0
+            agInjuries = injCount["-AG"] if "-AG" in injCount else 0
+            avInjuries = injCount["-AV"] if "-AV" in injCount else 0
+
+            completions = player[8]
+            touchdowns = player[9]
+            interceptions = player[10]
+            casualties = player[11]
+            kills = player[12]
+            mvps = player[13]
+
+            cursor.execute(
+                    "INSERT IGNORE INTO player VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (number, playerName, teamID, playerTypeID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, 0)
+            )
+
+    print
+    print "Match Types"
+    matchTypeIDs = {}
+    for matchType in MATCH_TYPES:
+        print "    %s" % matchType
+        cursor.execute("INSERT IGNORE INTO match_type VALUES(NULL,%s)", (matchType,))
+        matchTypeID = cursor.lastrowid
+        matchTypeIDs[matchType] = matchTypeID
+
+    print
+    print "Matches"
+    matchNum = 0
+    curSeason = None
+    for match in MATCHES:
+        if curSeason != match["season"]:
+            curSeason = match["season"]
+            matchNum = 1
+
+        team1 = match["teams"][0]
+        team2 = match["teams"][1]
+        print "    %s: Match %s - \"%s\" vs. \"%s\"" % (curSeason, matchNum, team1["name"], team2["name"])
+
+        seasonID = seasonIDs[curSeason]
+        matchTypeID = matchTypeIDs(match["type"])
+        team1ID = teamIDs[team1["name"]]
+        team2ID = teamIDs[team2["name"]]
+
+        cursor.execute(
+                "INSERT IGNORE INTO match VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                (seasonID, match["date"], matchTypeID, team1ID, team2ID, team1["tds"], team2["tds"], team1["fame"], team2["fame"], team1["tv"], team2["tv"], team1["winnings"], team2["winnings"])
+        )
+        matchID = cursor.lastrowid
+
+        # CREATE MATCH_INDUCEMENT TABLE
+        # MATCH_ID, TEAM_ID, INDUCEMENT_ID, AMT
+        # CREATE MATCH_PURCHASE TABLE
+        # MATCH_ID, TEAM_ID, PURCHASE_ID
+
+        matchNum += 1
 
     print
     print "Updating Season Winners..."
@@ -674,7 +1121,7 @@ if __name__ == '__main__':
         cursor.execute("INSERT IGNORE INTO deck VALUES(NULL,%s,%s)", (name, cost))
         deckID = cursor.lastrowid
         deckIDs[name] = deckID
-    
+
     print
     print "Cards"
     for card in CARDS:
@@ -688,39 +1135,6 @@ if __name__ == '__main__':
 
         deckID = deckIDs[deckName]
         cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
-
-    # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
-    print
-    print "Players Types"
-    for playerType in PLAYER_TYPES:
-        race = playerType[0]
-        maxAmt = playerType[1]
-        name = playerType[2]
-        value = playerType[3]
-        ma = playerType[4]
-        st = playerType[5]
-        ag = playerType[6]
-        av = playerType[7]
-        skills = playerType[8]
-        normal = playerType[9]
-        double = playerType[10]
-
-        print "    %s: %s" % (race, name)
-        cursor.execute("INSERT IGNORE INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 0, raceIDs[race], value, None))
-        playerTypeID = cursor.lastrowid
-
-        for skill in skills:
-            cursor.execute("INSERT IGNORE INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
-
-        for initial in normal:
-            for skillType in skillTypeIDs.keys():
-                if skillType.startswith(initial):
-                    cursor.execute("INSERT IGNORE INTO player_type_skill_type_normal VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
-
-        for initial in double:
-            for skillType in skillTypeIDs.keys():
-                if skillType.startswith(initial):
-                    cursor.execute("INSERT IGNORE INTO player_type_skill_type_double VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
 
     # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
     print
@@ -752,8 +1166,6 @@ if __name__ == '__main__':
 
             for skill in skills:
                 cursor.execute("INSERT IGNORE INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
-
-                
 
     print
     print "Inducements"
@@ -812,14 +1224,7 @@ if __name__ == '__main__':
                         cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                     break
 
-    print
-    print "Match Types"
-    for matchType in MATCH_TYPES:
-        print "    %s" % matchType
-        cursor.execute("INSERT IGNORE INTO match_type VALUES(NULL,%s)", (matchType,))
-
-
     cursor.execute("INSERT IGNORE INTO meta VALUES(NULL,%s,%s)", ("season.current", "3"))
-    
+
     print
     print "Done!"

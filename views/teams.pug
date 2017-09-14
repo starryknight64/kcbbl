@@ -57,13 +57,8 @@ append body
 						h3.panel-title Roster
 					.panel-body
 						.list-group
-							a.list-group-item(href="#") Player 1
-							a.list-group-item(href="#") Player 2
-							a.list-group-item(href="#") Player 3
-							a.list-group-item(href="#") Player 4
-							a.list-group-item(href="#") Player 5
 							each player, i in players
-								a.list-group-item(href="/players/"+player.id) #{player.name}
+								a.list-group-item(href="/players/"+player.id) #{player.number}: #{player.name}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading

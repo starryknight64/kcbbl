@@ -57,7 +57,7 @@ append body
 													if player.id == curPlayer.id
 														a(href="#") #{player.team.name} - #{player.name}
 													else
-														a(href="/teams/"+player.id) #{player.team.name} - #{player.name}
+														a(href="/players/"+player.id) #{player.team.name} - #{player.name}
 						.col-md-4
 							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curPlayer.team.race.name.replace(" ","%20")+".png")
 		.row

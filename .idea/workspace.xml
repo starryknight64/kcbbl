@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f7e2328e-6015-4428-863a-e44f47757f4f" name="Default" comment="" />
+    <list default="true" id="f7e2328e-6015-4428-863a-e44f47757f4f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/import.py" afterPath="$PROJECT_DIR$/import.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,24 +20,10 @@
       <file leaf-file-name="import.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/import.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="424" column="1" lean-forward="false" selection-start-line="424" selection-start-column="1" selection-end-line="424" selection-end-column="1" />
+            <state relative-caret-position="272">
+              <caret line="433" column="14" lean-forward="false" selection-start-line="433" selection-start-column="14" selection-end-line="433" selection-end-column="14" />
               <folding>
-                <element signature="e#1553#43509#0" expanded="false" />
-                <element signature="e#43518#54439#0" expanded="false" />
-                <element signature="e#54456#65744#0" expanded="false" />
-                <element signature="e#65760#74439#0" expanded="false" />
-                <element signature="e#74455#80000#0" expanded="false" />
-                <element signature="e#82413#83779#0" expanded="false" />
-                <element signature="e#84103#84300#0" expanded="false" />
-                <element signature="e#84382#84694#0" expanded="false" />
-                <element signature="e#85238#86483#0" expanded="false" />
-                <element signature="e#86693#87656#0" expanded="false" />
-                <element signature="e#87735#88259#0" expanded="false" />
-                <element signature="e#89089#89201#0" expanded="false" />
-                <element signature="e#89285#89469#0" expanded="false" />
-                <element signature="e#89555#89837#0" expanded="false" />
-                <element signature="e#89898#90278#0" expanded="false" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -55,15 +43,38 @@
       <find>–</find>
       <find>’</find>
       <find>MATCH_TYPES</find>
+      <find>playerTypeID</find>
+      <find>Niggling</find>
+      <find>-MA</find>
+      <find>-MA&quot;</find>
+      <find>mvin</find>
+      <find>+</find>
+      <find>Juggernaught</find>
+      <find>bomber</find>
+      <find>goblin</find>
+      <find>split</find>
+      <find>split(</find>
+      <find>alliance of</find>
+      <find>team re-roll</find>
+      <find>team re-roll&quot;</find>
+      <find>PURCHASES</find>
+      <find>team1</find>
+      <find>pre-</find>
+      <find>flagg</find>
     </findStrings>
     <replaceStrings>
       <replace>Kick-Off Return</replace>
       <replace>&quot;Claws&quot;</replace>
       <replace>&quot;Dump-off&quot;</replace>
       <replace>&quot;Sneaky Git&quot;</replace>
-      <replace>-</replace>
       <replace>'</replace>
+      <replace>-</replace>
+      <replace>Juggernaut</replace>
+      <replace>team2</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -73,11 +84,12 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
+    <option name="x" value="-1928" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
-    <option name="height" value="1176" />
+    <option name="height" value="1096" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -94,7 +106,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -109,10 +120,11 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -241,19 +253,19 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="7" />
+    <frame x="-1928" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18656716" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32928064" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32883817" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" x="-1828" y="297" width="1920" height="325" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298969" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39925024" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38900414" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -269,6 +281,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/import.py</url>
+          <line>881</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint suspend="NONE" type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -276,9 +295,13 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="8" />
+      <option name="time" value="43" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="node" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/import.py">
@@ -286,21 +309,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -310,189 +319,163 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/openpyxl/descriptors/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2295">
+          <caret line="135" column="40" lean-forward="true" selection-start-line="135" selection-start-column="40" selection-end-line="135" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/openpyxl/descriptors/serialisable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="83" column="21" lean-forward="true" selection-start-line="83" selection-start-column="21" selection-end-line="83" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/openpyxl/worksheet/table.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16626">
+          <caret line="1014" column="0" lean-forward="false" selection-start-line="1014" selection-start-column="0" selection-end-line="1014" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/import.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/import.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
+        <state relative-caret-position="7208">
           <caret line="424" column="1" lean-forward="false" selection-start-line="424" selection-start-column="1" selection-end-line="424" selection-end-column="1" />
           <folding>
-            <element signature="e#1553#43509#0" expanded="false" />
-            <element signature="e#43518#54439#0" expanded="false" />
-            <element signature="e#54456#65744#0" expanded="false" />
-            <element signature="e#65760#74439#0" expanded="false" />
-            <element signature="e#74455#80000#0" expanded="false" />
-            <element signature="e#82413#83779#0" expanded="false" />
-            <element signature="e#84103#84300#0" expanded="false" />
-            <element signature="e#84382#84694#0" expanded="false" />
-            <element signature="e#85238#86483#0" expanded="false" />
-            <element signature="e#86693#87656#0" expanded="false" />
-            <element signature="e#87735#88259#0" expanded="false" />
-            <element signature="e#89089#89201#0" expanded="false" />
-            <element signature="e#89285#89469#0" expanded="false" />
-            <element signature="e#89555#89837#0" expanded="false" />
-            <element signature="e#89898#90278#0" expanded="false" />
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="16626">
+          <caret line="1014" column="0" lean-forward="false" selection-start-line="1014" selection-start-column="0" selection-end-line="1014" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/openpyxl/worksheet/table.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/openpyxl/descriptors/serialisable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="83" column="21" lean-forward="false" selection-start-line="83" selection-start-column="21" selection-end-line="83" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/openpyxl/descriptors/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2295">
+          <caret line="135" column="40" lean-forward="false" selection-start-line="135" selection-start-column="40" selection-end-line="135" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="433" column="14" lean-forward="false" selection-start-line="433" selection-start-column="14" selection-end-line="433" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
