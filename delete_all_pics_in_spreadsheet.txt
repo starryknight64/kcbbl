@@ -1,0 +1,20 @@
+' From http://www.faronics.com/news/blog/delete-all-pictures-in-all-worksheets/
+Sub DeleteAllPictures()
+    With Application
+        .ScreenUpdating = False
+        Dim pict As Shape
+        On Error Resume Next
+        For Each sh In Sheets
+            For Each pict In sh.Shapes
+                'If pict.Type = msoPicture Then ' And pict.Width > 0 And pict.Height > 0 Then
+                    sh.Activate
+                    pict.Delete
+                    n = n + 1
+                'End If
+            Next pict
+        Next sh
+        MsgBox n & " pictures were deleted successfully."
+        .ScreenUpdating = True
+    End With
+End Sub
+

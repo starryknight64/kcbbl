@@ -2,18 +2,19 @@
 -- Host:                         127.0.0.1
 -- Server version:               5.5.27 - MySQL Community Server (GPL)
 -- Server OS:                    Win32
--- HeidiSQL Version:             8.3.0.4694
+-- HeidiSQL Version:             9.4.0.5125
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
 
 -- Dumping database structure for bloodbowl
 CREATE DATABASE IF NOT EXISTS `bloodbowl` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
 USE `bloodbowl`;
-
 
 -- Dumping structure for table bloodbowl.card
 CREATE TABLE IF NOT EXISTS `card` (
@@ -30,8 +31,6 @@ CREATE TABLE IF NOT EXISTS `card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.coach
 CREATE TABLE IF NOT EXISTS `coach` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -45,8 +44,6 @@ CREATE TABLE IF NOT EXISTS `coach` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.deck
 CREATE TABLE IF NOT EXISTS `deck` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -58,8 +55,6 @@ CREATE TABLE IF NOT EXISTS `deck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.inducement
 CREATE TABLE IF NOT EXISTS `inducement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -75,8 +70,6 @@ CREATE TABLE IF NOT EXISTS `inducement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.match
 CREATE TABLE IF NOT EXISTS `match` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -89,8 +82,10 @@ CREATE TABLE IF NOT EXISTS `match` (
   `team2_id` int(11) NOT NULL,
   `team1_tv` smallint(5) unsigned NOT NULL,
   `team2_tv` smallint(5) unsigned NOT NULL,
-  `team1_inducements` smallint(5) unsigned NOT NULL,
-  `team2_inducements` smallint(5) unsigned NOT NULL,
+  `team1_inducements` smallint(5) unsigned NOT NULL COMMENT 'Not including Petty Cash',
+  `team2_inducements` smallint(5) unsigned NOT NULL COMMENT 'Not including Petty Cash',
+  `team1_petty_cash` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `team2_petty_cash` smallint(5) unsigned NOT NULL DEFAULT '0',
   `team1_gate` tinyint(3) unsigned NOT NULL,
   `team2_gate` tinyint(3) unsigned NOT NULL,
   `team1_fame` tinyint(3) unsigned NOT NULL,
@@ -122,8 +117,6 @@ CREATE TABLE IF NOT EXISTS `match` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.match_inducement
 CREATE TABLE IF NOT EXISTS `match_inducement` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -140,13 +133,11 @@ CREATE TABLE IF NOT EXISTS `match_inducement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.match_player
 CREATE TABLE IF NOT EXISTS `match_player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `player_id` int(11) NOT NULL,
   `match_id` int(11) NOT NULL,
+  `player_id` int(11) NOT NULL,
   `miss_next_game` tinyint(1) unsigned DEFAULT NULL,
   `niggling_injury` tinyint(1) unsigned DEFAULT NULL,
   `movement_injury` tinyint(1) unsigned DEFAULT NULL,
@@ -171,8 +162,23 @@ CREATE TABLE IF NOT EXISTS `match_player` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+-- Dumping structure for table bloodbowl.match_player_skill
+CREATE TABLE IF NOT EXISTS `match_player_skill` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `match_id` int(11) NOT NULL,
+  `player_id` int(11) NOT NULL,
+  `skill_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `match` (`match_id`),
+  KEY `player` (`player_id`),
+  KEY `skill` (`skill_id`),
+  KEY `id` (`id`),
+  CONSTRAINT `match` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`),
+  CONSTRAINT `player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`),
+  CONSTRAINT `skill` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-
+-- Data exporting was unselected.
 -- Dumping structure for table bloodbowl.match_purchase
 CREATE TABLE IF NOT EXISTS `match_purchase` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -189,8 +195,6 @@ CREATE TABLE IF NOT EXISTS `match_purchase` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.match_type
 CREATE TABLE IF NOT EXISTS `match_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -201,8 +205,6 @@ CREATE TABLE IF NOT EXISTS `match_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.meta
 CREATE TABLE IF NOT EXISTS `meta` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -215,8 +217,6 @@ CREATE TABLE IF NOT EXISTS `meta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.player
 CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -249,8 +249,6 @@ CREATE TABLE IF NOT EXISTS `player` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.player_skill
 CREATE TABLE IF NOT EXISTS `player_skill` (
   `player_id` int(11) NOT NULL,
@@ -263,8 +261,6 @@ CREATE TABLE IF NOT EXISTS `player_skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.player_type
 CREATE TABLE IF NOT EXISTS `player_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -286,8 +282,6 @@ CREATE TABLE IF NOT EXISTS `player_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.player_type_skill
 CREATE TABLE IF NOT EXISTS `player_type_skill` (
   `player_type_id` int(11) NOT NULL,
@@ -300,8 +294,6 @@ CREATE TABLE IF NOT EXISTS `player_type_skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.player_type_skill_type_double
 CREATE TABLE IF NOT EXISTS `player_type_skill_type_double` (
   `player_type_id` int(11) NOT NULL,
@@ -314,8 +306,6 @@ CREATE TABLE IF NOT EXISTS `player_type_skill_type_double` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.player_type_skill_type_normal
 CREATE TABLE IF NOT EXISTS `player_type_skill_type_normal` (
   `player_type_id` int(11) NOT NULL,
@@ -328,8 +318,6 @@ CREATE TABLE IF NOT EXISTS `player_type_skill_type_normal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.purchase
 CREATE TABLE IF NOT EXISTS `purchase` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -344,8 +332,6 @@ CREATE TABLE IF NOT EXISTS `purchase` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.race
 CREATE TABLE IF NOT EXISTS `race` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -357,8 +343,6 @@ CREATE TABLE IF NOT EXISTS `race` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.season
 CREATE TABLE IF NOT EXISTS `season` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -377,8 +361,6 @@ CREATE TABLE IF NOT EXISTS `season` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.skill
 CREATE TABLE IF NOT EXISTS `skill` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -393,8 +375,6 @@ CREATE TABLE IF NOT EXISTS `skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.skill_type
 CREATE TABLE IF NOT EXISTS `skill_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -405,8 +385,6 @@ CREATE TABLE IF NOT EXISTS `skill_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.team
 CREATE TABLE IF NOT EXISTS `team` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -422,6 +400,7 @@ CREATE TABLE IF NOT EXISTS `team` (
   `assistant_coaches` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `cheerleaders` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `apothecary` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `imported` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_name_per_season` (`name`,`season_id`) USING BTREE,
   UNIQUE KEY `unique_prev_team_id` (`prev_team_id`),
@@ -436,8 +415,6 @@ CREATE TABLE IF NOT EXISTS `team` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
-
-
 -- Dumping structure for table bloodbowl.trophy
 CREATE TABLE IF NOT EXISTS `trophy` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

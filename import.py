@@ -8,16 +8,19 @@ Created on Apr 22, 2017
 
 @author: Phillip
 
+SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE `card`;
 TRUNCATE `coach`;
 TRUNCATE `deck`;
 TRUNCATE `inducement`;
 TRUNCATE `match`;
+TRUNCATE `match_inducement`;
+TRUNCATE `match_player`;
+TRUNCATE `match_purchase`;
 TRUNCATE `match_type`;
 TRUNCATE `meta`;
 TRUNCATE `player`;
 TRUNCATE `player_skill`;
-TRUNCATE `player_report`;
 TRUNCATE `player_type`;
 TRUNCATE `player_type_skill`;
 TRUNCATE `player_type_skill_type_double`;
@@ -35,10 +38,12 @@ ALTER Table `coach` AUTO_INCREMENT=1;
 ALTER Table `deck` AUTO_INCREMENT=1;
 ALTER Table `inducement` AUTO_INCREMENT=1;
 ALTER Table `match` AUTO_INCREMENT=1;
+ALTER Table `match_inducement` AUTO_INCREMENT=1;
+ALTER Table `match_player` AUTO_INCREMENT=1;
+ALTER Table `match_purchase` AUTO_INCREMENT=1;
 ALTER Table `match_type` AUTO_INCREMENT=1;
 ALTER Table `meta` AUTO_INCREMENT=1;
 ALTER Table `player` AUTO_INCREMENT=1;
-ALTER Table `player_report` AUTO_INCREMENT=1;
 ALTER Table `player_type` AUTO_INCREMENT=1;
 ALTER Table `player_type_skill` AUTO_INCREMENT=1;
 ALTER Table `player_type_skill_type_double` AUTO_INCREMENT=1;
@@ -577,84 +582,98 @@ CARDS = [
     ["Mysterious Old Medicine Man", "AS", "Desperate Measures", "", "", ""]
 ]
 
+
+def getAliases(name, aliases):
+    if name in aliases:
+        return aliases[teamName]
+    for alias, aliasList in aliases.iteritems():
+        if alias.lower() == name.lower():
+            return aliases[teamName]
+        for aliasName in aliasList:
+            if aliasName.lower() == name.lower():
+                return aliasList
+    return []
+
+
 if __name__ == '__main__':
     TEAMS = []
-    if False:
-        print "Loading Season 1 Rosters..."
-        s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True)
-        print "    Sheet loaded! Now loading teams/players..."
-        # sheetNames = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]  # , "T9", "T10"]
-        sheetNames = s1.get_sheet_names()[5:13]
-        for sheetName in sheetNames:
-            rosterSheet = s1[sheetName]
-            rows = []
-            for row in rosterSheet.rows:
-                rows.append([cell.value for cell in row])
+    if True:
+        if True:
+            print "Loading Season 1 Rosters..."
+            s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True)
+            print "    Sheet loaded! Now loading teams/players..."
+            # sheetNames = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]  # , "T9", "T10"]
+            sheetNames = s1.get_sheet_names()[5:13]
+            for sheetName in sheetNames:
+                rosterSheet = s1[sheetName]
+                rows = []
+                for row in rosterSheet.rows:
+                    rows.append([cell.value for cell in row])
 
-            teamInfo = rows[2]
-            raceName = teamInfo[4]
-            teamName = teamInfo[9]
-            coachName = teamInfo[13]
+                teamInfo = rows[2]
+                raceName = teamInfo[4]
+                teamName = teamInfo[9]
+                coachName = teamInfo[13]
 
-            treasury = rows[38][12]
-            rerolls = rows[33][12]
-            fanFactor = rows[34][12]
-            assistantCoaches = rows[35][12]
-            cheerleaders = rows[36][12]
-            apothecary = rows[37][12]
+                treasury = rows[38][12]
+                rerolls = rows[33][12]
+                fanFactor = rows[34][12]
+                assistantCoaches = rows[35][12]
+                cheerleaders = rows[36][12]
+                apothecary = rows[37][12]
 
-            players = []
-            for row in rows[5:21]:
-                playerName = row[3]
-                playerPosition = row[4]
-                ma = row[6]
-                st = row[7]
-                ag = row[8]
-                av = row[9]
-                skillsTemp = row[10].split(",") if row[10] else []
-                skills = [skill.strip() for skill in skillsTemp]
-                skillReplace = [
-                    ["MA+", "+MA"],
-                    ["ST+", "+ST"],
-                    ["AG+", "+AG"],
-                    ["AV+", "+AV"],
-                    ["MA-", "-MA"],
-                    ["ST-", "-ST"],
-                    ["AG-", "-AG"],
-                    ["AV-", "-AV"],
-                ]
-                for skillRepl in skillReplace:
-                    skill1 = skillRepl[0]
-                    skill2 = skillRepl[1]
-                    if skill1 in skills:
-                        skills.remove(skill1)
-                        skills.append(skill2)
+                players = []
+                for row in rows[5:21]:
+                    playerName = row[3]
+                    playerPosition = row[4]
+                    ma = row[6]
+                    st = row[7]
+                    ag = row[8]
+                    av = row[9]
+                    skillsTemp = row[10].split(",") if row[10] else []
+                    skills = [skill.strip() for skill in skillsTemp]
+                    skillReplace = [
+                        ["MA+", "+MA"],
+                        ["ST+", "+ST"],
+                        ["AG+", "+AG"],
+                        ["AV+", "+AV"],
+                        ["MA-", "-MA"],
+                        ["ST-", "-ST"],
+                        ["AG-", "-AG"],
+                        ["AV-", "-AV"],
+                    ]
+                    for skillRepl in skillReplace:
+                        skill1 = skillRepl[0]
+                        skill2 = skillRepl[1]
+                        if skill1 in skills:
+                            skills.remove(skill1)
+                            skills.append(skill2)
 
-                status = row[11]
-                completions = row[12]
-                touchdowns = row[13]
-                interceptions = row[14]
-                casualties = row[15]
-                kills = None
-                mvps = row[16]
-                players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+                    status = row[11]
+                    completions = row[12]
+                    touchdowns = row[13]
+                    interceptions = row[14]
+                    casualties = row[15]
+                    kills = None
+                    mvps = row[16]
+                    players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
-                # ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1", []],
-            print "        %s" % teamName
-            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players])
+                    # ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1", []],
+                print "        %s" % teamName
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players])
 
-            for coachNameKey, coachAliases in COACH_MAP.iteritems():
-                if coachNameKey == coachName:
-                    COACHES.add(coachName)
-                elif coachName in coachAliases:
-                    COACHES.add(coachNameKey)
+                for coachNameKey, coachAliases in COACH_MAP.iteritems():
+                    if coachNameKey == coachName:
+                        COACHES.add(coachName)
+                    elif coachName in coachAliases:
+                        COACHES.add(coachNameKey)
 
         print
         print "Loading Season 2 Rosters..."
         s2 = load_workbook("imports/S2 Rosters.xlsx", data_only=True)
         print "    Sheet loaded! Now loading teams/players..."
         # sheetNames = ["DC1", "CT1", "MQ1", "MQ2", "TL1", "DH1", "DH2", "JR1", "JR2", "PP1", "RC1", "KB1", "JH1", "TC1", "TC2", "FT1"]
-        sheetNames = s2.get_sheet_names()[4:20]
+        sheetNames = s2.get_sheet_names()[4:21]
         for sheetName in sheetNames:
             rosterSheet = s2[sheetName]
             rows = []
@@ -665,11 +684,11 @@ if __name__ == '__main__':
             raceName = rows[20][8]
             coachName = rows[21][8]
             treasury = rows[22][8]
-            rerolls = rows[19][19]
-            fanFactor = rows[20][19]
-            assistantCoaches = rows[21][19]
-            cheerleaders = rows[21][19]
-            apothecary = rows[21][19]
+            rerolls = rows[19][19] if rows[19][19] else rows[19][20]
+            fanFactor = rows[20][19] if rows[20][19] else rows[20][20]
+            assistantCoaches = rows[21][19] if rows[21][19] else rows[21][20]
+            cheerleaders = rows[22][19] if rows[22][19] else rows[22][20]
+            apothecary = rows[23][19] if rows[23][19] else rows[23][20]
 
             players = []
             for row in rows[2:18]:
@@ -714,69 +733,70 @@ if __name__ == '__main__':
                 elif coachName in coachAliases:
                     COACHES.add(coachNameKey)
 
-        print
-        print "Loading Season 3 Rosters..."
-        s3 = load_workbook("imports/S3 Rosters.xlsx", data_only=True)
-        print "    Sheet loaded! Now loading teams/players..."
-        sheetNames = s3.get_sheet_names()[0:22]
-        for sheetName in sheetNames:
-            rosterSheet = s3[sheetName]
-            rows = []
-            for row in rosterSheet.rows:
-                rows.append([cell.value for cell in row])
+        if False:
+            print
+            print "Loading Season 3 Rosters..."
+            s3 = load_workbook("imports/S3 Rosters.xlsx", data_only=True)
+            print "    Sheet loaded! Now loading teams/players..."
+            sheetNames = s3.get_sheet_names()[0:22]
+            for sheetName in sheetNames:
+                rosterSheet = s3[sheetName]
+                rows = []
+                for row in rosterSheet.rows:
+                    rows.append([cell.value for cell in row])
 
-            teamName = rows[20][8]
-            raceName = rows[21][8]
-            coachName = rows[22][8]
-            treasury = rows[23][8]
-            rerolls = rows[20][19]
-            fanFactor = rows[21][19]
-            assistantCoaches = rows[22][19]
-            cheerleaders = rows[22][19]
-            apothecary = rows[22][19]
+                teamName = rows[20][8]
+                raceName = rows[21][8]
+                coachName = rows[22][8]
+                treasury = rows[23][8]
+                rerolls = rows[20][19]
+                fanFactor = rows[21][19]
+                assistantCoaches = rows[22][19]
+                cheerleaders = rows[22][19]
+                apothecary = rows[22][19]
 
-            players = []
-            for row in rows[3:19]:
-                playerName = row[2]
-                playerPosition = row[3]
-                ma = row[4]
-                st = row[5]
-                ag = row[6]
-                av = row[7]
-                skillsTemp = row[8].split(",") if row[8] else []
-                skills = [skill.strip() for skill in skillsTemp]
-                injuryNiggling = row[12]
-                injuryMA = row[13]
-                injuryST = row[14]
-                injuryAG = row[15]
-                injuryAV = row[16]
-                if injuryNiggling:
-                    skills.append("Niggling")
-                if injuryMA:
-                    skills.append("-MA")
-                if injuryST:
-                    skills.append("-ST")
-                if injuryAG:
-                    skills.append("-AG")
-                if injuryAV:
-                    skills.append("-AV")
-                status = "MNG" if row[11] else None
-                completions = row[18]
-                touchdowns = row[19]
-                interceptions = row[17]
-                casualties = row[20]
-                kills = row[21]
-                mvps = row[22]
-                players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+                players = []
+                for row in rows[3:19]:
+                    playerName = row[2]
+                    playerPosition = row[3]
+                    ma = row[4]
+                    st = row[5]
+                    ag = row[6]
+                    av = row[7]
+                    skillsTemp = row[8].split(",") if row[8] else []
+                    skills = [skill.strip() for skill in skillsTemp]
+                    injuryNiggling = row[12]
+                    injuryMA = row[13]
+                    injuryST = row[14]
+                    injuryAG = row[15]
+                    injuryAV = row[16]
+                    if injuryNiggling:
+                        skills.append("Niggling")
+                    if injuryMA:
+                        skills.append("-MA")
+                    if injuryST:
+                        skills.append("-ST")
+                    if injuryAG:
+                        skills.append("-AG")
+                    if injuryAV:
+                        skills.append("-AV")
+                    status = "MNG" if row[11] else None
+                    completions = row[18]
+                    touchdowns = row[19]
+                    interceptions = row[17]
+                    casualties = row[20]
+                    kills = row[21]
+                    mvps = row[22]
+                    players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
-            print "        %s" % teamName
-            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
+                print "        %s" % teamName
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
 
-            for coachNameKey, coachAliases in COACH_MAP.iteritems():
-                if coachNameKey == coachName:
-                    COACHES.add(coachName)
-                elif coachName in coachAliases:
-                    COACHES.add(coachNameKey)
+                for coachNameKey, coachAliases in COACH_MAP.iteritems():
+                    if coachNameKey == coachName:
+                        COACHES.add(coachName)
+                    elif coachName in coachAliases:
+                        COACHES.add(coachNameKey)
 
     MATCHES = []
     print
@@ -792,7 +812,7 @@ if __name__ == '__main__':
 
         team1 = rows[2][1]
         team1TV = rows[2][25]
-        team1InducementGP = rows[6][1]
+        team1InducementGP = rows[6][1] if rows[6][1] else 0
         team1Gate = rows[6][13]
         team1Fame = rows[6][25]
         team1Inducements = [rows[i][1] for i in range(9, 16)]
@@ -808,14 +828,14 @@ if __name__ == '__main__':
             team1Kills += rows[i][11] if rows[i][11] else 0
 
         team1Winnings = rows[56][1]
-        team1ExpMistakes = rows[56][14]
-        team1EndFanFactor = rows[56][27]
+        team1ExpMistakes = rows[56][14] if rows[56][14] else 0
+        team1EndFanFactor = rows[56][27] if rows[56][27] else 0
         team1Purchases = rows[60][1]
         team1Notes = rows[60][19]
 
         team2 = rows[2][39]
         team2TV = rows[2][63]
-        team2InducementGP = rows[6][39]
+        team2InducementGP = rows[6][39] if rows[6][39] else 0
         team2Gate = rows[6][51]
         team2Fame = rows[6][63]
         team2Inducements = [rows[i][39] for i in range(9, 16)]
@@ -831,8 +851,8 @@ if __name__ == '__main__':
             team2Kills += rows[i][49] if rows[i][49] else 0
 
         team2Winnings = rows[56][39]
-        team2ExpMistakes = rows[56][14]
-        team2EndFanFactor = rows[56][52]
+        team2ExpMistakes = rows[56][14] if rows[56][14] else 0
+        team2EndFanFactor = rows[56][52] if rows[56][52] else 0
         team2Purchases = rows[60][39]
         team2Notes = rows[60][57]
 
@@ -842,7 +862,7 @@ if __name__ == '__main__':
             "season": "Season 2",
             "teams": [
                 {
-                    "name": team1,
+                    "name": team1.strip(),
                     "tv": team1TV,
                     "inducementsGP": team1InducementGP.replace(" gp", "") if type(team1InducementGP) is str else team1InducementGP,
                     "gate": team1Gate,
@@ -859,7 +879,7 @@ if __name__ == '__main__':
                     "notes": team1Notes
                 },
                 {
-                    "name": team2,
+                    "name": team2.strip(),
                     "tv": team2TV,
                     "inducementsGP": team2InducementGP.replace(" gp", "") if type(team2InducementGP) is str else team2InducementGP,
                     "gate": team2Gate,
@@ -887,7 +907,7 @@ if __name__ == '__main__':
     skillTypeIDs = {}
     for skillType in SKILL_TYPES:
         print "    %s" % skillType
-        cursor.execute("INSERT IGNORE INTO skill_type VALUES(NULL,%s)", (skillType,))
+        cursor.execute("INSERT INTO skill_type VALUES(NULL,%s)", (skillType,))
         skillTypeID = cursor.lastrowid
         skillTypeIDs[skillType] = skillTypeID
 
@@ -900,7 +920,7 @@ if __name__ == '__main__':
         skillType = skill[1]
         skillTypeID = skillTypeIDs[skillType]
         desc = skill[2]
-        cursor.execute("INSERT IGNORE INTO skill VALUES(NULL,%s,%s,%s)", (name, skillTypeID, desc))
+        cursor.execute("INSERT INTO skill VALUES(NULL,%s,%s,%s)", (name, skillTypeID, desc))
         skillID = cursor.lastrowid
         skillIDs[name] = skillID
 
@@ -911,7 +931,7 @@ if __name__ == '__main__':
         name = race[0]
         print "    %s" % name
         desc = race[1]
-        cursor.execute("INSERT IGNORE INTO race VALUES(NULL,%s,%s)", (name, desc))
+        cursor.execute("INSERT INTO race VALUES(NULL,%s,%s)", (name, desc))
         raceID = cursor.lastrowid
         raceIDs[name] = raceID
 
@@ -920,7 +940,7 @@ if __name__ == '__main__':
     print "Coaches"
     for coach in COACHES:
         print "    %s" % coach
-        cursor.execute("INSERT IGNORE INTO coach VALUES(NULL,%s,%s,NULL,NULL)", (coach, ""))
+        cursor.execute("INSERT INTO coach VALUES(NULL,%s,%s,NULL,NULL)", (coach, ""))
         coachID = cursor.lastrowid
         coachIDs[coach] = coachID
 
@@ -934,7 +954,7 @@ if __name__ == '__main__':
         name = trophy[0]
         img = trophy[1]
         print "    %s" % name
-        cursor.execute("INSERT IGNORE INTO trophy VALUES(NULL,%s,%s)", (name, img))
+        cursor.execute("INSERT INTO trophy VALUES(NULL,%s,%s)", (name, img))
         trophyID = cursor.lastrowid
         trophyIDs[name] = trophyID
 
@@ -948,7 +968,7 @@ if __name__ == '__main__':
         endDate = season[2]
         trophyName = season[3]
         trophyID = trophyIDs[trophyName]
-        cursor.execute("INSERT IGNORE INTO season VALUES(NULL,%s,%s,%s,NULL,%s)", (name, startDate, endDate, trophyID))
+        cursor.execute("INSERT INTO season VALUES(NULL,%s,%s,%s,NULL,%s)", (name, startDate, endDate, trophyID))
         seasonID = cursor.lastrowid
         seasonIDs[name] = seasonID
 
@@ -970,35 +990,43 @@ if __name__ == '__main__':
         double = playerType[10]
 
         print "    %s: %s" % (race, name)
-        cursor.execute("INSERT IGNORE INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 0, raceIDs[race], value, None))
+        cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 0, raceIDs[race], value, None))
         playerTypeID = cursor.lastrowid
         if race not in playerTypeIDs:
             playerTypeIDs[race] = {}
         playerTypeIDs[race][name] = playerTypeID
 
         for skill in skills:
-            cursor.execute("INSERT IGNORE INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
+            cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
 
         for initial in normal:
             for skillType in skillTypeIDs.keys():
                 if skillType.startswith(initial):
-                    cursor.execute("INSERT IGNORE INTO player_type_skill_type_normal VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
+                    cursor.execute("INSERT INTO player_type_skill_type_normal VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
 
         for initial in double:
             for skillType in skillTypeIDs.keys():
                 if skillType.startswith(initial):
-                    cursor.execute("INSERT IGNORE INTO player_type_skill_type_double VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
+                    cursor.execute("INSERT INTO player_type_skill_type_double VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
 
+    teamNameAliases = {
+        "Riverdale Ravagers": ["Alliance of the Old Gods", "Rivendale Ravagers"],
+        "Run! It's The PO PO": ["Watch Out For The PO PO", "Watch Out For The POPO", "Run it's the Po Po", "Run its the PO PO", "Watch out for the POPO", "Watch out for the PO PO"],
+        "Gold Diggers": ["Golddiggers"],
+        "Blood Mountain Berserkers": ["Blood Mountain Berzerkers"]
+    }
     teamIDs = {}
+    playerIDs = {}
+    playerIDsBySeasonIDAndTeamAndNumber = {}
     print
     print "Teams"
     for team in TEAMS:
         # TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
-        name = team[0].strip()
+        teamName = team[0].strip()
         coachName = team[1].strip()
         raceName = team[2].strip()
         treasury = team[3]
-        rerolls = team[4]
+        rerolls = team[4] if team[4] else 0
         fanFactor = team[5]
         assistantCoaches = team[6]
         cheerleaders = team[7]
@@ -1006,21 +1034,25 @@ if __name__ == '__main__':
         seasonName = team[9]
         players = team[10]
         value = 0
-        print "    %s" % name
+        print "    %s" % teamName
 
         coachID = coachIDs[coachName]
         raceID = raceIDs[raceName]
         seasonID = seasonIDs[seasonName]
         prevTeamID = None
-        if name in teamIDs:
-            prevTeamID = teamIDs[name]
+        if teamName in teamIDs:
+            prevTeamID = teamIDs[teamName]
 
         cursor.execute(
-                "INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (name, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary)
+                "INSERT INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)",
+                (teamName, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary)
         )
         teamID = cursor.lastrowid
-        teamIDs[name] = teamID
+        teamIDs[teamName] = teamID
+
+        teamAliases = getAliases(teamName, teamNameAliases)
+        for alias in teamAliases:
+            teamIDs[alias] = teamID
 
         for i, player in enumerate(players):
             # players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
@@ -1048,24 +1080,43 @@ if __name__ == '__main__':
             agInjuries = injCount["-AG"] if "-AG" in injCount else 0
             avInjuries = injCount["-AV"] if "-AV" in injCount else 0
 
-            completions = player[8]
-            touchdowns = player[9]
-            interceptions = player[10]
-            casualties = player[11]
-            kills = player[12]
-            mvps = player[13]
+            completions = player[8] if player[8] else 0
+            touchdowns = player[9] if player[9] else 0
+            interceptions = player[10] if player[10] else 0
+            casualties = player[11] if player[11] else 0
+            kills = player[12] if player[12] else 0
+            mvps = player[13] if player[13] else 0
 
-            cursor.execute(
-                    "INSERT IGNORE INTO player VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    (number, playerName, teamID, playerTypeID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, 0)
-            )
+            playerReport = (number, playerName, teamID, playerTypeID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, 0)
+            cursor.execute("INSERT INTO player VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", playerReport)
+            playerID = cursor.lastrowid
+            playerReport = (playerID,) + playerReport
+
+            if playerID <= 0:
+                pass
+
+            if teamName not in playerIDs:
+                playerIDs[teamName] = []
+            playerIDs[teamName].append(playerReport)
+
+            teamAliases = getAliases(teamName, teamNameAliases)
+            for alias in teamAliases:
+                if alias not in playerIDs:
+                    playerIDs[alias] = []
+                playerIDs[alias].append(playerReport)
+
+            if seasonID not in playerIDsBySeasonIDAndTeamAndNumber:
+                playerIDsBySeasonIDAndTeamAndNumber[seasonID] = {}
+            if teamID not in playerIDsBySeasonIDAndTeamAndNumber[seasonID]:
+                playerIDsBySeasonIDAndTeamAndNumber[seasonID][teamID] = {}
+            playerIDsBySeasonIDAndTeamAndNumber[seasonID][teamID][number] = playerReport
 
     print
     print "Match Types"
     matchTypeIDs = {}
     for matchType in MATCH_TYPES:
         print "    %s" % matchType
-        cursor.execute("INSERT IGNORE INTO match_type VALUES(NULL,%s)", (matchType,))
+        cursor.execute("INSERT INTO match_type VALUES(NULL,%s)", (matchType,))
         matchTypeID = cursor.lastrowid
         matchTypeIDs[matchType] = matchTypeID
 
@@ -1083,20 +1134,86 @@ if __name__ == '__main__':
         print "    %s: Match %s - \"%s\" vs. \"%s\"" % (curSeason, matchNum, team1["name"], team2["name"])
 
         seasonID = seasonIDs[curSeason]
-        matchTypeID = matchTypeIDs(match["type"])
+        matchTypeID = matchTypeIDs[match["type"]]
         team1ID = teamIDs[team1["name"]]
         team2ID = teamIDs[team2["name"]]
 
-        cursor.execute(
-                "INSERT IGNORE INTO match VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (seasonID, match["date"], matchTypeID, team1ID, team2ID, team1["tds"], team2["tds"], team1["fame"], team2["fame"], team1["tv"], team2["tv"], team1["winnings"], team2["winnings"])
-        )
+        description = ""
+        if team1["notes"]:
+            description = team1["notes"]
+        if team2["notes"]:
+            if team1["notes"]:
+                description += "\n" + team2["notes"]
+            else:
+                description = team2["notes"]
+
+        row = (seasonID, match["date"], description,
+               matchTypeID, matchTypeID,
+               team1ID, team2ID,
+               team1["tv"], team2["tv"],
+               team1["inducementsGP"], team2["inducementsGP"],
+               0, 0,
+               team1["gate"], team2["gate"],
+               team1["fame"], team2["fame"],
+               team1["tds"], team2["tds"],
+               team1["cas"], team2["cas"],
+               team1["kills"], team2["kills"],
+               team1["winnings"], team2["winnings"],
+               team1["expMistakes"], team2["expMistakes"],
+               team1["fanFactor"], team2["fanFactor"])
+        insertQry = "INSERT INTO `match` VALUES(NULL," + ",".join("%s" for entry in row) + ")"
+        cursor.execute(insertQry, row)
         matchID = cursor.lastrowid
 
-        # CREATE MATCH_INDUCEMENT TABLE
-        # MATCH_ID, TEAM_ID, INDUCEMENT_ID, AMT
-        # CREATE MATCH_PURCHASE TABLE
-        # MATCH_ID, TEAM_ID, PURCHASE_ID
+        seasonTeams = playerIDsBySeasonIDAndTeamAndNumber[seasonID]
+        for team in match["teams"]:
+            teamID = teamIDs[team["name"]]
+            seasonTeamPlayers = seasonTeams[teamID]
+            teamPlayers = playerIDs[team["name"]]
+            for i, player in enumerate(team["players"]):
+                playerNum = i + 1
+                playerFromTeam = None
+                if playerNum in seasonTeamPlayers:
+                    playerFromTeam = seasonTeamPlayers[playerNum]
+                else:
+                    continue
+
+                playerID = playerFromTeam[0]
+
+                completions = player[0]
+                touchdowns = player[1]
+                interceptions = player[2]
+                casualties = player[3]
+                kills = player[4]
+                mvp = player[5]
+                spp = player[6]
+                mng = player[7]
+                niggling = player[8]
+                minusStat = player[9]
+                dead = player[10]
+                newSkill = player[11]
+
+                mvInjury = 0
+                stInjury = 0
+                agInjury = 0
+                avInjury = 0
+                if minusStat is not None:
+                    if minusStat == "ST":
+                        stInjury = 1
+                    elif minusStat == "MA":
+                        mvInjury = 1
+                    elif minusStat == "AG":
+                        agInjury = 1
+                    elif minusStat == "AV":
+                        avInjury = 1
+                    else:
+                        print "ERROR: Cannot find injury for '%s'..." % minusStat
+
+                row = (matchID, playerID, mng, niggling, mvInjury, stInjury, agInjury, avInjury, interceptions, completions, touchdowns, casualties, kills, mvp, None)
+                try:
+                    cursor.execute("INSERT INTO match_player VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
+                except:
+                    pass
 
         matchNum += 1
 
@@ -1118,7 +1235,7 @@ if __name__ == '__main__':
         name = deck[0]
         cost = deck[1]
         print "    %s" % name
-        cursor.execute("INSERT IGNORE INTO deck VALUES(NULL,%s,%s)", (name, cost))
+        cursor.execute("INSERT INTO deck VALUES(NULL,%s,%s)", (name, cost))
         deckID = cursor.lastrowid
         deckIDs[name] = deckID
 
@@ -1134,7 +1251,7 @@ if __name__ == '__main__':
         print "    %s" % name
 
         deckID = deckIDs[deckName]
-        cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
+        cursor.execute("INSERT INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
 
     # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
     print
@@ -1161,11 +1278,11 @@ if __name__ == '__main__':
 
         for race in races:
             print "    %s: %s" % (name, race)
-            cursor.execute("INSERT IGNORE INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
+            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
             playerTypeID = cursor.lastrowid
 
             for skill in skills:
-                cursor.execute("INSERT IGNORE INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
+                cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
 
     print
     print "Inducements"
@@ -1182,7 +1299,7 @@ if __name__ == '__main__':
                 raceID = raceIDs[race]
 
             print "    %s: %s" % (name, race)
-            cursor.execute("INSERT IGNORE INTO inducement VALUES(NULL,%s,%s,%s,%s,%s)", (name, maxAmt, price, raceID, desc))
+            cursor.execute("INSERT INTO inducement VALUES(NULL,%s,%s,%s,%s,%s)", (name, maxAmt, price, raceID, desc))
 
             # ["Cheerleader", 10, ["All"], "Most Blood Bow
     print
@@ -1204,15 +1321,15 @@ if __name__ == '__main__':
                     for raceName in raceNames:
                         print "    %s: %s" % (name, raceName)
                         raceID = raceIDs[raceName]
-                        cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                        cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                     break
                 else:
                     print "    All: %s" % name
-                    cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
+                    cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
             elif raceNameCost != "Exceptions":
                 print "    %s: %s" % (name, raceName)
                 raceID = raceIDs[raceNameCost]
-                cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
 
                 if "Otherwise" in raceCosts:
                     raceNames = raceIDs.keys()
@@ -1221,10 +1338,10 @@ if __name__ == '__main__':
                     for raceName in raceNames:
                         print "    %s: %s" % (name, raceName)
                         raceID = raceIDs[raceName]
-                        cursor.execute("INSERT IGNORE INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                        cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                     break
 
-    cursor.execute("INSERT IGNORE INTO meta VALUES(NULL,%s,%s)", ("season.current", "3"))
+    cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "3"))
 
     print
     print "Done!"
