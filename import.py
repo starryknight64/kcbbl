@@ -416,8 +416,8 @@ PURCHASES = [
     ["Apothecary", {"All": 50, "Exceptions": ["Khemri", "Necromantic", "Nurgle", "Undead"]},
      "An Apothecary is a healer wise in the ways of medicine and the healing arts who looks after the injured players in a Blood Bowl team - and so has a strenuous and full-time job! It costs 50,000 gold pieces to purchase an Apothecary to permanently look after your team during a match. He may be represented by an appropriate Citadel miniature if you wish. A team may not have more than one purchased Apothecary. Khemri, Necromantic, Nurgle and Undead teams may not purchase or use an Apothecary.\nDuring a match, an Apothecary may attempt to cure a player who has suffered a Casualty or been KO'd. An Apothecary can be used only once per match. If the player was KO'd leave him on the pitch Stunned, or, if he was not on the pitch, put him in the Reserves box. Otherwise immediately after the player suffers the Casualty, you can use the Apothecary to make your opponent roll again on the Casualty table (see page 25) and then you choose which of the two results to apply. If the player is only Badly Hurt after this roll (even if it was the original Casualty roll) the Apothecary has managed to patch him up and pump him full of painkillers so that the player may be moved into the Reserves box."],
     ["Team Re-roll", {"Amazon": 50, "Chaos": 60, "Chaos Dwarf": 70, "Dark Elf": 50, "Dwarf": 50, "Elf": 50, "Goblin": 60, "Halfling": 60, "High Elf": 50, "Human": 50, "Khemri": 70, "Lizardman": 60, "Necromantic": 70, "Norse": 60, "Nurgle": 70, "Ogre": 70, "Orc": 60, "Skaven": 60, "Undead": 70, "Vampire": 70, "Wood Elf": 50, "Chaos Pact": 70, "Slann": 50, "Underworld": 70, "Bretonnian": 70, "Daemons of Khorne": 70, "Simyin": 60}, ""],
-    ["Bribe", {"Goblin": 100, "Otherwise": 200}, "Goblin teams may buy a bribe for 50,000 gold pieces; any other team can buy a bribe for 100,000 gold pieces. Each bribe allows a team to attempt to ignore one call by the referee for a player who has committed a foul to be sent off, or a player armed with a secret weapon to be banned from the match. Roll a D6: on a roll of 2-6 the bribe is effective (preventing a turnover if the player was ejected for fouling), but on a roll of 1 the bribe is wasted and the call still stands! Each bribe may be used once per match."],
-    ["Halfling Master Chef", {"Halfling": 200, "Otherwise": 600}, "Halfling teams may hire a Halfling Master Chef for 100,000 gold pieces; any other team can hire the Chef for 300,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."]
+    ["Bribe", {"Goblin": 100, "Otherwise": 200}, "Goblin teams may roster a bribe for 100,000 gold pieces; any other team can buy a bribe for 200,000 gold pieces. Each bribe allows a team to attempt to ignore one call by the referee for a player who has committed a foul to be sent off, or a player armed with a secret weapon to be banned from the match. Roll a D6: on a roll of 2-6 the bribe is effective (preventing a turnover if the player was ejected for fouling), but on a roll of 1 the bribe is wasted and the call still stands! Each bribe may be used once per match."],
+    ["Halfling Master Chef", {"Halfling": 200, "Otherwise": 600}, "Halfling teams may roster a Halfling Master Chef for 200,000 gold pieces; any other team can roster the Chef for 600,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."]
 ]
 
 MATCH_TYPES = ["Preseason", "Regular", "Postseason", "Championship"]
@@ -733,7 +733,7 @@ if __name__ == '__main__':
                 elif coachName in coachAliases:
                     COACHES.add(coachNameKey)
 
-        if False:
+        if True:
             print
             print "Loading Season 3 Rosters..."
             s3 = load_workbook("imports/S3 Rosters.xlsx", data_only=True)
@@ -903,6 +903,7 @@ if __name__ == '__main__':
     cnx.autocommit = True
     cursor = cnx.cursor()
 
+    print
     print "Skill Types"
     skillTypeIDs = {}
     for skillType in SKILL_TYPES:
@@ -1015,7 +1016,7 @@ if __name__ == '__main__':
         "Gold Diggers": ["Golddiggers"],
         "Blood Mountain Berserkers": ["Blood Mountain Berzerkers"]
     }
-    teamIDs = {}
+    teamIDsBySeasonID = {}
     playerIDs = {}
     playerIDsBySeasonIDAndTeamAndNumber = {}
     print
@@ -1039,20 +1040,31 @@ if __name__ == '__main__':
         coachID = coachIDs[coachName]
         raceID = raceIDs[raceName]
         seasonID = seasonIDs[seasonName]
+
+        if seasonID not in teamIDsBySeasonID:
+            teamIDsBySeasonID[seasonID] = {}
+
         prevTeamID = None
-        if teamName in teamIDs:
-            prevTeamID = teamIDs[teamName]
+        prevSeasonID = seasonID - 1
+        while prevSeasonID > 0:
+            prevSeasonName = "Season %s" % prevSeasonID
+            prevSeasonID = seasonIDs[prevSeasonName]
+            prevSeasonTeams = teamIDsBySeasonID[prevSeasonID]
+            if teamName in prevSeasonTeams:
+                prevTeamID = prevSeasonTeams[teamName]
+                break
+            prevSeasonID -= 1
 
         cursor.execute(
                 "INSERT INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)",
                 (teamName, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary)
         )
         teamID = cursor.lastrowid
-        teamIDs[teamName] = teamID
+        teamIDsBySeasonID[seasonID][teamName] = teamID
 
         teamAliases = getAliases(teamName, teamNameAliases)
         for alias in teamAliases:
-            teamIDs[alias] = teamID
+            teamIDsBySeasonID[seasonID][alias] = teamID
 
         for i, player in enumerate(players):
             # players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
@@ -1063,6 +1075,9 @@ if __name__ == '__main__':
                 playerName = "Player %s" % number
             print "        (%s/%s): %s" % (number, len(players), playerName)
             if not playerPosition:
+                continue
+
+            if playerName.lower() == "journeyman":
                 continue
 
             playerTypeID = playerTypeIDs[raceName][playerPosition]
@@ -1135,8 +1150,8 @@ if __name__ == '__main__':
 
         seasonID = seasonIDs[curSeason]
         matchTypeID = matchTypeIDs[match["type"]]
-        team1ID = teamIDs[team1["name"]]
-        team2ID = teamIDs[team2["name"]]
+        team1ID = teamIDsBySeasonID[seasonID][team1["name"]]
+        team2ID = teamIDsBySeasonID[seasonID][team2["name"]]
 
         description = ""
         if team1["notes"]:
@@ -1167,7 +1182,7 @@ if __name__ == '__main__':
 
         seasonTeams = playerIDsBySeasonIDAndTeamAndNumber[seasonID]
         for team in match["teams"]:
-            teamID = teamIDs[team["name"]]
+            teamID = teamIDsBySeasonID[seasonID][team["name"]]
             seasonTeamPlayers = seasonTeams[teamID]
             teamPlayers = playerIDs[team["name"]]
             for i, player in enumerate(team["players"]):
@@ -1225,7 +1240,7 @@ if __name__ == '__main__':
         print "    %s: %s" % (name, winnerTeamName)
         if winnerTeamName:
             seasonID = seasonIDs[name]
-            winnerTeamID = teamIDs[winnerTeamName]
+            winnerTeamID = teamIDsBySeasonID[seasonID][winnerTeamName]
             cursor.execute("UPDATE season SET winner_team_id=%s WHERE id=%s", (winnerTeamID, seasonID))
 
     deckIDs = {}
@@ -1319,24 +1334,25 @@ if __name__ == '__main__':
                         raceNames.remove(exceptRaceName)
 
                     for raceName in raceNames:
-                        print "    %s: %s" % (name, raceName)
+                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
                         raceID = raceIDs[raceName]
                         cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                     break
                 else:
-                    print "    All: %s" % name
+                    print "    All: %s (%s,000 gp)" % (name, cost)
                     cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
             elif raceNameCost != "Exceptions":
-                print "    %s: %s" % (name, raceName)
+                print "    %s: %s (%s,000 gp)" % (name, raceNameCost, cost)
                 raceID = raceIDs[raceNameCost]
                 cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
 
                 if "Otherwise" in raceCosts:
                     raceNames = raceIDs.keys()
                     raceNames.remove(raceNameCost)
+                    cost = raceCosts["Otherwise"]
 
                     for raceName in raceNames:
-                        print "    %s: %s" % (name, raceName)
+                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
                         raceID = raceIDs[raceName]
                         cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                     break
