@@ -75,7 +75,27 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
         wheresJoin = wheresCmp[cmp][0]
         wheresEnd = wheresCmp[cmp][1]
 
-        sql += " WHERE " + wheres.join(wheresJoin) + wheresEnd
+        sql += " WHERE "
+        if (values.indexOf(null) < 0) {
+            sql += wheres.join(wheresJoin) + wheresEnd
+        } else {
+            for (var i = 0; i < values.length; i++) {
+                if (values[i] == null) {
+                    sql += wheres[i] + " IS NULL"
+                } else {
+                    sql += wheres[i] + wheresEnd
+                }
+                if (i + 1 < values.length) {
+                    sql += " " + cmp + " "
+                }
+            }
+
+            var index = values.indexOf(null)
+            while (index >= 0) {
+                values.splice(index, 1)
+                index = values.indexOf(null)
+            }
+        }
     }
     sql += tail + " ORDER BY " + table + ".id ASC"
     return new Promise((resolve, reject) => {

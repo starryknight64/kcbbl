@@ -377,7 +377,14 @@ function getTeam(id) {
     })
   })
 }
-function getTeams(wheres, values, joins) {
+function getTeams(wheres, values, joins, unique) {
+  if (!Type.is(unique, Boolean)) {
+    unique = false
+  }      
+  if (unique) {
+    wheres.push("prev_team_id")
+    values.push(null)
+  }
   return db.getMany("team", ["*"], wheres, values, joins).then((teams) => {
     return getCoaches().then((coaches) => {
       return getRaces().then((races) => {
@@ -411,7 +418,10 @@ function getTeams(wheres, values, joins) {
     })
   })
 }
-function getTeamsForCoach(coachID, seasonID) {
+function getTeamsForCoach(coachID, seasonID, unique) {
+  if (!Type.is(unique, Boolean)) {
+    unique = false
+  }
   return getCoach(coachID).then((coach) => {
     wheres = ["coach_id"]
     values = [coach.id]
@@ -426,6 +436,10 @@ function getTeamsForCoach(coachID, seasonID) {
       }
       return resolve(null)
     }).then((season) => {
+      if (unique) {
+        wheres.push("prev_team_id")
+        values.push(null)
+      }
       return getTeams(wheres, values)
     })
   })
