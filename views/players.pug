@@ -18,8 +18,9 @@ append body
 								else
 									| #{curPlayer.team.race.name} #{curPlayer.type.name} 
 								| on the 
-								a(href="/teams/"+curPlayer.team.id) #{curPlayer.team.name} 
-								| team coached by 
+								a(href="/teams/"+curPlayer.team.id) 
+									| #{curPlayer.team.name}
+								|  team coached by 
 								a(href="/coaches/"+curPlayer.team.coach.id) #{curPlayer.team.coach.name}
 							p
 								.col-md-3
@@ -68,12 +69,15 @@ append body
 												th Skills
 										tbody
 											tr
-												td 
-													each skill, i in curPlayerSkills
-														if i+1 < curPlayerSkills.length
-															| #{skill.name}, 
-														else
-															| #{skill.name}
+												td
+													if curPlayerSkills.length > 0
+														each skill, i in curPlayerSkills
+															if i+1 < curPlayerSkills.length
+																| #{skill.name}, 
+															else
+																| #{skill.name}
+													else
+														| None
 								.col-md-12
 									h1.btn-group
 										button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a player...&nbsp;
@@ -109,7 +113,7 @@ append body
 						h3.panel-title Seasons
 					.panel-body
 						.list-group
-							//- each season, i in seasons
-							//- 	a.list-group-item(href="/seasons/"+season.id) #{season.name}
-							//- 		if season.id == curSeason.id
-							//- 			| &nbsp;(in progress)
+							each season, i in curPlayerSeasons
+								a.list-group-item(href="/seasons/"+season.id) #{season.name}
+									if season.id == curSeason.id
+										| &nbsp;(in progress)

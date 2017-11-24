@@ -7,7 +7,7 @@ function search(query, filter) {
     "coach": [["id", "name"], ["name"], null],
     // "deck": [null, ["name"], null],
     "inducement": [null, ["name", "description"], "GROUP BY name"],
-    "player": [null, ["name"], null],
+    "player": [null, ["name"], "GROUP BY name"],
     "player_type": [null, ["name", "description"], "GROUP BY CASE WHEN star_player=1 THEN name ELSE id END"],
     "purchase": [null, ["name", "description"], "GROUP BY name"],
     "race": [null, ["name", "description"], null],
@@ -343,6 +343,15 @@ function getSeasonsForTeam(teamID) {
     return getSeasons(["team.id"], [team.id], ["INNER JOIN team ON team.season_id=season.id"])
   })
 }
+function getSeasonsForPlayer(playerID) {
+  return getTeamsForPlayer(playerID).then((teams) => {
+    var seasons = []
+    for (var i in teams) {
+      seasons.push(teams[i].season)
+    }
+    return Promise.resolve(seasons)
+  })
+}
 
 function getSkill(id) {
   return db.get("skill", id)
@@ -451,23 +460,62 @@ function getTeamsForSeason(seasonID) {
 }
 function getTeamsForPlayer(playerID) {
   return getPlayer(playerID).then((player) => {
-    return getTeams(["player.id"], [player.id], ["INNER JOIN player ON player.team_id=team.id"]).then((teams) => {
-      var playerTeams = [teams[0]]
-      return new Promise((resolve, reject) => {
-        if (player.prev_player_id !== null) {
-          return getTeamsForPlayer(player.prev_player_id).then((prevPlayerTeams) => {
-            return resolve(prevPlayerTeams)
-          })
+    return getPrevTeamsForPlayer(player).then((prevTeams) => {
+      if (prevTeams == null) {
+        prevTeams = []
+      }
+      return getNextTeamsForPlayer(player).then((nextTeams) => {
+        if (nextTeams == null) {
+          nextTeams = []
         }
-        return resolve(null)
-      }).then((prevPlayerTeams) => {
-        if (prevPlayerTeams !== null) {
-          return Promise.resolve(prevPlayerTeams.concat(playerTeams))
-        }
-        return Promise.resolve(playerTeams)
+        return Promise.resolve(prevTeams.concat(nextTeams))
       })
     })
   })
+}
+function getPrevTeamsForPlayer(player) {
+  return getTeams(["player.id"], [player.id], ["INNER JOIN player ON player.team_id=team.id"]).then((teams) => {
+    var playerTeams = [teams[0]]
+    return new Promise((resolve, reject) => {
+      if (player.prev_player_id !== null) {
+        return getPlayer(player.prev_player_id).then((prevPlayer) => {
+          return getPrevTeamsForPlayer(prevPlayer).then((prevPlayerTeams) => {
+            return resolve(prevPlayerTeams)
+          })
+        })
+      }
+      return resolve(null)
+    }).then((prevPlayerTeams) => {
+      if (prevPlayerTeams !== null) {
+        return Promise.resolve(prevPlayerTeams.concat(playerTeams))
+      }
+      return Promise.resolve(playerTeams)
+    })
+  })
+}
+function getNextTeamsForPlayer(prevPlayer) {
+  return getPlayers(["prev_player_id"], [prevPlayer.id]).then((players) => {
+    var playerTeams = []
+    var player = null
+    return new Promise((resolve, reject) => {
+      if (players && players.length > 0) {
+        player = players[0]
+        return getTeams(["player.id"], [player.id], ["INNER JOIN player ON player.team_id=team.id"]).then((teams) => {
+          return resolve(teams)
+        })
+      }
+      return resolve(null)
+    }).then((nextPlayerTeams) => {
+      if (nextPlayerTeams !== null) {
+        playerTeams.push(nextPlayerTeams[0])
+        return getNextTeamsForPlayer(player).then((nextPlayerTeams) => {
+          return Promise.resolve(playerTeams.concat(nextPlayerTeams))
+        })
+      }
+      return Promise.resolve(playerTeams)
+    })
+  })
+
 }
 
 function getTrophy(id) {
@@ -506,6 +554,7 @@ module.exports = {
   getSeason: getSeason,
   getSeasons: getSeasons,
   getSeasonsForCoach: getSeasonsForCoach,
+  getSeasonsForPlayer: getSeasonsForPlayer,
   getSeasonsForTeam: getSeasonsForTeam,
   getWinningTeamForSeason: getWinningTeamForSeason,
   getSkill: getSkill,
