@@ -44,3 +44,11 @@ a:hover.no-underline, a:link.no-underline {
 .panel-heading[data-toggle="collapse"] {
   cursor: pointer;
 }
+
+.player-improvement {
+  background-color: yellowgreen;
+}
+
+.player-injury {
+  background-color: lightcoral;
+}

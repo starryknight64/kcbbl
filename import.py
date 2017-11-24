@@ -155,6 +155,7 @@ SKILLS = [
     ["Two Heads", "Mutation", "Having two heads enables this player to watch where he is going and the opponent trying to make sure he does not get there at the same time. Add 1 to all Dodge rolls the player makes."],
     ["Very Long Legs", "Mutation", "The player is allowed to add 1 to the D6 roll whenever he attempts to intercept or uses the Leap skill. In addition, the Safe Throw skill may not be used to affect any Interception rolls made by this player."],
     ["Wild Animal", "Extraordinary", "Wild Animals are uncontrollable creatures that rarely do exactly what a coach wants of them. In fact, just about all you can really rely on them to do is lash out at opposing players that move too close to them! To represent this, immediately after declaring an Action with a Wild Animal, roll a D6, adding 2 to the roll if taking a Block or Blitz Action. On a roll of 1-3, the Wild Animal does not move and roars in rage instead, and the Action is wasted."],
+    ["Weeping Dagger", "Extraordinary", "This player keeps a warpstone-tainted dagger hidden in their kit, and is an expert at keeping it out of the referee's sight! If this player inflicts a casualty during a block, and the result of the Casualty roll is 11-38 (Badly Hurt) after any re-rolls, roll a D6. On a result of 4 or more, the opposing player must miss their next game. If you are not playing a league, a Weeping Dagger has no effect on the game."],
     ["Wrestle", "General", "The player is specially trained in grappling techniques. This player may use Wrestle when he blocks or is blocked and a 'Both Down' result on the Block dice is chosen by either coach. Instead of applying the 'Both Down' result, both players are wrestled to the ground. Both players are Placed Prone in their respective squares even if one or both have the Block skill. Do not make Armour rolls for either player. Use of this skill does not cause a turnover unless the active player was holding the ball."],
     ["+MA", "Improvement", ""],
     ["+AV", "Improvement", ""],
@@ -172,7 +173,7 @@ RACES = [
     ["Halfling", "The technical deficiency of Halfling teams is legendary. They're too short to throw or catch, they run at half pace, and the whole team can spend all afternoon trying to block an Ogre without any chance of success. Most Halfling coaches try to make up for quality with quantity. After all, if you can get half a dozen players in the opposing team's End Zone and, by some miracle, manage to end up with the ball, then there is a small chance that one or two of them won't be jelly by the time you throw the thing."],
     ["High Elf", "The Elven Kingdom sponsored High Elf teams, feature a dangerous passing game and some of the most arrogant players you will find. Rich beyond the dreams of most teams, the High Elves often feature many Princes and noble born Elves on the team and what they cannot beat, they'll buy."],
     ["Human", "Although Human teams do not have the individual strengths or outstanding abilities available to other races, they do not suffer from any outstanding weakness either. This makes Human teams extremely flexible, equally at home running the ball, passing it, or ignoring it and pounding the opposition into the turf instead!"],
-    ["Khemri", "Over 8, years ago, the Khemri played the first games of Blood Bowl against the Slann. But, as the Kingdom died off, so did the game until its rediscovery. And as the game returned, it was inevitable that the ancient players and stars of the Khemri would return to the pitch they once played on."],
+    ["Khemri", "Over 8,000 years ago, the Khemri played the first games of Blood Bowl against the Slann. But, as the Kingdom died off, so did the game until its rediscovery. And as the game returned, it was inevitable that the ancient players and stars of the Khemri would return to the pitch they once played on."],
     ["Lizardman", "The Mage-Priests foretold the game of Blood Bowl thousands of years before it was discovered by the Dwarf Roze-El. So it is no surprise that the Lizardmen play Blood Bowl. Providing an odd blend of dexterity and strength, the Lustrian team can almost last the distance against a power team such as Chaos, while remaining able to pull off the running plays of the Skaven."],
     ["Necromantic", "The damned and the cursed do not always lurk in the forests or in the graveyards of the Old World. Sometimes they come together, forming a group to hunt those more fortunate of souls. Finding relief in crazed outbursts of terrible violence, these groups do the best they can to ease their suffering - they pop off for a nice game of Blood Bowl."],
     ["Norse", "Norse teams have a well deserved reputation for ferocity both on and off the playing pitch. The Norse that takes up Blood Bowl is a truly unedifying specimen, interested only in beer, women and song off the playing pitch, and beer, women and bloody carnage while on it!"],
@@ -283,7 +284,7 @@ PLAYER_TYPES = [
 
     ["Skaven", 16, "Lineman", 50, 7, 3, 3, 7, [], "G", "ASPM"],
     ["Skaven", 2, "Thrower", 70, 7, 3, 3, 7, ["Pass", "Sure Hands"], "GP", "ASM"],
-    ["Skaven", 4, "Gutter Runner", 80, 9, 2, 4, 7, ["Dodge"], "GA", "SPM"],
+    ["Skaven", 4, "Gutter Runner", 80, 9, 2, 4, 7, ["Dodge", "Weeping Dagger"], "GA", "SPM"],
     ["Skaven", 2, "Blitzer", 90, 4, 4, 2, 9, ["Block"], "GS", "APM"],
     ["Skaven", 1, "Rat Ogre", 150, 6, 3, 3, 9, ["Loner", "Frenzy", "Mighty Blow", "Prehensile Tail", "Wild Animal"], "S", "GAPM"],
 
@@ -585,7 +586,7 @@ CARDS = [
 
 def getAliases(name, aliases):
     if name in aliases:
-        return aliases[teamName]
+        return aliases[name]
     for alias, aliasList in aliases.iteritems():
         if alias.lower() == name.lower():
             return aliases[teamName]
@@ -913,6 +914,23 @@ if __name__ == '__main__':
         skillTypeIDs[skillType] = skillTypeID
 
     skillIDs = {}
+    skillAliases = {
+        "Blood Lust": ["Blood Blust"],
+        "Throw Team-Mate": ["Throw Teammate", "TTM", "Throw Team-mate"],
+        "Bone-head": ["Bonehead", "Bone Head", "Bone-headed", "Bone-Head"],
+        "Side Step": ["Sidestep"],
+        "Dodge": ["dodge"],
+        "Leap": ["leap"],
+        "Block": ["block"],
+        "Secret Weapon": ["Secret Weapons"],
+        "Bombardier": ["Bombadier"],
+        "Thick Skull": ["Thick Skulld"],
+        "Dump-off": ["Dump-Off"],
+        "Prehensile Tail": ["Prehensail Tail", "Prehensal Tail"],
+        "Mighty Blow": ["Might Blow"],
+        "Nurgle's Rot": ["Nurgles Rot"],
+        "+MA": ["+MV", "Movement"]
+    }
     print
     print "Skills"
     for skill in SKILLS:
@@ -924,6 +942,10 @@ if __name__ == '__main__':
         cursor.execute("INSERT INTO skill VALUES(NULL,%s,%s,%s)", (name, skillTypeID, desc))
         skillID = cursor.lastrowid
         skillIDs[name] = skillID
+
+        aliases = getAliases(name, skillAliases)
+        for alias in aliases:
+            skillIDs[alias] = skillID
 
     raceIDs = {}
     print
@@ -975,6 +997,7 @@ if __name__ == '__main__':
 
     # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
     playerTypeIDs = {}
+    playerTypeIDSkillIDs = {}
     print
     print "Players Types"
     for playerType in PLAYER_TYPES:
@@ -997,8 +1020,11 @@ if __name__ == '__main__':
             playerTypeIDs[race] = {}
         playerTypeIDs[race][name] = playerTypeID
 
+        playerTypeIDSkillIDs[playerTypeID] = []
         for skill in skills:
-            cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
+            skillID = skillIDs[skill]
+            cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillID))
+            playerTypeIDSkillIDs[playerTypeID].append(skillID)
 
         for initial in normal:
             for skillType in skillTypeIDs.keys():
@@ -1019,6 +1045,7 @@ if __name__ == '__main__':
     teamIDsBySeasonID = {}
     playerIDs = {}
     playerIDsBySeasonIDAndTeamAndNumber = {}
+    playerIDPlayerTypeIDs = {}
     print
     print "Teams"
     for team in TEAMS:
@@ -1050,8 +1077,18 @@ if __name__ == '__main__':
             prevSeasonName = "Season %s" % prevSeasonID
             prevSeasonID = seasonIDs[prevSeasonName]
             prevSeasonTeams = teamIDsBySeasonID[prevSeasonID]
+
             if teamName in prevSeasonTeams:
                 prevTeamID = prevSeasonTeams[teamName]
+                break
+
+            teamAliases = getAliases(teamName, teamNameAliases)
+            for alias in teamAliases:
+                if alias in prevSeasonTeams:
+                    prevTeamID = prevSeasonTeams[alias]
+                    break
+
+            if prevTeamID:
                 break
             prevSeasonID -= 1
 
@@ -1094,6 +1131,7 @@ if __name__ == '__main__':
             stInjuries = injCount["-ST"] if "-ST" in injCount else 0
             agInjuries = injCount["-AG"] if "-AG" in injCount else 0
             avInjuries = injCount["-AV"] if "-AV" in injCount else 0
+            skillsNoInjuries = set(skills) - set(["-MA", "-ST", "-AG", "-AV", "Niggling"])
 
             completions = player[8] if player[8] else 0
             touchdowns = player[9] if player[9] else 0
@@ -1102,13 +1140,32 @@ if __name__ == '__main__':
             kills = player[12] if player[12] else 0
             mvps = player[13] if player[13] else 0
 
-            playerReport = (number, playerName, teamID, playerTypeID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, 0)
-            cursor.execute("INSERT INTO player VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", playerReport)
+            prevPlayerID = None
+            if prevTeamID is not None and prevSeasonID > 0:
+                playerReportsByNumber = playerIDsBySeasonIDAndTeamAndNumber[prevSeasonID][prevTeamID]
+                for prevPlayerReport in playerReportsByNumber.values():
+                    prevPlayerName = prevPlayerReport[2]
+                    if playerName.strip().lower() == prevPlayerName.strip().lower():
+                        prevPlayerID = prevPlayerReport[0]
+                        break
+
+            playerReport = (number, playerName, teamID, playerTypeID, prevPlayerID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, 0)
+            cursor.execute("INSERT INTO player VALUES(NULL," + ",".join(["%s" for pr in playerReport]) + ")", playerReport)
             playerID = cursor.lastrowid
+            playerIDPlayerTypeIDs[playerID] = playerTypeID
             playerReport = (playerID,) + playerReport
 
             if playerID <= 0:
-                pass
+                print "ERROR: Player not imported!"
+
+            for skillName in skillsNoInjuries:
+                if skillName not in skillIDs:
+                    pass
+                else:
+                    skillID = skillIDs[skillName]
+                    playerTypeSkills = playerTypeIDSkillIDs[playerTypeID]
+                    if skillID not in playerTypeSkills:
+                        cursor.execute("INSERT INTO player_skill VALUES(%s,%s)", (playerID, skillID))
 
             if teamName not in playerIDs:
                 playerIDs[teamName] = []
@@ -1225,11 +1282,20 @@ if __name__ == '__main__':
                         print "ERROR: Cannot find injury for '%s'..." % minusStat
 
                 row = (matchID, playerID, mng, niggling, mvInjury, stInjury, agInjury, avInjury, interceptions, completions, touchdowns, casualties, kills, mvp, None)
-                try:
-                    cursor.execute("INSERT INTO match_player VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
-                except:
-                    pass
+                cursor.execute("INSERT INTO match_player VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
 
+                if newSkill is not None:
+                    newSkills = [s.strip() for s in newSkill.split(",")]
+                    for skillName in newSkills:
+                        if skillName != "Fired":
+                            if skillName not in skillIDs:
+                                pass
+                            else:
+                                newSkillID = skillIDs[skillName]
+                                playerTypeID = playerIDPlayerTypeIDs[playerID]
+                                playerTypeSkills = playerTypeIDSkillIDs[playerTypeID]
+                                if newSkillID not in playerTypeSkills:
+                                    cursor.execute("INSERT INTO match_player_skill VALUES(NULL,%s,%s,%s)", (matchID, playerID, newSkillID))
         matchNum += 1
 
     print

@@ -12,10 +12,14 @@ append body
 					.row
 						.col-md-8
 							h1 #{curPlayer.name}
-							p 
-								| #{curPlayer.team.race.name} #{curPlayer.type.name} on the 
-								a(href="/teams/"+curPlayer.team.id) #{curPlayer.team.name}
-								| &nbsp;team coached by 
+							p
+								if curPlayer.team.race.name == curPlayer.type.name
+									| #{curPlayer.type.name} 
+								else
+									| #{curPlayer.team.race.name} #{curPlayer.type.name} 
+								| on the 
+								a(href="/teams/"+curPlayer.team.id) #{curPlayer.team.name} 
+								| team coached by 
 								a(href="/coaches/"+curPlayer.team.coach.id) #{curPlayer.team.coach.name}
 							p
 								.col-md-3
@@ -29,10 +33,33 @@ append body
 												th SPP
 										tbody
 											tr
-												td.text-center #{curPlayer.type.movement}
-												td.text-center #{curPlayer.type.strength}
-												td.text-center #{curPlayer.type.agility}
-												td.text-center #{curPlayer.type.armor}
+												if improvements.MV > 0
+													td.text-center.player-improvement #{curPlayer.type.movement + improvements.MV}
+												else if improvements.MV < 0
+													td.text-center.player-injury #{curPlayer.type.movement + improvements.MV}
+												else
+													td.text-center #{curPlayer.type.movement}
+
+												if improvements.ST > 0
+													td.text-center.player-improvement #{curPlayer.type.strength + improvements.ST}
+												else if improvements.ST < 0
+													td.text-center.player-injury #{curPlayer.type.strength + improvements.ST}
+												else
+													td.text-center #{curPlayer.type.strength}
+
+												if improvements.AG > 0
+													td.text-center.player-improvement #{curPlayer.type.agility + improvements.AG}
+												else if improvements.AG < 0
+													td.text-center.player-injury #{curPlayer.type.agility + improvements.AG}
+												else
+													td.text-center #{curPlayer.type.agility}
+
+												if improvements.AV > 0
+													td.text-center.player-improvement #{curPlayer.type.armor + improvements.AV}
+												else if improvements.AV < 0
+													td.text-center.player-injury #{curPlayer.type.armor + improvements.AV}
+												else
+													td.text-center #{curPlayer.type.armor}
 												td.text-center #{curPlayer.spp}
 								.col-md-9
 									table.table-bordered.table-condensed
@@ -44,9 +71,9 @@ append body
 												td 
 													each skill, i in curPlayerSkills
 														if i+1 < curPlayerSkills.length
-															| #{skill.name.replace(" "," ")}, 
+															| #{skill.name}, 
 														else
-															| #{skill.name.replace(" "," ")}
+															| #{skill.name}
 								.col-md-12
 									h1.btn-group
 										button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a player...&nbsp;

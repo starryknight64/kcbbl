@@ -89,10 +89,19 @@ append body
 										each obj in result
 											a.list-group-item(href="/players/"+obj.id) 
 												h4 #{obj.name}
+												if obj.team.race.name == obj.type.name
+													h5.ellipsis #{obj.type.name}
+												else
+													h5.ellipsis #{obj.team.race.name} #{obj.type.name}
+												h5.ellipsis #{obj.team.name}
 									else if title == "Player Types"
 										each obj in result
-											a.list-group-item(href="#") 
-												h4 #{obj.name}
+											a.list-group-item(href="#")
+												if obj.star_player
+													h4 #{obj.name}
+													h5.ellipsis Star Player
+												else
+													h4 #{obj.race.name}: #{obj.name}
 									else if title == "Purchases"
 										each obj in result
 											a.list-group-item(href="#") 

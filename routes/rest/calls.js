@@ -9,7 +9,7 @@ function search(query, filter) {
     "inducement": [null, ["name", "description"], "GROUP BY name"],
     "player": [null, ["name"], null],
     "player_type": [null, ["name", "description"], "GROUP BY CASE WHEN star_player=1 THEN name ELSE id END"],
-    "purchase": [null, ["name", "description"], null],
+    "purchase": [null, ["name", "description"], "GROUP BY name"],
     "race": [null, ["name", "description"], null],
     "season": [null, ["name"], null],
     "skill": [null, ["name", "description"], null],
@@ -380,12 +380,12 @@ function getTeam(id) {
 function getTeams(wheres, values, joins, unique) {
   if (!Type.is(unique, Boolean)) {
     unique = false
-  }      
+  }
   if (unique) {
     wheres.push("prev_team_id")
     values.push(null)
   }
-  return db.getMany("team", ["*"], wheres, values, joins).then((teams) => {
+  return db.getMany("team", null, wheres, values, joins).then((teams) => {
     return getCoaches().then((coaches) => {
       return getRaces().then((races) => {
         return getSeasons().then((seasons) => {
@@ -449,6 +449,26 @@ function getTeamsForSeason(seasonID) {
     return getTeams(["season_id"], [season.id])
   })
 }
+function getTeamsForPlayer(playerID) {
+  return getPlayer(playerID).then((player) => {
+    return getTeams(["player.id"], [player.id], ["INNER JOIN player ON player.team_id=team.id"]).then((teams) => {
+      var playerTeams = [teams[0]]
+      return new Promise((resolve, reject) => {
+        if (player.prev_player_id !== null) {
+          return getTeamsForPlayer(player.prev_player_id).then((prevPlayerTeams) => {
+            return resolve(prevPlayerTeams)
+          })
+        }
+        return resolve(null)
+      }).then((prevPlayerTeams) => {
+        if (prevPlayerTeams !== null) {
+          return Promise.resolve(prevPlayerTeams.concat(playerTeams))
+        }
+        return Promise.resolve(playerTeams)
+      })
+    })
+  })
+}
 
 function getTrophy(id) {
   return db.get("trophy", id)
@@ -495,6 +515,7 @@ module.exports = {
   getTeams: getTeams,
   getTeamsForCoach: getTeamsForCoach,
   getTeamsForSeason: getTeamsForSeason,
+  getTeamsForPlayer: getTeamsForPlayer,
   getTrophy: getTrophy,
   getTrophies: getTrophies
 }

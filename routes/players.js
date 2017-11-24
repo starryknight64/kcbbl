@@ -15,7 +15,21 @@ router.get("/:id", function (req, res, next) {
   calls.getPlayer(id).then((player) => {
     calls.getSkillsForPlayer(player.id).then((skills) => {
       calls.getPlayers().then((players) => {
-        res.render("players", { "players": players, "curPlayer": player, "curPlayerSkills": skills })
+
+        var improvements = { "MV": 0, "ST": 0, "AG": 0, "AV": 0 }
+        for (var i in skills) {
+          var improvement = skills[i].name.substring(1)
+          if (Object.keys(improvements).indexOf(improvement) >= 0) {
+            var value = 1
+            var plusOrMinus = skills[i].name[0]
+            if (plusOrMinus == "-") {
+              value = -1
+            }
+            improvements[improvement] += value
+          }
+        }
+
+        res.render("players", { "players": players, "curPlayer": player, "curPlayerSkills": skills, "improvements": improvements })
       })
     })
   })
