@@ -408,7 +408,7 @@ INDUCEMENTS = [
      "A team may hire a Wizard to help your team during the match for 150,000 gold pieces. Wizards, just like everybody else in the Old World, are keen sports fans and many are fanatically loyal in support of their chosen team. It is not surprising, then, that soon after the game was born, Wizards started 'helping out' the team they supported with carefully selected spells. Soon games were awash with magic as rival Wizards battled to give their team the edge. In the end, the Colleges of Magic were forced to insist that only teams that had bought a special license from the Colleges of Magic were allowed to have magical assistance. They limited this assistance to one spell per match, and even this had to be chosen from a very limited selection and cast by an officially appointed Colleges of Magic team Wizard. Wizards and fans alike soon realised that they really wanted to see a proper Blood Bowl match rather than a spellcasting contest, so the new rules were soon universally accepted.\nAny team is allowed to hire a Wizard for a match, as long as they can afford the whopping licensing fee charged by the College of Magic concerned. No team may hire more than one Wizard per match. Wizards can be represented in games with one of the Wizard models from the range of Citadel miniatures for Warhammer. This isn't strictly necessary, but looks a lot better than representing a Wizard with a bottle top or tiddlywink!\nOnce per game, the Wizard is allowed to cast either a Fireball spell or a Lightning Bolt spell. Wizards may only cast spells at the start of his own turn before any player performs an Action or immediately after his own team's turn has ended even if it ended with a turnover.\nFireball: Choose a target square anywhere on the pitch. Roll one dice to hit each standing player (from either team) that is either in the target square or a square adjacent to it. If the 'to hit' roll is a 4 or more then the target is Knocked Down. If it is a 3 or less he manages to dodge the fireball's blast. Make an Armour roll (and possible Injury as well) for any player that is Knocked Down as if they had been Knocked Down by a player with the Mighty Blow skill. If a player on the moving team is Knocked Down by a fireball, then the moving team does not suffer a turnover unless the player was carrying the ball at the time.\nLightning Bolt: Pick a standing player anywhere on the pitch, and roll one dice. If the score is a 2 or higher, then he has been hit by the lightning bolt. If the roll is a 1 then he manages to dodge out of the way. A player hit by a lightning bolt is Knocked Down and must make an Armour roll (and possible Injury as well) as if hit by a player with the Mighty Blow skill."],
     ["Cheerleader", 3, {"All": 20}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
     ["Assistant Coach", 3, {"All": 20}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
-    ["Marketing Blitz", 5, {"All": 20}, ""]
+    ["Marketing Blitz", 5, {"All": 20}, "+1 Fan Factor"]
 ]
 
 PURCHASES = [
@@ -617,6 +617,7 @@ if __name__ == '__main__':
                 coachName = teamInfo[13]
 
                 treasury = rows[38][12]
+                teamValue = rows[39][17]
                 rerolls = rows[33][12]
                 fanFactor = rows[34][12]
                 assistantCoaches = rows[35][12]
@@ -661,7 +662,7 @@ if __name__ == '__main__':
 
                     # ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1", []],
                 print "        %s" % teamName
-                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players])
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players, teamValue])
 
                 for coachNameKey, coachAliases in COACH_MAP.iteritems():
                     if coachNameKey == coachName:
@@ -682,14 +683,22 @@ if __name__ == '__main__':
                 rows.append([cell.value for cell in row])
 
             teamName = rows[19][8]
+            print "        %s" % teamName
+
             raceName = rows[20][8]
             coachName = rows[21][8]
-            treasury = rows[22][8]
-            rerolls = rows[19][19] if rows[19][19] else rows[19][20]
-            fanFactor = rows[20][19] if rows[20][19] else rows[20][20]
-            assistantCoaches = rows[21][19] if rows[21][19] else rows[21][20]
-            cheerleaders = rows[22][19] if rows[22][19] else rows[22][20]
-            apothecary = rows[23][19] if rows[23][19] else rows[23][20]
+            teamValue = rows[22][8]
+            treasury = rows[23][8]
+            rerolls = rows[19][19] if rows[19][19] is not None else rows[19][20]
+            fanFactor = rows[20][19] if rows[20][19] is not None else rows[20][20]
+            assistantCoaches = rows[21][19] if rows[21][19] is not None else rows[21][20]
+            cheerleaders = rows[22][19] if rows[22][19] is not None else rows[22][20]
+            apothecary = rows[23][19] if rows[23][19] is not None else rows[23][20]
+
+            try:
+                cheerleaders = int(cheerleaders)
+            except Exception as ex:
+                pass
 
             players = []
             for row in rows[2:18]:
@@ -716,6 +725,10 @@ if __name__ == '__main__':
                     skills.append("-AG")
                 if injuryAV:
                     skills.append("-AV")
+
+                if row[11]:
+                    pass
+
                 status = "MNG" if row[11] else None
                 completions = row[18]
                 touchdowns = row[19]
@@ -725,8 +738,7 @@ if __name__ == '__main__':
                 mvps = row[22]
                 players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
-            print "        %s" % teamName
-            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 2", players])
+            TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 2", players, teamValue])
 
             for coachNameKey, coachAliases in COACH_MAP.iteritems():
                 if coachNameKey == coachName:
@@ -749,7 +761,8 @@ if __name__ == '__main__':
                 teamName = rows[20][8]
                 raceName = rows[21][8]
                 coachName = rows[22][8]
-                treasury = rows[23][8]
+                teamValue = rows[23][8]
+                treasury = rows[24][8]
                 rerolls = rows[20][19]
                 fanFactor = rows[21][19]
                 assistantCoaches = rows[22][19]
@@ -781,6 +794,10 @@ if __name__ == '__main__':
                         skills.append("-AG")
                     if injuryAV:
                         skills.append("-AV")
+
+                    if row[11]:
+                        pass
+
                     status = "MNG" if row[11] else None
                     completions = row[18]
                     touchdowns = row[19]
@@ -791,7 +808,7 @@ if __name__ == '__main__':
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
-                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players, teamValue])
 
                 for coachNameKey, coachAliases in COACH_MAP.iteritems():
                     if coachNameKey == coachName:
@@ -806,6 +823,7 @@ if __name__ == '__main__':
     print "    Sheet loaded! Now loading matches..."
     sheetNames = s3.get_sheet_names()[3:]
     for sheetName in sheetNames:
+        print "        %s" % sheetName
         matchSheet = s3[sheetName]
         rows = []
         for row in matchSheet.rows:
@@ -852,53 +870,56 @@ if __name__ == '__main__':
             team2Kills += rows[i][49] if rows[i][49] else 0
 
         team2Winnings = rows[56][39]
-        team2ExpMistakes = rows[56][14] if rows[56][14] else 0
-        team2EndFanFactor = rows[56][52] if rows[56][52] else 0
+        team2ExpMistakes = rows[56][52] if rows[56][52] else 0
+        team2EndFanFactor = rows[56][65] if rows[56][65] else 0
         team2Purchases = rows[60][39]
         team2Notes = rows[60][57]
 
-        match = {
-            "type": "Regular",
-            "date": None,
-            "season": "Season 2",
-            "teams": [
-                {
-                    "name": team1.strip(),
-                    "tv": team1TV,
-                    "inducementsGP": team1InducementGP.replace(" gp", "") if type(team1InducementGP) is str else team1InducementGP,
-                    "gate": team1Gate,
-                    "fame": int(team1Fame) if team1Fame else 0,
-                    "inducements": list(filter(lambda x: x is not None, team1Inducements)),
-                    "tds": team1TDs,
-                    "cas": team1Cas,
-                    "kills": team1Kills,
-                    "players": team1Players,
-                    "winnings": team1Winnings,
-                    "expMistakes": team1ExpMistakes,
-                    "fanFactor": team1EndFanFactor,
-                    "purchases": team1Purchases,
-                    "notes": team1Notes
-                },
-                {
-                    "name": team2.strip(),
-                    "tv": team2TV,
-                    "inducementsGP": team2InducementGP.replace(" gp", "") if type(team2InducementGP) is str else team2InducementGP,
-                    "gate": team2Gate,
-                    "fame": int(team2Fame) if team2Fame else 0,
-                    "inducements": list(filter(lambda x: x is not None, team2Inducements)),
-                    "tds": team2TDs,
-                    "cas": team2Cas,
-                    "kills": team2Kills,
-                    "players": team2Players,
-                    "winnings": team2Winnings,
-                    "expMistakes": team2ExpMistakes,
-                    "fanFactor": team2EndFanFactor,
-                    "purchases": team2Purchases,
-                    "notes": team2Notes
-                }
-            ]
-        }
-        MATCHES.append(match)
+        try:
+            match = {
+                "type": "Regular",
+                "date": None,
+                "season": "Season 2",
+                "teams": [
+                    {
+                        "name": team1.strip(),
+                        "tv": team1TV,
+                        "inducementsGP": int(team1InducementGP.replace("gp", "") if type(team1InducementGP) is str else team1InducementGP),
+                        "gate": int(team1Gate),
+                        "fame": int(team1Fame) if team1Fame else 0,
+                        "inducements": list(filter(lambda x: x is not None, team1Inducements)),
+                        "tds": int(team1TDs),
+                        "cas": int(team1Cas),
+                        "kills": int(team1Kills),
+                        "players": team1Players,
+                        "winnings": int(team1Winnings),
+                        "expMistakes": int(team1ExpMistakes),
+                        "fanFactor": int(team1EndFanFactor),
+                        "purchases": team1Purchases,
+                        "notes": team1Notes
+                    },
+                    {
+                        "name": team2.strip(),
+                        "tv": int(team2TV),
+                        "inducementsGP": int(team2InducementGP.replace("gp", "") if type(team2InducementGP) is str else team2InducementGP),
+                        "gate": int(team2Gate),
+                        "fame": int(team2Fame) if team2Fame else 0,
+                        "inducements": list(filter(lambda x: x is not None, team2Inducements)),
+                        "tds": int(team2TDs),
+                        "cas": int(team2Cas),
+                        "kills": int(team2Kills),
+                        "players": team2Players,
+                        "winnings": int(team2Winnings),
+                        "expMistakes": int(team2ExpMistakes),
+                        "fanFactor": int(team2EndFanFactor),
+                        "purchases": team2Purchases,
+                        "notes": team2Notes
+                    }
+                ]
+            }
+            MATCHES.append(match)
+        except Exception as ex:
+            pass
 
     cnx = mysql.connector.connect(user=settings.mysql_username, password=settings.mysql_password, host=settings.mysql_server, database=settings.mysql_db)
     cnx.autocommit = True
@@ -1039,7 +1060,7 @@ if __name__ == '__main__':
     teamNameAliases = {
         "Riverdale Ravagers": ["Alliance of the Old Gods", "Rivendale Ravagers"],
         "Run! It's The PO PO": ["Watch Out For The PO PO", "Watch Out For The POPO", "Run it's the Po Po", "Run its the PO PO", "Watch out for the POPO", "Watch out for the PO PO"],
-        "Gold Diggers": ["Golddiggers"],
+        "Gold Diggers": ["Golddiggers", "Karak Barak Varr Gold Diggers"],
         "Blood Mountain Berserkers": ["Blood Mountain Berzerkers"]
     }
     teamIDsBySeasonID = {}
@@ -1049,20 +1070,21 @@ if __name__ == '__main__':
     print
     print "Teams"
     for team in TEAMS:
-        # TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players])
+        # TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players, teamValue])
         teamName = team[0].strip()
+        seasonName = team[9]
+        print "    %s: %s" % (seasonName, teamName)
+
         coachName = team[1].strip()
         raceName = team[2].strip()
-        treasury = team[3]
-        rerolls = team[4] if team[4] else 0
-        fanFactor = team[5]
-        assistantCoaches = team[6]
-        cheerleaders = team[7]
-        apothecary = team[8]
-        seasonName = team[9]
+        treasury = int(team[3])
+        value = int(team[11])
+        rerolls = int(team[4]) if team[4] else 0
+        fanFactor = int(team[5])
+        assistantCoaches = int(team[6])
+        cheerleaders = int(team[7])
+        apothecary = int(team[8])
         players = team[10]
-        value = 0
-        print "    %s" % teamName
 
         coachID = coachIDs[coachName]
         raceID = raceIDs[raceName]
@@ -1091,6 +1113,11 @@ if __name__ == '__main__':
             if prevTeamID:
                 break
             prevSeasonID -= 1
+
+        if treasury > 9999:
+            treasury /= 1000
+        if value > 9999:
+            value /= 1000
 
         cursor.execute(
                 "INSERT INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)",
@@ -1212,12 +1239,44 @@ if __name__ == '__main__':
 
         description = ""
         if team1["notes"]:
-            description = team1["notes"]
+            description = "%s: %s" % (team1["name"], team1["notes"])
         if team2["notes"]:
             if team1["notes"]:
-                description += "\n" + team2["notes"]
+                description += "\n" + "%s: %s" % (team2["name"], team2["notes"])
             else:
-                description = team2["notes"]
+                description = "%s: %s" % (team2["name"], team2["notes"])
+
+        if team1["tv"] > 1000:
+            team1["tv"] /= 1000
+        if team2["tv"] > 1000:
+            team2["tv"] /= 1000
+
+        if team1["inducementsGP"] > 1000:
+            team1["inducementsGP"] /= 1000
+        if team2["inducementsGP"] > 1000:
+            team2["inducementsGP"] /= 1000
+
+        if team1["gate"] > 1000:
+            team1["gate"] /= 1000
+            if team1["gate"] > 100:
+                team1["gate"] /= 100
+        if team2["gate"] > 1000:
+            team2["gate"] /= 1000
+            if team2["gate"] > 100:
+                team2["gate"] /= 100
+
+        if team1["winnings"] > 1000:
+            team1["winnings"] /= 1000
+        if team2["winnings"] > 1000:
+            team2["winnings"] /= 1000
+
+        if team1["expMistakes"] > 1000:
+            team1["expMistakes"] /= 1000
+        if team2["expMistakes"] > 1000:
+            team2["expMistakes"] /= 1000
+
+        if team1["fanFactor"] > 0 or team2["fanFactor"] > 0:
+            pass
 
         row = (seasonID, match["date"], description,
                matchTypeID, matchTypeID,
@@ -1259,16 +1318,16 @@ if __name__ == '__main__':
                 kills = player[4]
                 mvp = player[5]
                 spp = player[6]
-                mng = player[7]
+                mng = "1" if player[7] else None
                 niggling = player[8]
                 minusStat = player[9]
                 dead = player[10]
                 newSkill = player[11]
 
-                mvInjury = 0
-                stInjury = 0
-                agInjury = 0
-                avInjury = 0
+                mvInjury = None
+                stInjury = None
+                agInjury = None
+                avInjury = None
                 if minusStat is not None:
                     if minusStat == "ST":
                         stInjury = 1
@@ -1280,6 +1339,12 @@ if __name__ == '__main__':
                         avInjury = 1
                     else:
                         print "ERROR: Cannot find injury for '%s'..." % minusStat
+
+                if mng is not None:
+                    mng = 1
+                if niggling is not None:
+                    niggling = 1
+                    mng = 1
 
                 row = (matchID, playerID, mng, niggling, mvInjury, stInjury, agInjury, avInjury, interceptions, completions, touchdowns, casualties, kills, mvp, None)
                 cursor.execute("INSERT INTO match_player VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
