@@ -76,3 +76,11 @@ a:hover.no-underline, a:link.no-underline {
   width: 0px;
 }
 
+.match-player-none {
+  background-color: hsla(0, 0%, 96%, 1);
+}
+
+h3.panel-title a {
+  color: #337ab7;
+}
+

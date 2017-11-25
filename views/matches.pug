@@ -40,13 +40,13 @@ append body
 							tbody
 								tr
 									th Team Value
-									td #{curMatch.team1_tv} gp
+									td #{curMatch.team1_tv},000 gp
 								tr
 									th Match Type
 									td #{curMatch.team1_match_type.name}
 								tr
 									th Gate
-									td #{curMatch.team1_gate} fans
+									td #{curMatch.team1_gate},000 fans
 								tr
 									th Fame
 									td +#{curMatch.team1_fame}
@@ -80,37 +80,69 @@ append body
 										div RIP
 									th New Skill
 							tbody
-								each matchPlayer, i in team1MatchPlayers
-									tr
-										th.text-center #{matchPlayer.player.number}	
-										td.match-value.text-center
-											div #{matchPlayer.completions ? matchPlayer.completions : ""}
-										td.match-value
-											div #{matchPlayer.touchdowns ? matchPlayer.touchdowns : ""}
-										td.match-value
-											div #{matchPlayer.interceptions ? matchPlayer.interceptions : ""}
-										td.match-value
-											div #{matchPlayer.casualties ? matchPlayer.casualties : ""}
-										td.match-value
-											div #{matchPlayer.kills ? matchPlayer.kills : ""}
-										//- td #{player.}
-										td.match-value
-											div 
-										td.match-value
-											div #{matchPlayer.mvp ? matchPlayer.mvp : ""}
-										td.match-value
-											div #{matchPlayer.completions + (3 * matchPlayer.touchdowns) + (2 * matchPlayer.interceptions) + (2 * matchPlayer.casualties) + (5 * player.mvp)}
-										td.match-value
-											div #{matchPlayer.miss_next_game ? matchPlayer.miss_next_game : ""}
-										td.match-value
-											div #{matchPlayer.niggling_injury ? matchPlayer.niggling_injury : ""}
-										//- td #{player.}
-										td.match-value
-											div 
-										td.match-value
-											div #{matchPlayer.killed_by_player_id ? "RIP" : ""}
-										//- td #{player.}
-										td 
+								each matchPlayer, i in Object.values(team1MatchPlayers)
+									if matchPlayer
+										tr
+											th.text-center #{matchPlayer.player.number}	
+											td.match-value.text-center
+												div #{matchPlayer.completions ? matchPlayer.completions : ""}
+											td.match-value
+												div #{matchPlayer.touchdowns ? matchPlayer.touchdowns : ""}
+											td.match-value
+												div #{matchPlayer.interceptions ? matchPlayer.interceptions : ""}
+											td.match-value
+												div #{matchPlayer.casualties ? matchPlayer.casualties : ""}
+											td.match-value
+												div #{matchPlayer.kills ? matchPlayer.kills : ""}
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div #{matchPlayer.mvp ? matchPlayer.mvp : ""}
+											td.match-value
+												div #{matchPlayer.completions + (3 * matchPlayer.touchdowns) + (2 * matchPlayer.interceptions) + (2 * matchPlayer.casualties) + (5 * matchPlayer.mvp)}
+											td.match-value
+												div #{matchPlayer.miss_next_game ? matchPlayer.miss_next_game : ""}
+											td.match-value
+												div #{matchPlayer.niggling_injury ? matchPlayer.niggling_injury : ""}
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div #{matchPlayer.killed_by_player_id ? "RIP" : ""}
+											//- td #{player.}
+											td 
+									else
+										tr.match-player-none
+											th.text-center #{i+1}	
+											td.match-value.text-center
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div 
+											//- td #{player.}
+											td 
 
 
 
@@ -125,13 +157,13 @@ append body
 							tbody
 								tr
 									th Team Value
-									td #{curMatch.team2_tv} gp
+									td #{curMatch.team2_tv},000 gp
 								tr
 									th Match Type
 									td #{curMatch.team2_match_type.name}
 								tr
 									th Gate
-									td #{curMatch.team2_gate} fans
+									td #{curMatch.team2_gate},000 fans
 								tr
 									th Fame
 									td +#{curMatch.team2_fame}
@@ -165,34 +197,66 @@ append body
 										div RIP
 									th New Skill
 							tbody
-								each player, i in team2MatchPlayers
-									tr
-										th.text-center #{matchPlayer.player.number}	
-										td.match-value.text-center
-											div #{matchPlayer.completions ? matchPlayer.completions : ""}
-										td.match-value
-											div #{matchPlayer.touchdowns ? matchPlayer.touchdowns : ""}
-										td.match-value
-											div #{matchPlayer.interceptions ? matchPlayer.interceptions : ""}
-										td.match-value
-											div #{matchPlayer.casualties ? matchPlayer.casualties : ""}
-										td.match-value
-											div #{matchPlayer.kills ? matchPlayer.kills : ""}
-										//- td #{player.}
-										td.match-value
-											div 
-										td.match-value
-											div #{matchPlayer.mvp ? matchPlayer.mvp : ""}
-										td.match-value
-											div #{matchPlayer.completions + (3 * matchPlayer.touchdowns) + (2 * matchPlayer.interceptions) + (2 * matchPlayer.casualties) + (5 * player.mvp)}
-										td.match-value
-											div #{matchPlayer.miss_next_game ? matchPlayer.miss_next_game : ""}
-										td.match-value
-											div #{matchPlayer.niggling_injury ? matchPlayer.niggling_injury : ""}
-										//- td #{player.}
-										td.match-value
-											div 
-										td.match-value
-											div #{matchPlayer.killed_by_player_id ? "RIP" : ""}
-										//- td #{player.}
-										td 
+								each matchPlayer, i in Object.values(team2MatchPlayers)
+									if matchPlayer
+										tr
+											th.text-center #{matchPlayer.player.number}	
+											td.match-value.text-center
+												div #{matchPlayer.completions ? matchPlayer.completions : ""}
+											td.match-value
+												div #{matchPlayer.touchdowns ? matchPlayer.touchdowns : ""}
+											td.match-value
+												div #{matchPlayer.interceptions ? matchPlayer.interceptions : ""}
+											td.match-value
+												div #{matchPlayer.casualties ? matchPlayer.casualties : ""}
+											td.match-value
+												div #{matchPlayer.kills ? matchPlayer.kills : ""}
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div #{matchPlayer.mvp ? matchPlayer.mvp : ""}
+											td.match-value
+												div #{matchPlayer.completions + (3 * matchPlayer.touchdowns) + (2 * matchPlayer.interceptions) + (2 * matchPlayer.casualties) + (5 * matchPlayer.mvp)}
+											td.match-value
+												div #{matchPlayer.miss_next_game ? matchPlayer.miss_next_game : ""}
+											td.match-value
+												div #{matchPlayer.niggling_injury ? matchPlayer.niggling_injury : ""}
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div #{matchPlayer.killed_by_player_id ? "RIP" : ""}
+											//- td #{player.}
+											td 
+									else
+										tr.match-player-none
+											th.text-center #{i+1}	
+											td.match-value.text-center
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											td.match-value
+												div 
+											//- td #{player.}
+											td.match-value
+												div 
+											td.match-value
+												div 
+											//- td #{player.}
+											td 

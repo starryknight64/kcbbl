@@ -17,6 +17,12 @@ function toPlural(text) {
     }
 }
 
+function formatNumberWithCommas(number) {
+    var parts = number.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
+
 function getID(num) {
     if (!Type.is(num, Number)) {
         if (Type.is(num, String)) {
@@ -57,6 +63,7 @@ function handleError(res, error) {
 module.exports = {
     toTitleCase: toTitleCase,
     toPlural: toPlural,
+    formatNumberWithCommas: formatNumberWithCommas,
     getID: getID,
     handleRESTError: handleRESTError
 }

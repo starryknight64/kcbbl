@@ -258,7 +258,25 @@ function getPlayersForMatchAndTeam(matchID, teamID) {
         }
       }
 
-      return Promise.resolve(matchPlayers)
+      var numberedPlayers = {}
+      var found = false
+      for (var i in [...Array(16)]) {
+        var num = Number(i) + 1
+        found = false
+        for (var j in matchPlayers) {
+          var matchPlayer = matchPlayers[j]
+          if (matchPlayer.player.number == num) {
+            found = true
+            numberedPlayers[num] = matchPlayer
+            break
+          }
+        }
+        if (!found) {
+          numberedPlayers[num] = null
+        }
+      }
+
+      return Promise.resolve(numberedPlayers)
     })
   })
 }
