@@ -52,3 +52,27 @@ a:hover.no-underline, a:link.no-underline {
 .player-injury {
   background-color: lightcoral;
 }
+
+.vertical-center-child {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.match-header-number {
+  width: 10px;
+}
+
+.match-header-rotated {
+  height: 63px;
+  white-space: nowrap;
+}
+
+.match-header-rotated > div {
+  transform: translate(5px, 5px) rotate(270deg);
+  width: 0px;
+}
+
+.match-value > div {
+  width: 0px;
+}
+

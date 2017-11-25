@@ -1,0 +1,198 @@
+extends ../layouts/starter
+
+//- append head
+//- 	script(src="js/jquery.min.js")
+//- 	script(src="js/seasons.js")
+
+append body
+	.container.body-container
+		.row
+			.jumbotron
+				.container
+					.row
+						.col-md-5
+							h1.text-center #{curMatch.team1.name}
+						.col-md-2.vertical-center-parent
+							h1.text-center.vertical-center-child VS
+						.col-md-5
+							h1.text-center #{curMatch.team2.name}
+					.row
+						.col-md-12.text-center
+							h1.btn-group
+								button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a match...&nbsp;
+									span.caret
+								ul.dropdown-menu
+									each match, i in matches
+										li
+											if match.id == curMatch.id
+												a(href="#") #{match.team1.name} VS #{match.team2.name} (#{match.team1_tds}-#{match.team2_tds})
+											else
+												a(href="/matches/"+match.id) #{match.team1.name} VS #{match.team2.name} (#{match.team1_tds}-#{match.team2_tds})
+		.row
+			.col-md-6
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title
+							| #{curMatch.team1.race.name} team coached by 
+							a(href="/coaches/"+curMatch.team1.coach.id) #{curMatch.team1.coach.name}
+					.panel-body
+						table.table.table-condensed.table-hover
+							tbody
+								tr
+									th Team Value
+									td #{curMatch.team1_tv} gp
+								tr
+									th Match Type
+									td #{curMatch.team1_match_type.name}
+								tr
+									th Gate
+									td #{curMatch.team1_gate} fans
+								tr
+									th Fame
+									td +#{curMatch.team1_fame}
+						table.table.table-condensed.table-hover.table-bordered
+							thead
+								tr
+									th.match-header-number.text-center #
+									th.match-header-rotated
+										div CMP
+									th.match-header-rotated
+										div TD
+									th.match-header-rotated
+										div INT
+									th.match-header-rotated
+										div CAS
+									th.match-header-rotated
+										div Kills
+									th.match-header-rotated
+										div Fouls
+									th.match-header-rotated
+										div MVP
+									th.match-header-rotated
+										div SPP
+									th.match-header-rotated
+										div MNG
+									th.match-header-rotated
+										div Niggle
+									th.match-header-rotated
+										div -Stat
+									th.match-header-rotated
+										div RIP
+									th New Skill
+							tbody
+								each matchPlayer, i in team1MatchPlayers
+									tr
+										th.text-center #{matchPlayer.player.number}	
+										td.match-value.text-center
+											div #{matchPlayer.completions ? matchPlayer.completions : ""}
+										td.match-value
+											div #{matchPlayer.touchdowns ? matchPlayer.touchdowns : ""}
+										td.match-value
+											div #{matchPlayer.interceptions ? matchPlayer.interceptions : ""}
+										td.match-value
+											div #{matchPlayer.casualties ? matchPlayer.casualties : ""}
+										td.match-value
+											div #{matchPlayer.kills ? matchPlayer.kills : ""}
+										//- td #{player.}
+										td.match-value
+											div 
+										td.match-value
+											div #{matchPlayer.mvp ? matchPlayer.mvp : ""}
+										td.match-value
+											div #{matchPlayer.completions + (3 * matchPlayer.touchdowns) + (2 * matchPlayer.interceptions) + (2 * matchPlayer.casualties) + (5 * player.mvp)}
+										td.match-value
+											div #{matchPlayer.miss_next_game ? matchPlayer.miss_next_game : ""}
+										td.match-value
+											div #{matchPlayer.niggling_injury ? matchPlayer.niggling_injury : ""}
+										//- td #{player.}
+										td.match-value
+											div 
+										td.match-value
+											div #{matchPlayer.killed_by_player_id ? "RIP" : ""}
+										//- td #{player.}
+										td 
+
+
+
+			.col-md-6
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title
+							| #{curMatch.team2.race.name} team coached by 
+							a(href="/coaches/"+curMatch.team2.coach.id) #{curMatch.team2.coach.name}
+					.panel-body
+						table.table.table-condensed.table-hover
+							tbody
+								tr
+									th Team Value
+									td #{curMatch.team2_tv} gp
+								tr
+									th Match Type
+									td #{curMatch.team2_match_type.name}
+								tr
+									th Gate
+									td #{curMatch.team2_gate} fans
+								tr
+									th Fame
+									td +#{curMatch.team2_fame}
+						table.table.table-condensed.table-hover.table-bordered
+							thead
+								tr
+									th.match-header-number.text-center #
+									th.match-header-rotated
+										div CMP
+									th.match-header-rotated
+										div TD
+									th.match-header-rotated
+										div INT
+									th.match-header-rotated
+										div CAS
+									th.match-header-rotated
+										div Kills
+									th.match-header-rotated
+										div Fouls
+									th.match-header-rotated
+										div MVP
+									th.match-header-rotated
+										div SPP
+									th.match-header-rotated
+										div MNG
+									th.match-header-rotated
+										div Niggle
+									th.match-header-rotated
+										div -Stat
+									th.match-header-rotated
+										div RIP
+									th New Skill
+							tbody
+								each player, i in team2MatchPlayers
+									tr
+										th.text-center #{matchPlayer.player.number}	
+										td.match-value.text-center
+											div #{matchPlayer.completions ? matchPlayer.completions : ""}
+										td.match-value
+											div #{matchPlayer.touchdowns ? matchPlayer.touchdowns : ""}
+										td.match-value
+											div #{matchPlayer.interceptions ? matchPlayer.interceptions : ""}
+										td.match-value
+											div #{matchPlayer.casualties ? matchPlayer.casualties : ""}
+										td.match-value
+											div #{matchPlayer.kills ? matchPlayer.kills : ""}
+										//- td #{player.}
+										td.match-value
+											div 
+										td.match-value
+											div #{matchPlayer.mvp ? matchPlayer.mvp : ""}
+										td.match-value
+											div #{matchPlayer.completions + (3 * matchPlayer.touchdowns) + (2 * matchPlayer.interceptions) + (2 * matchPlayer.casualties) + (5 * player.mvp)}
+										td.match-value
+											div #{matchPlayer.miss_next_game ? matchPlayer.miss_next_game : ""}
+										td.match-value
+											div #{matchPlayer.niggling_injury ? matchPlayer.niggling_injury : ""}
+										//- td #{player.}
+										td.match-value
+											div 
+										td.match-value
+											div #{matchPlayer.killed_by_player_id ? "RIP" : ""}
+										//- td #{player.}
+										td 

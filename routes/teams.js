@@ -3,7 +3,7 @@ var router = express.Router()
 var calls = require("./rest/calls")
 
 router.get("/", function (req, res, next) {
-  calls.getTeams([], [], [], true).then((teams) => {
+  calls.getTeamsUnique().then((teams) => {
     calls.getPlayersForTeam(teams[0].id).then((players) => {
       calls.getSeasons().then((seasons) => {
         calls.getCurrentSeason().then((curSeason) => {

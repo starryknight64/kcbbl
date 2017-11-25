@@ -19,11 +19,12 @@ function get(table, id, cols) {
         return Promise.reject(table + " ID must be a positive integer!")
     }
     if (!Type.is(cols, Array)) {
-        cols = [table + ".*"]
+        cols = ["`" + table + "`.*"]
     }
 
     var sql = "SELECT " + cols.join(",") + " FROM `" + table + "` WHERE id=?"
     return new Promise((resolve, reject) => {
+        //console.log(sql)
         db.query(sql, [idClean], (error, results, fields) => {
             if (error) {
                 return reject(error)
