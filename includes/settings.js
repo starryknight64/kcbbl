@@ -10,7 +10,7 @@ var config = {
         appSecret: "",
         version: "",
         accessToken: "",
-        pageID: ""
+        groupID: ""
     }
 }
 
