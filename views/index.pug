@@ -1,5 +1,15 @@
 extends ../layouts/starter
 
+append head
+	script.
+		var fbAPIVersion="#{fbAPIVersion}"
+	script(src="/js/fb-sdk.js")
+
 append body
 	.container
 		img.img-responsive.center-block.logo(src="/images/kcbbl-logo.png")
+
+	.fb.container.body-container
+		each message, i in messages
+			.fb.col-xs-12.col-md-6.text-center
+				.fb-post(data-href="https://www.facebook.com/20531316728/posts/" + message.id)

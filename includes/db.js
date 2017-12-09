@@ -1,12 +1,13 @@
 var Type = require("type-of-is")
 var mysql = require("mysql")
 var util = require("./util")
+var settings = require("./settings")
 
 var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "bloodbowl"
+    host: settings.db.host,
+    user: settings.db.user,
+    password: settings.db.password,
+    database: settings.db.database
 })
 db.connect()
 
