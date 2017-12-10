@@ -61,14 +61,16 @@ TROPHIES = [
     ["Spike Bowl", "spike bowl.png"],
     ["Chaos Cup", "chaos cup.png"],
     ["Dungeon Bowl", "dungeon bowl.png"],
-    ["Blood Bowl", "blood bowl.png"]
+    ["Blood Bowl", "blood bowl.png"],
+    ["Open Season", ""]
 ]
 
 SEASONS = [
     ["Season 1", "2017-01-01", "2017-03-31", "Spike Bowl", "Guardians of the Nile"],
     ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup", "Riverdale Ravagers"],
-    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", None],
-    ["Season 4", "2017-10-01", "2017-12-31", "Blood Bowl", None]
+    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", "Rat Rat City Bitch"],
+    ["Season 3.5", "2017-10-01", "2017-12-31", "Open Season", None],
+    ["Season 4", "2018-01-01", "2018-03-31", "Blood Bowl", None],
 ]
 
 SKILL_TYPES = ["General", "Agility", "Passing", "Strength", "Mutation", "Extraordinary", "Improvement"]
@@ -1443,20 +1445,20 @@ if __name__ == '__main__':
         seasonTeams = playerIDsBySeasonIDAndTeamAndNumber[seasonID]
         for team in match["teams"]:
             teamID = teamIDsBySeasonID[seasonID][team["name"]]
+            raceID = raceIDsByTeamID[teamID]
 
             teamInducements = team["inducements"]
             for inducement in teamInducements:
                 print "        Inducement: %s" % inducement
-                raceID = raceIDsByTeamID[teamID]
                 inducementID = None
                 playerTypeID = None
                 cardID = None
                 amount = 1
 
-                inducementSplit = inducement.lower().split()
-                if inducementSplit[0][0].isdigit() and inducementSplit[0].endswith("x"):
+                inducementSplit = inducement.split()
+                if inducementSplit[0][0].isdigit() and inducementSplit[0].lower().endswith("x"):
                     amount = inducementSplit[0][0]
-                    inducement = " ".join(inducementSplit[1:]).title()
+                    inducement = " ".join(inducementSplit[1:])
 
                 if raceID in inducementIDsByRaceID:
                     raceInducementIDs = inducementIDsByRaceID[raceID]
@@ -1468,11 +1470,15 @@ if __name__ == '__main__':
                     if inducement in playerTypeIDsByRaceID[raceID]:
                         playerTypeID = playerTypeIDsByRaceID[raceID][inducement]
                 elif "Journeyman" in inducement:
-                    description += "<br><br>'%s' also had a %s" % (team["name"], inducement)
+                    addDesc = "<br><br>'%s' also had a %s" % (team["name"], inducement)
+                    print"            %s" % addDesc
+                    description += addDesc
                     cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
                     continue
                 elif " Card" in inducement:
-                    description += "<br>'%s' had an unknown %s as an inducement" % (team["name"], inducement)
+                    addDesc = "<br>'%s' had an unknown %s as an inducement" % (team["name"], inducement)
+                    print"            %s" % addDesc
+                    description += addDesc
                     cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
                     continue
 
@@ -1495,6 +1501,39 @@ if __name__ == '__main__':
 
                 row = (matchID, teamID, inducementID, amount, playerTypeID, cardID)
                 cursor.execute("INSERT INTO match_inducement VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
+
+            teamPurchases = team["purchases"].split("\n") if team["purchases"] else []
+            for purchase in teamPurchases:
+                if purchase == "":
+                    continue
+
+                print "        Purchase: %s" % purchase
+                purchaseID = None
+                playerTypeID = None
+                amount = 1
+
+                purchaseSplit = purchase.split()
+                if purchaseSplit[0][0].isdigit() and purchaseSplit[0].lower().endswith("x"):
+                    amount = purchaseSplit[0][0]
+                    purchase = " ".join(purchaseSplit[1:])
+
+                if raceID in purchaseIDsByRaceID:
+                    racePurchaseIDs = purchaseIDsByRaceID[raceID]
+                    if purchase in racePurchaseIDs:
+                        purchaseID = racePurchaseIDs[purchase]
+
+                if purchaseID is None:
+                    if purchase in playerTypeIDsByRaceID[raceID]:
+                        playerTypeID = playerTypeIDsByRaceID[raceID][purchase]
+                    elif purchase in purchaseIDs:
+                        purchaseID = purchaseIDs[purchase]
+
+                if purchaseID is None and playerTypeID is None:
+                    print "            Couldn't find purchase '%s' Skipping..." % purchase
+                    continue
+
+                row = (matchID, teamID, purchaseID, amount, playerTypeID)
+                cursor.execute("INSERT INTO match_purchase VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
 
             seasonTeamPlayers = seasonTeams[teamID]
             teamPlayers = playerIDs[team["name"]]
