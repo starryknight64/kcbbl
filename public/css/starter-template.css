@@ -69,27 +69,36 @@ a:hover.no-underline, a:link.no-underline {
 
 @media (min-width: 769px) {
   .match-header-rotated > div {
-    transform: translate(8px, 5px) rotate(270deg);
-    width: 0px;
+    transform: translate(4px, 2px) rotate(270deg);
+    width: 5px;
   }
 
   .match-value > div {
-    width: 0px;
+    width: 5px;
     position: relative;
     left: 4px;
+  }
+
+  .match-skills {
+    width: 200px;
   }
 }
 
 @media (max-width: 768px) {
   .match-header-rotated > div {
-    transform: translate(3px, 5px) rotate(270deg);
-    width: 0px;
+    transform: translate(1px, 2px) rotate(270deg);
+    width: 5px;
   }
   
   .match-value > div {
-    width: 0px;
+    width: 5px;
     position: relative;
     left: -2px;
+  }
+
+  .match-roster {
+    position: relative;
+    left: -15px;
   }
 }
 
@@ -103,4 +112,8 @@ h3.panel-title a {
 
 .fb {
   padding: 0px;
+}
+
+.table>tbody>tr.vert-center>td, .table>tbody>tr.vert-center>th, .table>tfoot>tr.vert-center>td, .table>tfoot>tr.vert-center>th, .table>thead>tr.vert-center>td, .table>thead>tr.vert-center>th {
+  vertical-align: middle;
 }

@@ -258,25 +258,43 @@ function getPlayersForMatchAndTeam(matchID, teamID) {
         }
       }
 
-      var numberedPlayers = {}
-      var found = false
-      for (var i in [...Array(16)]) {
-        var num = Number(i) + 1
-        found = false
-        for (var j in matchPlayers) {
-          var matchPlayer = matchPlayers[j]
-          if (matchPlayer.player.number == num) {
-            found = true
-            numberedPlayers[num] = matchPlayer
-            break
-          }
-        }
-        if (!found) {
-          numberedPlayers[num] = null
+      var skillsPromises = []
+      for (var i in matchPlayers) {
+        var matchPlayer = matchPlayers[i]
+        if (matchPlayer) {
+          skillsPromises.push(getSkillsForPlayerAndMatch(matchPlayer.player.id, matchID))
         }
       }
 
-      return Promise.resolve(numberedPlayers)
+      return Promise.all(skillsPromises).then((skillData) => {
+        for (var i in matchPlayers) {
+          if (skillData[i]) {
+            matchPlayers[i]["skills"] = skillData[i]
+          } else {
+            matchPlayers[i]["skills"] = []
+          }
+        }
+
+        var numberedPlayers = {}
+        var found = false
+        for (var i in [...Array(16)]) {
+          var num = Number(i) + 1
+          found = false
+          for (var j in matchPlayers) {
+            var matchPlayer = matchPlayers[j]
+            if (matchPlayer.player.number == num) {
+              found = true
+              numberedPlayers[num] = matchPlayer
+              break
+            }
+          }
+          if (!found) {
+            numberedPlayers[num] = null
+          }
+        }
+
+        return Promise.resolve(numberedPlayers)
+      })
     })
   })
 }
@@ -480,6 +498,13 @@ function getSkillsForPlayer(playerID) {
     })
   })
 }
+function getSkillsForPlayerAndMatch(playerID, matchID) {
+  return getPlayer(playerID).then((player) => {
+    return getMatch(matchID).then((match) => {
+      return getSkills(["match_player_skill.player_id", "match_player_skill.match_id"], [player.id, match.id], ["INNER JOIN match_player_skill ON match_player_skill.skill_id=skill.id"])
+    })
+  })
+}
 
 function getTeam(id) {
   return db.get("team", id).then((team) => {
@@ -676,6 +701,7 @@ module.exports = {
   getSkill: getSkill,
   getSkills: getSkills,
   getSkillsForPlayer: getSkillsForPlayer,
+  getSkillsForPlayerAndMatch: getSkillsForPlayerAndMatch,
   getTeam: getTeam,
   getTeams: getTeams,
   getTeamsForCoach: getTeamsForCoach,
