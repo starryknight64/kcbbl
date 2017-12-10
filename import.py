@@ -1017,7 +1017,7 @@ if __name__ == '__main__':
         seasonIDs[name] = seasonID
 
     # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
-    playerTypeIDs = {}
+    playerTypeIDsByRaceID = {}
     playerTypeIDSkillIDs = {}
     print
     print "Players Types"
@@ -1037,9 +1037,11 @@ if __name__ == '__main__':
         print "    %s: %s" % (race, name)
         cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 0, raceIDs[race], value, None))
         playerTypeID = cursor.lastrowid
-        if race not in playerTypeIDs:
-            playerTypeIDs[race] = {}
-        playerTypeIDs[race][name] = playerTypeID
+
+        raceID = raceIDs[race]
+        if raceID not in playerTypeIDsByRaceID:
+            playerTypeIDsByRaceID[raceID] = {}
+        playerTypeIDsByRaceID[raceID][name] = playerTypeID
 
         playerTypeIDSkillIDs[playerTypeID] = []
         for skill in skills:
@@ -1067,6 +1069,7 @@ if __name__ == '__main__':
     playerIDs = {}
     playerIDsBySeasonIDAndTeamAndNumber = {}
     playerIDPlayerTypeIDs = {}
+    raceIDsByTeamID = {}
     print
     print "Teams"
     for team in TEAMS:
@@ -1125,6 +1128,7 @@ if __name__ == '__main__':
         )
         teamID = cursor.lastrowid
         teamIDsBySeasonID[seasonID][teamName] = teamID
+        raceIDsByTeamID[teamID] = raceID
 
         teamAliases = getAliases(teamName, teamNameAliases)
         for alias in teamAliases:
@@ -1144,7 +1148,7 @@ if __name__ == '__main__':
             if playerName.lower() == "journeyman":
                 continue
 
-            playerTypeID = playerTypeIDs[raceName][playerPosition]
+            playerTypeID = playerTypeIDsByRaceID[raceID][playerPosition]
             ma = player[2]
             st = player[3]
             ag = player[4]
@@ -1220,6 +1224,149 @@ if __name__ == '__main__':
         matchTypeIDs[matchType] = matchTypeID
 
     print
+    print "Inducements"
+    inducementIDs = {}
+    inducementIDsByRaceID = {}
+    # ["Bloodweiser Babe", 2, {"All": 50}, "The team
+    for inducement in INDUCEMENTS:
+        name = inducement[0]
+        maxAmt = inducement[1]
+        priceForRaces = inducement[2]
+        desc = inducement[3]
+
+        for race, price in priceForRaces.iteritems():
+            raceID = None
+            if race != "All" and race != "Otherwise":
+                raceID = raceIDs[race]
+
+            print "    %s: %s" % (name, race)
+            cursor.execute("INSERT INTO inducement VALUES(NULL,%s,%s,%s,%s,%s)", (name, maxAmt, price, raceID, desc))
+            inducementID = cursor.lastrowid
+
+            if raceID:
+                if raceID not in inducementIDsByRaceID:
+                    inducementIDsByRaceID[raceID] = {}
+                inducementIDsByRaceID[raceID][name] = inducementID
+            else:
+                inducementIDs[name] = inducementID
+                # ["Cheerleader", 10, ["All"], "Most Blood Bow
+    print
+    print "Purchases"
+    purchaseIDs = {}
+    purchaseIDsByRaceID = {}
+    # ["Apothecary", {"All":50, "Exceptions":["Khemri", "Necromantic", "Nurgle", "Undead"]}, "An Apothecary is a
+    for purchase in PURCHASES:
+        name = purchase[0]
+        raceCosts = purchase[1]
+        desc = purchase[2]
+
+        for raceNameCost, cost in raceCosts.iteritems():
+            if raceNameCost == "All":
+                if "Exceptions" in raceCosts:
+                    raceNames = raceIDs.keys()
+                    exceptRaceNames = raceCosts["Exceptions"]
+                    for exceptRaceName in exceptRaceNames:
+                        raceNames.remove(exceptRaceName)
+
+                    for raceName in raceNames:
+                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
+                        raceID = raceIDs[raceName]
+                        cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                        purchaseID = cursor.lastrowid
+                        if raceID not in purchaseIDsByRaceID:
+                            purchaseIDsByRaceID[raceID] = {}
+                        purchaseIDsByRaceID[raceID][name] = purchaseID
+                    break
+                else:
+                    print "    All: %s (%s,000 gp)" % (name, cost)
+                    cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
+                    purchaseID = cursor.lastrowid
+                    purchaseIDs[name] = purchaseID
+            elif raceNameCost != "Exceptions":
+                raceName = raceNameCost
+                print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
+                raceID = raceIDs[raceName]
+                cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                purchaseID = cursor.lastrowid
+                if raceID not in purchaseIDsByRaceID:
+                    purchaseIDsByRaceID[raceID] = {}
+                purchaseIDsByRaceID[raceID][name] = purchaseID
+
+                if "Otherwise" in raceCosts:
+                    cost = raceCosts["Otherwise"]
+                    raceID = None
+
+                    print "    %s: All Other Races (%s,000 gp)" % (name, cost)
+                    cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
+                    purchaseID = cursor.lastrowid
+                    purchaseIDs[name] = purchaseID
+                    break
+
+    deckIDs = {}
+    print
+    print "Decks"
+    for deck in DECKS:
+        name = deck[0]
+        cost = deck[1]
+        print "    %s" % name
+        cursor.execute("INSERT INTO deck VALUES(NULL,%s,%s)", (name, cost))
+        deckID = cursor.lastrowid
+        deckIDs[name] = deckID
+
+    print
+    print "Cards"
+    cardIDs = {}
+    for card in CARDS:
+        name = card[0]
+        aka = card[1]
+        deckName = card[2]
+        desc = card[3]
+        timing = card[4]
+        effect = card[5]
+        print "    %s" % name
+
+        deckID = deckIDs[deckName]
+        cursor.execute("INSERT INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
+        cardID = cursor.lastrowid
+        cardIDs[name] = cardID
+
+    # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
+    print
+    print "Star Players"
+    starPlayerIDsByRaceID = {}
+    for starPlayer in STAR_PLAYERS:
+        name = starPlayer[0]
+        races = starPlayer[1]
+        skills = starPlayer[2]
+        value = starPlayer[3]
+        ma = starPlayer[4]
+        st = starPlayer[5]
+        ag = starPlayer[6]
+        av = starPlayer[7]
+        desc = starPlayer[8]
+
+        if desc == "":
+            desc = None
+
+        if "All Except" in races:
+            newRaces = raceIDs.keys()
+            for race in races[1:]:
+                newRaces.remove(race)
+            races = newRaces
+
+        for race in races:
+            print "    %s: %s" % (name, race)
+            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
+            starPlayerID = cursor.lastrowid
+            raceID = raceIDs[race]
+            if raceID not in starPlayerIDsByRaceID:
+                starPlayerIDsByRaceID[raceID] = {}
+            starPlayerIDsByRaceID[raceID][name] = starPlayerID
+
+            for skill in skills:
+                cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (starPlayerID, skillIDs[skill]))
+
+    print
     print "Matches"
     matchNum = 0
     curSeason = None
@@ -1275,9 +1422,6 @@ if __name__ == '__main__':
         if team2["expMistakes"] > 1000:
             team2["expMistakes"] /= 1000
 
-        if team1["fanFactor"] > 0 or team2["fanFactor"] > 0:
-            pass
-
         row = (seasonID, match["date"], description,
                matchTypeID, matchTypeID,
                team1ID, team2ID,
@@ -1299,6 +1443,59 @@ if __name__ == '__main__':
         seasonTeams = playerIDsBySeasonIDAndTeamAndNumber[seasonID]
         for team in match["teams"]:
             teamID = teamIDsBySeasonID[seasonID][team["name"]]
+
+            teamInducements = team["inducements"]
+            for inducement in teamInducements:
+                print "        Inducement: %s" % inducement
+                raceID = raceIDsByTeamID[teamID]
+                inducementID = None
+                playerTypeID = None
+                cardID = None
+                amount = 1
+
+                inducementSplit = inducement.lower().split()
+                if inducementSplit[0][0].isdigit() and inducementSplit[0].endswith("x"):
+                    amount = inducementSplit[0][0]
+                    inducement = " ".join(inducementSplit[1:]).title()
+
+                if raceID in inducementIDsByRaceID:
+                    raceInducementIDs = inducementIDsByRaceID[raceID]
+                    if inducement in raceInducementIDs:
+                        inducementID = raceInducementIDs[inducement]
+
+                if "Mercenary" in inducement:
+                    inducement = " ".join(inducement.split()[:-1])
+                    if inducement in playerTypeIDsByRaceID[raceID]:
+                        playerTypeID = playerTypeIDsByRaceID[raceID][inducement]
+                elif "Journeyman" in inducement:
+                    description += "<br><br>'%s' also had a %s" % (team["name"], inducement)
+                    cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
+                    continue
+                elif " Card" in inducement:
+                    description += "<br>'%s' had an unknown %s as an inducement" % (team["name"], inducement)
+                    cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
+                    continue
+
+                if inducementID is None:
+                    if inducement in inducementIDs:
+                        inducementID = inducementIDs[inducement]
+                    elif inducement in starPlayerIDsByRaceID[raceID]:
+                        playerTypeID = starPlayerIDsByRaceID[raceID][inducement]
+                    elif inducement in cardIDs:
+                        cardID = cardIDs[inducement]
+                    elif "petty cash" in inducement.lower():
+                        pettyCash = inducement.lower().split()[0].replace("k", "")
+                        teamNum = "1" if team["name"] == team1["name"] else "2"
+                        cursor.execute("UPDATE `match` SET team" + teamNum + "_petty_cash=%s WHERE id=%s", (pettyCash, matchID))
+                        continue
+
+                if inducementID is None and playerTypeID is None and cardID is None:
+                    print "            Couldn't find inducement '%s' Skipping..." % inducement
+                    continue
+
+                row = (matchID, teamID, inducementID, amount, playerTypeID, cardID)
+                cursor.execute("INSERT INTO match_inducement VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
+
             seasonTeamPlayers = seasonTeams[teamID]
             teamPlayers = playerIDs[team["name"]]
             for i, player in enumerate(team["players"]):
@@ -1373,120 +1570,6 @@ if __name__ == '__main__':
             seasonID = seasonIDs[name]
             winnerTeamID = teamIDsBySeasonID[seasonID][winnerTeamName]
             cursor.execute("UPDATE season SET winner_team_id=%s WHERE id=%s", (winnerTeamID, seasonID))
-
-    deckIDs = {}
-    print
-    print "Decks"
-    for deck in DECKS:
-        name = deck[0]
-        cost = deck[1]
-        print "    %s" % name
-        cursor.execute("INSERT INTO deck VALUES(NULL,%s,%s)", (name, cost))
-        deckID = cursor.lastrowid
-        deckIDs[name] = deckID
-
-    print
-    print "Cards"
-    for card in CARDS:
-        name = card[0]
-        aka = card[1]
-        deckName = card[2]
-        desc = card[3]
-        timing = card[4]
-        effect = card[5]
-        print "    %s" % name
-
-        deckID = deckIDs[deckName]
-        cursor.execute("INSERT INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
-
-    # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
-    print
-    print "Star Players"
-    for starPlayer in STAR_PLAYERS:
-        name = starPlayer[0]
-        races = starPlayer[1]
-        skills = starPlayer[2]
-        value = starPlayer[3]
-        ma = starPlayer[4]
-        st = starPlayer[5]
-        ag = starPlayer[6]
-        av = starPlayer[7]
-        desc = starPlayer[8]
-
-        if desc == "":
-            desc = None
-
-        if "All Except" in races:
-            newRaces = raceIDs.keys()
-            for race in races[1:]:
-                newRaces.remove(race)
-            races = newRaces
-
-        for race in races:
-            print "    %s: %s" % (name, race)
-            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
-            playerTypeID = cursor.lastrowid
-
-            for skill in skills:
-                cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (playerTypeID, skillIDs[skill]))
-
-    print
-    print "Inducements"
-    # ["Bloodweiser Babe", 2, {"All": 50}, "The team
-    for inducement in INDUCEMENTS:
-        name = inducement[0]
-        maxAmt = inducement[1]
-        priceForRaces = inducement[2]
-        desc = inducement[3]
-
-        for race, price in priceForRaces.iteritems():
-            raceID = None
-            if race != "All" and race != "Otherwise":
-                raceID = raceIDs[race]
-
-            print "    %s: %s" % (name, race)
-            cursor.execute("INSERT INTO inducement VALUES(NULL,%s,%s,%s,%s,%s)", (name, maxAmt, price, raceID, desc))
-
-            # ["Cheerleader", 10, ["All"], "Most Blood Bow
-    print
-    print "Purchases"
-    # ["Apothecary", {"All":50, "Exceptions":["Khemri", "Necromantic", "Nurgle", "Undead"]}, "An Apothecary is a
-    for purchase in PURCHASES:
-        name = purchase[0]
-        raceCosts = purchase[1]
-        desc = purchase[2]
-
-        for raceNameCost, cost in raceCosts.iteritems():
-            if raceNameCost == "All":
-                if "Exceptions" in raceCosts:
-                    raceNames = raceIDs.keys()
-                    exceptRaceNames = raceCosts["Exceptions"]
-                    for exceptRaceName in exceptRaceNames:
-                        raceNames.remove(exceptRaceName)
-
-                    for raceName in raceNames:
-                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
-                        raceID = raceIDs[raceName]
-                        cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
-                    break
-                else:
-                    print "    All: %s (%s,000 gp)" % (name, cost)
-                    cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,NULL,%s)", (name, cost, desc))
-            elif raceNameCost != "Exceptions":
-                print "    %s: %s (%s,000 gp)" % (name, raceNameCost, cost)
-                raceID = raceIDs[raceNameCost]
-                cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
-
-                if "Otherwise" in raceCosts:
-                    raceNames = raceIDs.keys()
-                    raceNames.remove(raceNameCost)
-                    cost = raceCosts["Otherwise"]
-
-                    for raceName in raceNames:
-                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
-                        raceID = raceIDs[raceName]
-                        cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
-                    break
 
     cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "3"))
 
