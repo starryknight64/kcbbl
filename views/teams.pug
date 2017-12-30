@@ -27,7 +27,7 @@ append body
 												else
 													a(href="/teams/"+team.id) #{team.name}
 						.col-md-4
-							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curTeam.race.name.replace(" ","%20")+".png")
+							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curTeam.race.name.toLowerCase().replace(" ","%20")+".png")
 		.row
 			.col-md-4
 				.panel.panel-default

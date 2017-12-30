@@ -861,7 +861,7 @@ if __name__ == '__main__':
                 team1Kills += rows[i][11] if rows[i][11] else 0
 
             team1Winnings = rows[56][1]
-            team1ExpMistakes = rows[56][14] if rows[56][14] else 0
+            team1ExpMistakes = abs(rows[56][14]) if rows[56][14] else 0
             team1EndFanFactor = rows[56][27] if rows[56][27] else 0
             team1Purchases = rows[60][1]
             team1Notes = rows[60][19]
@@ -884,7 +884,7 @@ if __name__ == '__main__':
                 team2Kills += rows[i][49] if rows[i][49] else 0
 
             team2Winnings = rows[56][39]
-            team2ExpMistakes = rows[56][52] if rows[56][52] else 0
+            team2ExpMistakes = abs(rows[56][52]) if rows[56][52] else 0
             team2EndFanFactor = rows[56][65] if rows[56][65] else 0
             team2Purchases = rows[60][39]
             team2Notes = rows[60][57]
@@ -1255,7 +1255,7 @@ if __name__ == '__main__':
             value /= 1000
 
         cursor.execute(
-                "INSERT INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)",
+                "INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)",
                 (teamName, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary)
         )
         teamID = cursor.lastrowid
@@ -1470,7 +1470,7 @@ if __name__ == '__main__':
         print "    %s" % name
 
         deckID = deckIDs[deckName]
-        cursor.execute("INSERT INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
+        cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
         cardID = cursor.lastrowid
         cardIDs[name] = cardID
 
@@ -1602,7 +1602,7 @@ if __name__ == '__main__':
                team1["winnings"], team2["winnings"],
                team1["expMistakes"], team2["expMistakes"],
                team1["fanFactor"], team2["fanFactor"])
-        insertQry = "INSERT INTO `match` VALUES(NULL," + ",".join("%s" for entry in row) + ")"
+        insertQry = "INSERT IGNORE INTO `match` VALUES(NULL," + ",".join("%s" for entry in row) + ")"
         cursor.execute(insertQry, row)
         matchID = cursor.lastrowid
 

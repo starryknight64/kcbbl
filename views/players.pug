@@ -90,7 +90,7 @@ append body
 													else
 														a(href="/players/"+player.id) #{player.team.name} - #{player.name}
 						.col-md-4
-							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curPlayer.team.race.name.replace(" ","%20")+".png")
+							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curPlayer.team.race.name.toLowerCase().replace(" ","%20")+".png")
 		.row
 			.col-md-4
 				.panel.panel-default

@@ -17,7 +17,7 @@ function get(table, id, cols) {
     }
     idClean = util.getID(id)
     if (!idClean) {
-        return Promise.reject(table + " ID must be a positive integer!")
+        return Promise.reject(table + " ID must be a positive integer! '" + id + "' was given!")
     }
     if (!Type.is(cols, Array)) {
         cols = ["`" + table + "`.*"]

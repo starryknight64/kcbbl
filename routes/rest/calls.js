@@ -217,7 +217,7 @@ function getMatchesForCoach(coachID, seasonID, teamID, matchTypeID) {
 
 var META_SEASON_CURRENT = "season.current"
 function getMeta(key) {
-  return db.getMany("meta", ["value"], ["mkey"], [key]).then((values) => {
+  return db.getMany("meta", undefined, ["mkey"], [key]).then((values) => {
     if (values.length > 0) {
       return Promise.resolve(values[0])
     }
