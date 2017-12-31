@@ -10,6 +10,18 @@ var db = mysql.createConnection({
     database: settings.db.database
 })
 db.connect()
+
+/**
+ * Heartbeat so the MySQL connection won't get closed
+ */
+setInterval(() => {
+    db.ping((err) => {
+        if (err) {
+            console.log("ping failed! " + err)
+        }
+    })
+}, 60000)
+
 // var pool = mysql.createPool({
 //     host: settings.db.host,
 //     user: settings.db.user,

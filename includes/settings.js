@@ -1,4 +1,8 @@
 var config = {
+    web: {
+        ip: "",
+        port: -1
+    },
     db: {
         host: "",
         user: "",
