@@ -1,24 +1,50 @@
 extends ../layouts/starter
 
-//- append head
-//- 	script(src="js/jquery.min.js")
-//- 	script(src="js/seasons.js")
+append head
+	title [KCBBL] Match: #{curMatch.team1.name} VS #{curMatch.team2.name} (#{curMatch.team1_tds}-#{curMatch.team2_tds})
 
 append body
 	.container.body-container
 		.row
-			.jumbotron
+			.jumbotron.match-jumbotron
 				.container
 					.row
+						h2.scoreboard.col-md-2.col-md-offset-5.text-center #{curMatch.team1_tds} - #{curMatch.team2_tds}
+					.row
 						.col-md-5
-							h1.text-center #{curMatch.team1.name}
+							h1.text-center.match-team-name #{curMatch.team1.name}
+							table.table.table-condensed.table-bordered
+								tbody
+									tr.active
+										th.text-center TDs
+										th.text-center CAS
+										th.text-center Kills
+										th.text-center Fouls
+									tr
+										td.text-center #{curMatch.team1_tds}
+										td.text-center #{curMatch.team1_cas}
+										td.text-center #{curMatch.team1_kills}
+										td.text-center 0
 						.col-md-2.vertical-center-parent
-							h1.text-center.vertical-center-child VS
+							//- h2.text-center.scoreboard #{curMatch.team1_tds} - #{curMatch.team2_tds}
+							h2.text-center.versus VS
 						.col-md-5
-							h1.text-center #{curMatch.team2.name}
+							h1.text-center.match-team-name #{curMatch.team2.name}
+							table.table.table-condensed.table-bordered
+								tbody
+									tr.active
+										th.text-center TDs
+										th.text-center CAS
+										th.text-center Kills
+										th.text-center Fouls
+									tr
+										td.text-center #{curMatch.team2_tds}
+										td.text-center #{curMatch.team2_cas}
+										td.text-center #{curMatch.team2_kills}
+										td.text-center 0
 					.row
 						.col-md-12.text-center
-							h1.btn-group
+							h2.btn-group
 								button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a match...&nbsp;
 									span.caret
 								ul.dropdown-menu

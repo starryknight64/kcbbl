@@ -53,9 +53,26 @@ a:hover.no-underline, a:link.no-underline {
   background-color: lightcoral;
 }
 
-.vertical-center-child {
+.versus {
   padding-top: 30px;
   padding-bottom: 30px;
+  font-size: 40px;
+}
+
+.scoreboard {
+  font-size: 40px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  font-family: "Arbutus", cursive;
+}
+
+.jumbotron.match-jumbotron {
+  padding-top: 0px;
+}
+
 }
 
 .match-header-number {

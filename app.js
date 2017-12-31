@@ -60,6 +60,11 @@ app.use("/rest/teams", teamsREST.router)
 app.use("/rest/trophies", trophiesREST.router)
 app.use("/rest/races", racesREST.router)
 
+process.on('unhandledRejection', error => {
+  // Will print "unhandledRejection err is not defined"
+  console.log('unhandledRejection', error.message);
+})
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error("Not Found")

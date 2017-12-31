@@ -19,7 +19,7 @@ router.get("/", function (req, res, next) {
           entry.id = entry.id.split("_")[1]
           messages.push(entry)
         }
-        if (messages.length >= 4) {
+        if (messages.length >= 6) {
           break
         }
       }
