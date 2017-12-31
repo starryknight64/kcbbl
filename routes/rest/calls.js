@@ -82,49 +82,56 @@ function getInducements(wheres, values, joins) {
 }
 
 function formatMatch(match, seasons, matchTypes, teams) {
-  for (var i in seasons) {
-    if (seasons[i].id == match.season_id) {
-      match["season"] = seasons[i]
-      delete match.season_id
-      break
+  if (!("season" in match)) {
+    for (var i in seasons) {
+      if (seasons[i].id == match.season_id) {
+        match["season"] = seasons[i]
+        delete match.season_id
+        break
+      }
     }
   }
-  var m1Found = false, m2Found = false
-  for (var i in matchTypes) {
-    if (matchTypes[i].id == match.team1_match_type_id) {
-      m1Found = true
-      match["team1_match_type"] = matchTypes[i]
-      delete match.team1_match_type_id
+
+  if (!("team1_match_type" in match) && !("team2_match_type" in match)) {
+    for (var i in matchTypes) {
+      if (matchTypes[i].id == match.team1_match_type_id) {
+        match["team1_match_type"] = matchTypes[i]
+        delete match.team1_match_type_id
+      }
     }
-    if (matchTypes[i].id == match.team2_match_type_id) {
-      m2Found = true
-      match["team2_match_type"] = matchTypes[i]
-      delete match.team2_match_type_id
-    }
-    if (m1Found && m2Found) {
-      break
+
+    for (var i in matchTypes) {
+      if (matchTypes[i].id == match.team2_match_type_id) {
+        match["team2_match_type"] = matchTypes[i]
+        delete match.team2_match_type_id
+      }
     }
   }
-  var t1Found = false, t2Found = false
-  for (var i in teams) {
-    if (teams[i].id == match.team1_id) {
-      t1Found = true
-      match["team1"] = teams[i]
-      delete match.team1_id
+
+  if (!("team1" in match) && !("team2" in match)) {
+    for (var i in teams) {
+      if (teams[i].id == match.team1_id) {
+        t1Found = true
+        match["team1"] = teams[i]
+        delete match.team1_id
+      }
     }
-    if (teams[i].id == match.team2_id) {
-      t2Found = true
-      match["team2"] = teams[i]
-      delete match.team2_id
-    }
-    if (t1Found && t2Found) {
-      break
+
+    for (var i in teams) {
+      if (teams[i].id == match.team2_id) {
+        t2Found = true
+        match["team2"] = teams[i]
+        delete match.team2_id
+      }
     }
   }
   return match
 }
 function getMatch(id) {
   return db.get("match", id).then((match) => {
+    if ("season" in match) {
+      return Promise.resolve(match)
+    }
     return getSeason(match.season_id).then((season) => {
       return getMatchTypes(["id", "id"], [match.team1_match_type_id, match.team2_match_type_id], undefined, "OR").then((matchTypes) => {
         return getTeams(["id", "id"], [match.team1_id, match.team2_id], undefined, "OR").then((teams) => {
@@ -251,6 +258,9 @@ function getPlayersForMatchAndTeam(matchID, teamID) {
         matchPlayer.mvp = matchPlayer.mvp ? matchPlayer.mvp : 0
 
         for (var j in players) {
+          if ("player" in matchPlayer) {
+            continue
+          }
           if (matchPlayer.player_id == players[j].id) {
             matchPlayer["player"] = players[j]
             delete matchPlayer.player_id
@@ -302,6 +312,9 @@ function getPlayersForMatchAndTeam(matchID, teamID) {
 
 function getPlayer(id) {
   return db.get("player", id).then((player) => {
+    if ("spp" in player && "team" in player && "type" in player && "dead" in player) {
+      return Promise.resolve(player)
+    }
     return getTeam(player.team_id).then((team) => {
       return getPlayerTypes(["id"], [player.type_id]).then((playerTypes) => {
         delete player.team_id
@@ -323,6 +336,9 @@ function getPlayers(wheres, values, joins) {
       return getPlayerTypes(["star_player"], [0]).then((playerTypes) => {
         for (var i in players) {
           players[i]["spp"] = players[i].completions + ((players[i].interceptions + players[i].casualties) * 2) + (players[i].touchdowns * 3) + (players[i].mvps * 5)
+          if ("team" in players[i]) {
+            continue
+          }
           for (var j in teams) {
             if (players[i].team_id == teams[j].id) {
               delete players[i].team_id
@@ -332,6 +348,9 @@ function getPlayers(wheres, values, joins) {
           }
         }
         for (var i in players) {
+          if ("type" in players[i]) {
+            continue
+          }
           for (var j in playerTypes) {
             if (players[i].type_id == playerTypes[j].id) {
               delete players[i].type_id
@@ -365,6 +384,9 @@ function getPlayersForTeam(teamID) {
 
 function getPlayerType(id) {
   return db.get("player_type", id).then((playerType) => {
+    if ("race" in playerType) {
+      return Promise.resolve(playerType)
+    }
     return getRace(playerType.race_id).then((race) => {
       if (playerType.star_player == 1) {
         playerType.star_player = true
@@ -388,6 +410,9 @@ function getPlayerTypes(wheres, values, joins) {
         }
       }
       for (var i in playerTypes) {
+        if ("race" in playerTypes[i]) {
+          continue
+        }
         for (var j in races) {
           if (playerTypes[i].race_id == races[j].id) {
             delete playerTypes[i].race_id
@@ -425,6 +450,9 @@ function getCurrentSeason() {
 }
 function getSeason(id) {
   return db.get("season", id).then((season) => {
+    if ("trophy" in season) {
+      return Promise.resolve(season)
+    }
     return getTrophy(season.trophy_id).then((trophy) => {
       delete season.trophy_id
       season["trophy"] = trophy
@@ -448,6 +476,9 @@ function getSeasons(wheres, values, joins) {
     .then((seasons) => {
       return getTrophies().then((trophies) => {
         for (var i in seasons) {
+          if ("trophy" in seasons[i]) {
+            continue
+          }
           var trophyID = seasons[i].trophy_id
           for (var j in trophies) {
             if (trophies[j].id == trophyID) {
@@ -508,6 +539,9 @@ function getSkillsForPlayerAndMatch(playerID, matchID) {
 
 function getTeam(id) {
   return db.get("team", id).then((team) => {
+    if ("coach" in team && "race" in team && "season" in team) {
+      return Promise.resolve(team)
+    }
     return getCoach(team.coach_id).then((coach) => {
       return getRace(team.race_id).then((race) => {
         return getSeason(team.season_id).then((season) => {
@@ -529,25 +563,33 @@ function getTeams(wheres, values, joins, cmp) {
       return getRaces().then((races) => {
         return getSeasons().then((seasons) => {
           for (var i in teams) {
-            for (var j in coaches) {
-              if (teams[i].coach_id == coaches[j].id) {
-                delete teams[i].coach_id
-                teams[i]["coach"] = coaches[j]
-                break
+            if (!("coach" in teams[i])) {
+              for (var j in coaches) {
+                if (teams[i].coach_id == coaches[j].id) {
+                  delete teams[i].coach_id
+                  teams[i]["coach"] = coaches[j]
+                  break
+                }
               }
             }
-            for (var j in races) {
-              if (teams[i].race_id == races[j].id) {
-                delete teams[i].race_id
-                teams[i]["race"] = races[j]
-                break
+
+            if (!("race" in teams[i])) {
+              for (var j in races) {
+                if (teams[i].race_id == races[j].id) {
+                  delete teams[i].race_id
+                  teams[i]["race"] = races[j]
+                  break
+                }
               }
             }
-            for (var j in seasons) {
-              if (teams[i].season_id == seasons[j].id) {
-                delete teams[i].season_id
-                teams[i]["season"] = seasons[j]
-                break
+
+            if (!("season" in teams[i])) {
+              for (var j in seasons) {
+                if (teams[i].season_id == seasons[j].id) {
+                  delete teams[i].season_id
+                  teams[i]["season"] = seasons[j]
+                  break
+                }
               }
             }
           }

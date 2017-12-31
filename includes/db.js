@@ -10,6 +10,16 @@ var db = mysql.createConnection({
     database: settings.db.database
 })
 db.connect()
+// var pool = mysql.createPool({
+//     host: settings.db.host,
+//     user: settings.db.user,
+//     password: settings.db.password,
+//     database: settings.db.database,
+//     connectionLimit: 50
+// })
+
+var QUERY_CACHE_TIMEOUT = 5 * 1000 //in milliseconds
+var cachedQueries = {}
 
 function get(table, id, cols) {
     if (!Type.is(table, String)) {
@@ -24,17 +34,36 @@ function get(table, id, cols) {
     }
 
     var sql = "SELECT " + cols.join(",") + " FROM `" + table + "` WHERE id=?"
+
+    if (sql in cachedQueries) {
+        var now = new Date()
+        var cacheDate = cachedQueries[sql].date
+        if ((now - cacheDate) >= QUERY_CACHE_TIMEOUT) {
+            delete cachedQueries[sql]
+        } else {
+            console.log("CACHED: " + sql)
+            return Promise.resolve(cachedQueries[sql].results[0])
+        }
+    }
+
+    console.log("        " + sql)
     return new Promise((resolve, reject) => {
-        //console.log(sql)
+        // pool.getConnection((err, db) => {
+        //     if (err) {
+        //         return reject(err)
+        //     }
         db.query(sql, [idClean], (error, results, fields) => {
+            // db.release()
             if (error) {
                 return reject(error)
             }
             if (Type.is(results, Array) && results.length == 0) {
                 return reject(table + " '" + idClean + "' does not exist!")
             }
+            cachedQueries[sql] = { "date": new Date(), "results": results }
             return resolve(results[0])
         })
+        // })
     })
 }
 
@@ -100,14 +129,33 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
         }
     }
     sql += tail + " ORDER BY `" + table + "`.id ASC"
+
+    if (sql in cachedQueries) {
+        var now = new Date()
+        var cacheDate = cachedQueries[sql].date
+        if ((now - cacheDate) >= QUERY_CACHE_TIMEOUT) {
+            delete cachedQueries[sql]
+        } else {
+            console.log("CACHED: " + sql)
+            return Promise.resolve(cachedQueries[sql].results)
+        }
+    }
+    console.log("        " + sql)
     return new Promise((resolve, reject) => {
         //console.log(sql)
+        // pool.getConnection((err, db) => {
+        //     if (err) {
+        //         return reject(err)
+        //     }
         db.query(sql, values, (error, results, fields) => {
+            // db.release()
             if (error) {
                 return reject(error)
             }
+            cachedQueries[sql] = { "date": new Date(), "results": results }
             resolve(results)
         })
+        // })
     })
 }
 
