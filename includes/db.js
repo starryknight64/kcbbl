@@ -3,6 +3,9 @@ var mysql = require("mysql")
 var util = require("./util")
 var settings = require("./settings")
 
+var QUERY_CACHE_TIMEOUT = 5 * 1000 //in milliseconds
+var cachedQueries = {}
+
 var db = mysql.createConnection({
     host: settings.db.host,
     user: settings.db.user,
@@ -30,8 +33,24 @@ setInterval(() => {
 //     connectionLimit: 50
 // })
 
-var QUERY_CACHE_TIMEOUT = 5 * 1000 //in milliseconds
-var cachedQueries = {}
+/**
+ * Clear cached queries every-so-often so it doesn't get too big
+ */
+setInterval(() => {
+    var now = new Date()
+    var cleared = 0
+    for (var sql in cachedQueries) {
+        var cacheDate = cachedQueries[sql].date
+        if ((now - cacheDate) >= QUERY_CACHE_TIMEOUT) {
+            delete cachedQueries[sql]
+            cleared++
+        }
+    }
+
+    if (cleared > 0) {
+        console.log("CACHE: Cleared " + cleared + " cached queries!")
+    }
+}, 2 * QUERY_CACHE_TIMEOUT)
 
 function get(table, id, cols) {
     if (!Type.is(table, String)) {
@@ -46,16 +65,10 @@ function get(table, id, cols) {
     }
 
     var sql = "SELECT " + cols.join(",") + " FROM `" + table + "` WHERE id=?"
-
-    if (sql in cachedQueries) {
-        var now = new Date()
-        var cacheDate = cachedQueries[sql].date
-        if ((now - cacheDate) >= QUERY_CACHE_TIMEOUT) {
-            delete cachedQueries[sql]
-        } else {
-            console.log("CACHED: " + sql)
-            return Promise.resolve(cachedQueries[sql].results[0])
-        }
+    var sqlKey = sql + " " + id
+    if (sqlKey in cachedQueries) {
+        console.log("CACHED: " + sqlKey)
+        return Promise.resolve(Object.assign({}, cachedQueries[sqlKey].results[0]))
     }
 
     console.log("        " + sql)
@@ -72,7 +85,7 @@ function get(table, id, cols) {
             if (Type.is(results, Array) && results.length == 0) {
                 return reject(table + " '" + idClean + "' does not exist!")
             }
-            cachedQueries[sql] = { "date": new Date(), "results": results }
+            cachedQueries[sqlKey] = { "date": new Date(), "results": results }
             return resolve(results[0])
         })
         // })
@@ -142,15 +155,10 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
     }
     sql += tail + " ORDER BY `" + table + "`.id ASC"
 
-    if (sql in cachedQueries) {
-        var now = new Date()
-        var cacheDate = cachedQueries[sql].date
-        if ((now - cacheDate) >= QUERY_CACHE_TIMEOUT) {
-            delete cachedQueries[sql]
-        } else {
-            console.log("CACHED: " + sql)
-            return Promise.resolve(cachedQueries[sql].results)
-        }
+    var sqlKey = sql + " " + values.join(",")
+    if (sqlKey in cachedQueries) {
+        console.log("CACHED: " + sqlKey)
+        return Promise.resolve(Object.assign([], cachedQueries[sqlKey].results))
     }
     console.log("        " + sql)
     return new Promise((resolve, reject) => {
@@ -164,7 +172,7 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
             if (error) {
                 return reject(error)
             }
-            cachedQueries[sql] = { "date": new Date(), "results": results }
+            cachedQueries[sqlKey] = { "date": new Date(), "results": results }
             resolve(results)
         })
         // })
