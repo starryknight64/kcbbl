@@ -2,7 +2,8 @@ extends ../_bootstrap
 
 append styles
 	// Custom styles for this template
-	link(href="/css/starter-template.css", rel="stylesheet")
+	link(href="/css/starter-template.css" rel="stylesheet")
+	link(href="/fonts/awesome/css/all.css" rel="stylesheet")
 
 block body
 	nav.navbar.navbar-fixed-top.navbar-inverse(role="navigation")
@@ -31,6 +32,44 @@ block body
 						a(href="/matches") Matches
 					li
 						a(href="/stats") Stats
+				
+				ul.nav.navbar-nav.navbar-right
+					li.dropdown
+						a.dropdown-toggle(data-toggle="dropdown" href="#")
+							img(src="/images/helmet.png" width="18px")
+							|&nbsp;
+							span.caret
+						ul.dropdown-menu#login-dp
+							li.row
+								.col-md-12 
+									| Login via
+									div
+										a.btn.btn-fb(href="#")
+											<i class="fab fa-facebook-f"></i>
+											|&nbsp;&nbsp;Facebook
+									| or
+									form.form#login-nav(method="POST" action="login" accept-charset="UTF-8")
+										.form-group
+											label.sr-only(for="email-input") Email
+											input.form-control#email-input(type="email" placeholder="Email address..." required)
+										.form-group
+											label.sr-only(for="password-input") Password
+											input.form-control#password-input(type="password" placeholder="Password..." required)
+											.help-block.text-right
+												a Forgot your password?
+										.form-group
+											button.btn.btn-primary.btn-block(type="submit") Sign In
+										.checkbox
+											label
+												input(type="checkbox")
+												| Remember me
+								.bottom.text-center
+									| New here?&nbsp;
+									a Create an account
+
+
+
+				
 				form.navbar-form.navbar-right#search(action="/search" method="GET")
-					div.form-group
+					.form-group
 						input.form-control#search(type="text" placeholder="Search..." name="q")

@@ -43,6 +43,7 @@ app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"))
 app.use("/css", express.static(__dirname + "/public/css"))
 app.use("/images", express.static(__dirname + "/public/images"))
 app.use("/fonts", express.static(__dirname + "/public/fonts"))
+app.use("/fonts/awesome", express.static(__dirname + "/node_modules/@fortawesome/fontawesome-free"))
 
 app.use("/", index)
 app.use("/seasons", seasons)
