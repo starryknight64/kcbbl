@@ -64,15 +64,17 @@ TROPHIES = [
     ["Chaos Cup", "chaos cup.png"],
     ["Dungeon Bowl", "dungeon bowl.png"],
     ["Blood Bowl", "blood bowl.png"],
-    ["Open Season", ""]
+    ["Witch King Cup", "trophy.png"],
+    ["Open Season", "trophy.png"]
 ]
 
 SEASONS = [
     ["Season 1", "2017-01-01", "2017-03-31", "Spike Bowl", "Guardians of the Nile"],
     ["Season 2", "2017-04-01", "2017-06-30", "Chaos Cup", "Riverdale Ravagers"],
-    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", "Rat Rat City Bitch"],
-    ["Season 4", "2017-10-01", "2017-12-31", "Open Season", None],  # Technically Season 3.5
-    ["Season 5", "2018-01-01", "2018-03-31", "Blood Bowl", None],
+    ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", "Rat Rat City"],
+    ["Season 3.5", "2017-10-01", "2017-12-31", "Open Season", None],
+    ["Season 4", "2018-01-01", "2018-03-31", "Witch King Cup", None],
+    ["Season 5", "2018-05-21", "2018-08-31", "Blood Bowl", None]
 ]
 
 SKILL_TYPES = ["General", "Agility", "Passing", "Strength", "Mutation", "Extraordinary", "Improvement"]
@@ -103,7 +105,7 @@ SKILLS = [
     ["Dodge", "Agility", "A player with the Dodge skill is adept at slipping away from opponents, and is allowed to re-roll the D6 if he fails to dodge out of any of an opposing player's tackle zones. However, the player may only re-roll one failed Dodge roll per turn. In addition, the Dodge skill, if used, affects the results rolled on the Block dice, as explained in the Blocking rules."],
     ["Dump-off", "Passing", "This skill allows the player to make a Quick Pass when an opponent declares that he will throw a block at him, allowing the player to get rid of the ball before he is hit. Work out the Dump-off pass before the opponent makes his block. The normal throwing rules apply, except that neither team's turn ends as a result of the throw, whatever it may be. After the throw is worked out your opponent completes the block, and then carries on with his turn. Dump-off may not be used on the second block from an opponent with the Frenzy skill or in conjunction with the Bombardier or Throw Team-Mate skills."],
     ["Extra Arms", "Mutation", "A player with one or more extra arms may add 1 to any attempt to pick up, catch or intercept."],
-    ["Fan Favorite", "Extraordinary", "The fans love seeing this player on the pitch so much that even the opposing fans cheer for your team. For each player with Fan Favourite on the pitch your team receives an additional +1 FAME modifier (see page 18) for any Kick-Off table results, but not for the Winnings roll."],
+    ["Fan Favorite", "Extraordinary", "The fans love seeing this player on the pitch so much that even the opposing fans cheer for your team. For each player with Fan Favorite on the pitch your team receives an additional +1 FAME modifier (see page 18) for any Kick-Off table results, but not for the Winnings roll."],
     ["Fend", "General", "This player is very skilled at holding off would-be attackers. Opposing players may not follow-up blocks made against this player even if the Fend player is Knocked Down. The opposing player may still continue moving after blocking if he had declared a Blitz Action."],
     ["Foul Appearance", "Mutation", "The player's appearance is so horrible that any opposing player that wants to block the player (or use a special attack that takes the place of a block) must first roll a D6 and score 2 or more. If the opposing player rolls a 1 he is too revolted to make the block and it is wasted (though the opposing team does not suffer a turnover)."],
     ["Frenzy", "General", "A player with this skill is a slavering psychopath who attacks his opponents in an uncontrollable rage. Unless otherwise overridden, this skill must always be used. When making a block, a player with this skill must always follow up if he can. If a 'Pushed' or 'Defender Stumbles' result was chosen, the player must immediately throw a second block against the same opponent so long as they are both still standing and adjacent. If possible, the player must also follow up this second block. If the frenzied player is performing a Blitz Action then he must pay a square of Movement and must make the second block unless he has no further normal movement and cannot Go For It again."],
@@ -148,6 +150,7 @@ SKILLS = [
     ["Stunty", "Extraordinary", "The player is so small that they are very difficult to tackle because they can duck underneath opposing players' outstretched arms and run between their legs. On the other hand, Stunty players are just a bit too small to throw the ball very well, and are easily injured. To represent these things a player with the Stunty skill may ignore any enemy tackle zones on the square he is moving to when he makes a Dodge roll (i.e., they always end up with a +1 Dodge roll modifier), but must subtract 1 from the roll when he passes. In addition, this player treats a roll of 7 and 9 on the Injury table after any modifiers have been applied as a KO'd and Badly Hurt result respectively, rather than the normal results. Stunties that are armed with a Secret Weapon are not allowed to ignore enemy tackle zones, but still suffer the other penalties."],
     ["Sure Feet", "Agility", "The player may re-roll the D6 if he is Knocked Down when trying to Go For It. A player may only use the Sure Feet skill once per turn."],
     ["Sure Hands", "General", "A player with the Sure Hands skill is allowed to re-roll the D6 if he fails to pick up the ball. In addition, the Strip Ball skill will not work against a player with this skill."],
+    ["Swoop", "Extraordinary", "This player is equipped with a rudimentary set of wings, either natural or engineered, allowing them to glide through the air (rather than plummeting gracelessly) if they are thrown by a team-mate. If a player with Swoop is thrown by a player with the Throw Team-mate skill, the Throw-in template is used instead of the Scatter template to see where they land. Each time the player scatters, their coach places the Throw-in template over the player facing up or down the pitch or towards either sideline. Then they roll a D6 and move the player one square in the indicated direction. In addition, when rolling to see whether the player lands on their feet (as per the Right Stuff skill), add 1 to the result. When a player with both the Swoop and Stunty skills dodges, they do not ignore any modifiers for enemy tackle zones on the square they are moving to - the presence of a large pair of wings negates any benefit they would gain from being small and slippery."],
     ["Tackle", "General", "Opposing players who are standing in any of this player's tackle zones are not allowed to use their Dodge skill if they attempt to dodge out of any of the player's tackle zones, nor may they use their Dodge skill if the player throws a block at them and uses the Tackle skill."],
     ["Take Root", "Extraordinary", "Immediately after declaring an Action with this player, roll a D6. On a 2 or more, the player may take his Action as normal. On a 1, the player \"takes root\", and his MA is considered 0 until a drive ends, or he is Knocked Down or Placed Prone (and no, players from his own team may not try and block him in order to try to knock him down!). A player that has taken root may not Go For It, be pushed back for any reason, or use any skill that would allow him to move out of his current square or be Placed Prone. The player may block adjacent players without following-up as part of a Block Action however if a player fails his Take Root roll as part of a Blitz Action he may not block that turn (he can still roll to stand up if he is Prone)."],
     ["Tentacles", "Mutation", "The player may use this skill when an opposing player attempts to dodge or leap out of any of his tackle zones. The opposing coach rolls 2D6 adding his player's ST and subtracting the Tentacles player's ST from the score. If the final result is 5 or less, then the moving player is held firm, and his Action ends immediately. If a player attempts to leave the tackle zone of several players that have the Tentacles skill, only one may attempt to grab him with Tentacles."],
@@ -229,9 +232,11 @@ PLAYER_TYPES = [
     ["Elf", 2, "Blitzer", 110, 7, 3, 4, 8, ["Block", "Side Step"], "GA", "SP"],
 
     ["Goblin", 16, "Goblin", 40, 6, 2, 3, 7, ["Dodge", "Right Stuff", "Stunty"], "A", "GSP"],
-    ["Goblin", 1, "Bombardier", 40, 6, 2, 3, 7, ["Bombardier", "Dodge", "Secret Weapon", "Stunty"], "A", "GSP"],
+    ["Goblin", 1, "Doom Diver", 60, 6, 2, 3, 7, ["Right Stuff", "Stunty", "Swoop"], "A", "GSP"],
+    ["Goblin", 1, "Bomma", 40, 6, 2, 3, 7, ["Bombardier", "Dodge", "Secret Weapon", "Stunty"], "A", "GSP"],
     ["Goblin", 1, "Looney", 40, 6, 2, 3, 7, ["Chainsaw", "Secret Weapon", "Stunty"], "A", "GSP"],
     ["Goblin", 1, "Fanatic", 70, 3, 7, 3, 7, ["Ball & Chain", "No Hands", "Secret Weapon", "Stunty"], "S", "GAP"],
+    ["Goblin", 1, "Ooligan", 70, 6, 2, 3, 7, ["Disturbing Presence", "Dodge", "Fan Favorite", "Right Stuff", "Stunty"], "A", "GSP"],
     ["Goblin", 1, "Pogoer", 110, 7, 2, 3, 7, ["Dodge", "Leap", "Stunty", "Very Long Legs"], "A", "GSP"],
     ["Goblin", 2, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAP"],
 
@@ -266,10 +271,10 @@ PLAYER_TYPES = [
 
     ["Norse", 16, "Lineman", 50, 6, 3, 3, 7, ["Block"], "G", "ASP"],
     ["Norse", 2, "Thrower", 70, 6, 3, 3, 7, ["Block", "Pass"], "GP", "AS"],
-    ["Norse", 2, "Runner", 90, 7, 3, 3, 7, ["Block", "Dauntless"], "GA", "SP"],
-    ["Norse", 2, "Berserker", 90, 6, 3, 3, 7, ["Block", "Frenzy", "Jump Up"], "GS", "AP"],
-    ["Norse", 2, "Ulfwerener", 110, 6, 4, 2, 8, ["Frenzy"], "GS", "AP"],
-    ["Norse", 1, "Snow Troll", 140, 5, 5, 1, 8, ["Loner", "Claws", "Disturbing Presence", "Frenzy", "Wild Animal"], "S", "GAP"],
+    ["Norse", 2, "Catcher", 90, 7, 3, 3, 7, ["Block", "Dauntless"], "GA", "SP"],
+    ["Norse", 2, "Blitzer", 90, 6, 3, 3, 7, ["Block", "Frenzy", "Jump Up"], "GS", "AP"],
+    ["Norse", 2, "Werewolf", 110, 6, 4, 2, 8, ["Frenzy"], "GS", "AP"],
+    ["Norse", 1, "Yhetee", 140, 5, 5, 1, 8, ["Loner", "Claws", "Disturbing Presence", "Frenzy", "Wild Animal"], "S", "GAP"],
 
     ["Nurgle", 16, "Rotter", 40, 5, 3, 3, 8, ["Decay", "Nurgle's Rot"], "GM", "ASP"],
     ["Nurgle", 4, "Pestigor", 80, 6, 3, 3, 8, ["Horns", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
@@ -381,7 +386,7 @@ STAR_PLAYERS = [
     ["Lewdgrip Whiparm", ["Chaos", "Nurgle", "Chaos Pact"], ["Loner", "Pass", "Strong Arm", "Sure Hands", "Tentacles"], 150, 6, 3, 3, 9, ""],
     ["Lord Borak the Despoiler", ["Chaos", "Nurgle"], ["Loner", "Block", "Dirty Player", "Mighty Blow"], 300, 5, 5, 3, 9, ""],
     ["Lottabottol", ["Lizardman", "Slann"], ["Loner", "Catch", "Diving Tackle", "Jump Up", "Leap", "Pass Block", "Shadowing", "Very Long Legs"], 220, 8, 3, 3, 8, ""],
-    ["Lucien the Swift", ["Elf", "High Elf", "Wood Elf"], ["Loner", "Block", "Mighty Blow", "Tackle"], 390, 7, 3, 4, 8, "Valen the Swift"],
+    ["Lucien the Swift", ["Elf", "High Elf", "Wood Elf"], ["Loner", "Block", "Mighty Blow", "Tackle"], 390, 7, 3, 4, 8, "Note: When inducing this player, you must have 2 slots open on your roster so that you can also induce Valen the Swift. This counts only as one Star Player inducement."],
     ["Madcap Miggz", ["Goblin"], ["Loner", "Break Tackle", "Claws", "Leap", "Very Long Legs", "Wild Animal"], 170, 6, 4, 3, 8, ""],
     ["Max Spleenripper", ["Chaos", "Nurgle"], ["Loner", "Chainsaw", "Secret Weapon"], 130, 5, 4, 3, 8, ""],
     ["Mighty Zug", ["Human", "Bretonnian"], ["Loner", "Block", "Mighty Blow"], 260, 4, 5, 2, 9, ""],
@@ -401,7 +406,7 @@ STAR_PLAYERS = [
     ["Slibli", ["Lizardman", "Slann"], ["Loner", "Block", "Grab", "Guard", "Stand Firm"], 250, 7, 4, 1, 8, ""],
     ["Soaren Hightower", ["High Elf"], ["Loner", "Fend", "Kick-Off Return", "Pass", "Safe Throw", "Sure Hands", "Strong Arm"], 180, 6, 3, 4, 8, ""],
     ["Ugroth Bolgrot", ["Orc", "Chaos Pact"], ["Loner", "Chainsaw", "Secret Weapon"], 100, 5, 3, 3, 9, ""],
-    ["Valen the Swift", ["Elf", "High Elf", "Wood Elf"], ["Loner", "Accurate", "Nerves of Steel", "Pass", "Safe Throw", "Sure Hands"], 390, 7, 3, 5, 7, "Lucien the Swift"],
+    ["Valen the Swift", ["Elf", "High Elf", "Wood Elf"], ["Loner", "Accurate", "Nerves of Steel", "Pass", "Safe Throw", "Sure Hands"], 390, 7, 3, 5, 7, "Note: When inducing this player, you must have 2 slots open on your roster so that you can also induce Lucien the Swift. This counts only as one Star Player inducement."],
     ["Varag Ghoul-Chewer", ["Orc"], ["Loner", "Block", "Jump Up", "Mighty Blow", "Thick Skull"], 290, 6, 4, 3, 9, ""],
     ["Wilhelm Chaney", ["Necromantic", "Norse", "Vampire"], ["Loner", "Catch", "Claws", "Frenzy", "Regeneration", "Wrestle"], 240, 8, 4, 3, 8, ""],
     ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf", "Bretonnian"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""],
@@ -435,21 +440,26 @@ PURCHASES = [
 
 MATCH_TYPES = ["Preseason", "Regular", "Postseason", "Championship"]
 
-COACHES = set(["Randy", "Phillip", "Matthew", "Joe R", "David", "Kendal", "Daniel", "Joe H", "Trever", "Chris", "Troy"])
-
-COACH_MAP = {
-    "Randy": ["Randy Cummins"],
-    "Phillip": ["Phillip Ponzer", "Phil"],
-    "Matthew": ["Matthew Quinn"],
-    "Joe R": ["Joe Roberts", "Joe \"profgoldfinch\" Roberts"],
-    "David": ["David J Harshman"],
-    "Kendal": ["Kendal Bowser"],
-    "Daniel": ["Daniel Connors"],
-    "Joe H": ["Joe Hudgens"],
-    "Trever": ["Trever Leikam"],
-    "Chris": ["The Spirit of Harambe", "Chris Thomason", "Patches O'Houlihan"],
-    "Troy": ["TDC", "Troy Chrisman"],
-    "Flagg": ["Flagg Thorin"]
+COACHES = {
+    "Matt": {"email": "mattiequinn35@gmail.com", "aka": ["Matthew Quinn", "Matthew"]},
+    "Troy": {"email": "troychrisman@gmail.com", "aka": ["TDC", "Troy Chrisman"]},
+    "Phillip": {"email": "pdponzer@gmail.com", "aka": ["Phillip Ponzer", "Phil"]},
+    "Bryan": {"email": "bmankc2001@gmail.com", "aka": ["Bryan Bledsoe"]},
+    "Chris": {"email": "ckthomason@gmail.com", "aka": ["The Spirit of Harambe", "Chris Thomason", "Patches O'Houlihan"]},
+    "Trever": {"email": "guidedbyhim@gmail.com", "aka": ["Trever Leikam", "Sun Tzu"]},
+    "Daniel": {"email": "dwconnors84@gmail.com", "aka": ["Daniel Connors"]},
+    "Joe R": {"email": "vanhalfling@gmail.com", "aka": ["Joe Roberts", "Joe \"profgoldfinch\" Roberts"]},
+    "James V": {"email": "jdv311@gmail.com", "aka": ["James Valdez"]},
+    "David": {"email": "godzfirefly@gmail.com", "aka": ["David J Harshman"]},
+    "Kendal": {"email": "jon.kbowser@gmail.com", "aka": ["Kendal Bowser"]},
+    "Patrick": {"email": "opcubby@gmail.com", "aka": ["Patrick Morissey"]},
+    "Aaron M": {"email": "ammckinn90@gmail.com", "aka": ["Aaron Mckinney"]},
+    "Flagg": {"email": "eyeofthedragon101@gmail.com", "aka": ["Flagg Thorin"]},
+    "Randy": {"email": "rkrg.enterprises13@gmail.com", "aka": ["Randy Cummins"]},
+    "Joe H": {"email": "hudgenslaw@gmail.com", "aka": ["Joe Hudgens"]},
+    "Russell": {"email": "christiangeek6170@gmail.com", "aka": ["Russell Parks"]},
+    "Nicholas": {"email": "moluccowrathe@gmail.com", "aka": ["Nicholas J Milberger", "Nicholas J. Milberger"]},
+    "Patrick": {"email":"opcubby@gmail.com", "aka": ["Patrick Morrissey"]}
 }
 
 TEAMS = [
@@ -674,20 +684,23 @@ if __name__ == '__main__':
 
                     # ["Sylvania Suckhawks", "Joe R", "Vampire", "Season 1", []],
                 print "        %s" % teamName
-                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players, teamValue])
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 1", players, teamValue, 0, 0])
 
-                for coachNameKey, coachAliases in COACH_MAP.iteritems():
-                    if coachNameKey == coachName:
-                        COACHES.add(coachName)
-                    elif coachName in coachAliases:
-                        COACHES.add(coachNameKey)
+                if coachName not in COACHES:
+                    coachFound = False
+                    for coachNameKey, coachInfo in COACHES.iteritems():
+                        if coachName in coachInfo["aka"]:
+                            coachFound = True
+                            break
+                    if not coachFound:
+                        print "ERROR: Coach '%s' not found!" % coachName
+                        exit()
 
         if True:
             print
             print "Loading Season 2 Rosters..."
             s2 = load_workbook("imports/S2 Rosters.xlsx", data_only=True)
             print "    Sheet loaded! Now loading teams/players..."
-            # sheetNames = ["DC1", "CT1", "MQ1", "MQ2", "TL1", "DH1", "DH2", "JR1", "JR2", "PP1", "RC1", "KB1", "JH1", "TC1", "TC2", "FT1"]
             sheetNames = s2.get_sheet_names()[4:21]
             for sheetName in sheetNames:
                 rosterSheet = s2[sheetName]
@@ -751,13 +764,17 @@ if __name__ == '__main__':
                     mvps = row[22]
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
-                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 2", players, teamValue])
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 2", players, teamValue, 0, 0])
 
-                for coachNameKey, coachAliases in COACH_MAP.iteritems():
-                    if coachNameKey == coachName:
-                        COACHES.add(coachName)
-                    elif coachName in coachAliases:
-                        COACHES.add(coachNameKey)
+                if coachName not in COACHES:
+                    coachFound = False
+                    for coachNameKey, coachInfo in COACHES.iteritems():
+                        if coachName in coachInfo["aka"]:
+                            coachFound = True
+                            break
+                    if not coachFound:
+                        print "ERROR: Coach '%s' not found!" % coachName
+                        exit()
 
         if True:
             print
@@ -779,8 +796,8 @@ if __name__ == '__main__':
                 rerolls = rows[20][19]
                 fanFactor = rows[21][19]
                 assistantCoaches = rows[22][19] if rows[22][19] else 0
-                cheerleaders = rows[22][19] if rows[22][19] else 0
-                apothecary = rows[22][19] if rows[22][19] else 0
+                cheerleaders = rows[23][19] if rows[23][19] else 0
+                apothecary = rows[24][19] if rows[24][19] else 0
 
                 players = []
                 for row in rows[3:19]:
@@ -821,13 +838,99 @@ if __name__ == '__main__':
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
-                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players, teamValue])
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3", players, teamValue, 0, 0])
 
-                for coachNameKey, coachAliases in COACH_MAP.iteritems():
-                    if coachNameKey == coachName:
-                        COACHES.add(coachName)
-                    elif coachName in coachAliases:
-                        COACHES.add(coachNameKey)
+                if coachName not in COACHES:
+                    coachFound = False
+                    for coachNameKey, coachInfo in COACHES.iteritems():
+                        if coachName in coachInfo["aka"]:
+                            coachFound = True
+                            break
+                    if not coachFound:
+                        print "ERROR: Coach '%s' not found!" % coachName
+                        exit()
+
+        if True:
+            print
+            print "Loading Season 3.5 Rosters..."
+            s3p5 = load_workbook("imports/S3.5 Rosters.xlsx", data_only=True)
+            print "    Sheet loaded! Now loading teams/players..."
+            sheetNames = s3p5.get_sheet_names()[:27]
+            for sheetName in sheetNames:
+                rosterSheet = s3p5[sheetName]
+                rows = []
+                for row in rosterSheet.rows:
+                    rows.append([cell.value for cell in row])
+
+                teamName = rows[20][8]
+                raceName = rows[23][8]
+                coachName = rows[24][8]
+                teamValue = rows[25][8]
+                treasury = rows[26][8]
+                rerolls = rows[20][19]
+                fanFactor = rows[21][19]
+                assistantCoaches = rows[22][19] if rows[22][19] else 0
+                cheerleaders = rows[23][19] if rows[23][19] else 0
+                apothecary = rows[24][19] if rows[24][19] else 0
+                masterChef = rows[25][19] if rows[25][19] else 0
+                bribes = rows[26][19] if rows[26][19] else 0
+
+                if rows[25][11] != "HALFLING MASTER CHEF": # Then this utilizes the old style sheet without master chef and bribes added
+                    raceName = rows[21][8]
+                    coachName = rows[22][8]
+                    teamValue = rows[23][8]
+                    treasury = rows[24][8]
+
+                players = []
+                for row in rows[3:19]:
+                    playerName = row[2]
+                    playerPosition = row[3]
+                    ma = row[4]
+                    st = row[5]
+                    ag = row[6]
+                    av = row[7]
+                    skillsTemp = row[8].split(",") if row[8] else []
+                    skills = [skill.strip() for skill in skillsTemp]
+                    injuryNiggling = row[12]
+                    injuryMA = row[13]
+                    injuryST = row[14]
+                    injuryAG = row[15]
+                    injuryAV = row[16]
+                    if injuryNiggling:
+                        skills.append("Niggling")
+                    if injuryMA:
+                        skills.append("-MA")
+                    if injuryST:
+                        skills.append("-ST")
+                    if injuryAG:
+                        skills.append("-AG")
+                    if injuryAV:
+                        skills.append("-AV")
+
+                    if row[11]:
+                        pass
+
+                    status = "MNG" if row[11] else None
+                    completions = row[18]
+                    touchdowns = row[19]
+                    interceptions = row[17]
+                    casualties = row[20]
+                    kills = row[21]
+                    mvps = row[22]
+                    players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+
+                print "        %s" % teamName
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 3.5", players, teamValue, masterChef, bribes])
+
+                if coachName not in COACHES:
+                    coachFound = False
+                    for coachNameKey, coachInfo in COACHES.iteritems():
+                        if coachName in coachInfo["aka"]:
+                            coachFound = True
+                            break
+                    if not coachFound:
+                        print "ERROR: Coach '%s' not found!" % coachName
+                        exit()
 
     MATCHES = []
     if True:
@@ -835,7 +938,7 @@ if __name__ == '__main__':
         print "Loading Season 2 Matches..."
         s3 = load_workbook("imports/S2 Matches.xlsx", data_only=True)
         print "    Sheet loaded! Now loading matches..."
-        sheetNames = s3.get_sheet_names()[3:]
+        sheetNames = s3.get_sheet_names()
         for sheetName in sheetNames:
             print "        %s" % sheetName
             matchSheet = s3[sheetName]
@@ -935,117 +1038,227 @@ if __name__ == '__main__':
             except Exception as ex:
                 pass
 
-    print
-    print "Loading Season 3 Matches..."
-    s3 = load_workbook("imports/S3 Matches.xlsx", data_only=True)
-    print "    Sheet loaded! Now loading matches..."
-    sheetNames = s3.get_sheet_names()
-    sheetNames.reverse()
-    for sheetName in sheetNames:
-        print "        %s" % sheetName
-        matchSheet = s3[sheetName]
-        rows = []
-        for row in matchSheet.rows:
-            rows.append([cell.value for cell in row])
+    if True:
+        print
+        print "Loading Season 3 Matches..."
+        s3 = load_workbook("imports/S3 Matches.xlsx", data_only=True)
+        print "    Sheet loaded! Now loading matches..."
+        sheetNames = s3.get_sheet_names()
+        sheetNames.reverse()
+        for sheetName in sheetNames:
+            print "        %s" % sheetName
+            matchSheet = s3[sheetName]
+            rows = []
+            for row in matchSheet.rows:
+                rows.append([cell.value for cell in row])
 
-        matchDate = rows[1][17]
-        team1 = rows[2][1]
-        team1TV = rows[2][14]
-        team1InducementGP = rows[5][1]
-        team1Gate = rows[5][7]
-        team1Fame = rows[7][10]
-        team1Inducements = [rows[i][1] for i in range(6, 9)]
-        if team1Inducements[-1] and "\n" in team1Inducements[-1]:
-            inducements = team1Inducements.pop().split("\n")
-            for inducement in inducements:
-                team1Inducements.append(inducement)
-        team1TDs = 0
-        team1Cas = 0
-        team1Kills = 0
-        team1Players = []
-        for i in range(13, 29):
-            team1Players.append([rows[i][j] for j in range(2, 14)])
-            team1TDs += rows[i][3] if rows[i][3] else 0
-            team1Cas += rows[i][5] if rows[i][5] else 0
-            team1Kills += rows[i][6] if rows[i][6] else 0
+            matchDate = rows[1][17]
+            team1 = rows[2][1]
+            team1TV = rows[2][14]
+            team1InducementGP = rows[5][1]
+            team1Gate = rows[5][7]
+            team1Fame = rows[7][10]
+            team1Inducements = [rows[i][1] for i in range(6, 9)]
+            if team1Inducements[-1] and "\n" in team1Inducements[-1]:
+                inducements = team1Inducements.pop().split("\n")
+                for inducement in inducements:
+                    team1Inducements.append(inducement)
+            team1TDs = 0
+            team1Cas = 0
+            team1Kills = 0
+            team1Players = []
+            for i in range(13, 29):
+                team1Players.append([rows[i][j] for j in range(2, 14)])
+                team1TDs += rows[i][3] if rows[i][3] else 0
+                team1Cas += rows[i][5] if rows[i][5] else 0
+                team1Kills += rows[i][6] if rows[i][6] else 0
 
-        team1Winnings = rows[31][1]
-        team1ExpMistakes = rows[31][7] if rows[31][7] else 0
-        team1EndFanFactor = rows[31][14] if rows[31][14] else 0
-        team1Purchases = rows[34][1]
-        team1Notes = rows[34][11]
+            team1Winnings = rows[31][1]
+            team1ExpMistakes = rows[31][7] if rows[31][7] else 0
+            team1EndFanFactor = rows[31][14] if rows[31][14] else 0
+            team1Purchases = rows[34][1]
+            team1Notes = rows[34][11]
 
-        team2 = rows[2][22]
-        team2TV = rows[2][35]
-        team2InducementGP = rows[5][22]
-        team2Gate = rows[5][28]
-        team2Fame = rows[7][31]
-        team2Inducements = [rows[i][22] for i in range(6, 9)]
-        if team2Inducements[-1] and "\n" in team2Inducements[-1]:
-            inducements = team2Inducements.pop().split("\n")
-            for inducement in inducements:
-                team2Inducements.append(inducement)
-        team2TDs = 0
-        team2Cas = 0
-        team2Kills = 0
-        team2Players = []
-        for i in range(13, 29):
-            team2Players.append([rows[i][j] for j in range(23, 35)])
-            team2TDs += rows[i][24] if rows[i][24] else 0
-            team2Cas += rows[i][26] if rows[i][26] else 0
-            team2Kills += rows[i][27] if rows[i][27] else 0
+            team2 = rows[2][22]
+            team2TV = rows[2][35]
+            team2InducementGP = rows[5][22]
+            team2Gate = rows[5][28]
+            team2Fame = rows[7][31]
+            team2Inducements = [rows[i][22] for i in range(6, 9)]
+            if team2Inducements[-1] and "\n" in team2Inducements[-1]:
+                inducements = team2Inducements.pop().split("\n")
+                for inducement in inducements:
+                    team2Inducements.append(inducement)
+            team2TDs = 0
+            team2Cas = 0
+            team2Kills = 0
+            team2Players = []
+            for i in range(13, 29):
+                team2Players.append([rows[i][j] for j in range(23, 35)])
+                team2TDs += rows[i][24] if rows[i][24] else 0
+                team2Cas += rows[i][26] if rows[i][26] else 0
+                team2Kills += rows[i][27] if rows[i][27] else 0
 
-        team2Winnings = rows[31][22]
-        team2ExpMistakes = rows[31][28] if rows[31][28] else 0
-        team2EndFanFactor = rows[31][35] if rows[31][35] else 0
-        team2Purchases = rows[34][22]
-        team2Notes = rows[34][32]
+            team2Winnings = rows[31][22]
+            team2ExpMistakes = rows[31][28] if rows[31][28] else 0
+            team2EndFanFactor = rows[31][35] if rows[31][35] else 0
+            team2Purchases = rows[34][22]
+            team2Notes = rows[34][32]
 
-        try:
-            match = {
-                "type": "Regular",
-                "date": matchDate,
-                "season": "Season 3",
-                "teams": [
-                    {
-                        "name": team1.strip(),
-                        "tv": team1TV,
-                        "inducementsGP": int(team1InducementGP.replace("gp", "") if type(team1InducementGP) is str else team1InducementGP),
-                        "gate": int(team1Gate),
-                        "fame": int(team1Fame) if team1Fame else 0,
-                        "inducements": list(filter(lambda x: x is not None, team1Inducements)),
-                        "tds": int(team1TDs),
-                        "cas": int(team1Cas),
-                        "kills": int(team1Kills),
-                        "players": team1Players,
-                        "winnings": int(team1Winnings),
-                        "expMistakes": int(team1ExpMistakes),
-                        "fanFactor": int(team1EndFanFactor),
-                        "purchases": team1Purchases,
-                        "notes": team1Notes
-                    },
-                    {
-                        "name": team2.strip(),
-                        "tv": int(team2TV),
-                        "inducementsGP": int(team2InducementGP.replace("gp", "") if type(team2InducementGP) is str else team2InducementGP),
-                        "gate": int(team2Gate),
-                        "fame": int(team2Fame) if team2Fame else 0,
-                        "inducements": list(filter(lambda x: x is not None, team2Inducements)),
-                        "tds": int(team2TDs),
-                        "cas": int(team2Cas),
-                        "kills": int(team2Kills),
-                        "players": team2Players,
-                        "winnings": int(team2Winnings),
-                        "expMistakes": int(team2ExpMistakes),
-                        "fanFactor": int(team2EndFanFactor),
-                        "purchases": team2Purchases,
-                        "notes": team2Notes
-                    }
-                ]
-            }
-            MATCHES.append(match)
-        except Exception as ex:
-            pass
+            try:
+                match = {
+                    "type": "Regular",
+                    "date": matchDate,
+                    "season": "Season 3",
+                    "teams": [
+                        {
+                            "name": team1.strip(),
+                            "tv": team1TV,
+                            "inducementsGP": int(team1InducementGP.replace("gp", "") if type(team1InducementGP) is str else team1InducementGP),
+                            "gate": int(team1Gate),
+                            "fame": int(team1Fame) if team1Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team1Inducements)),
+                            "tds": int(team1TDs),
+                            "cas": int(team1Cas),
+                            "kills": int(team1Kills),
+                            "players": team1Players,
+                            "winnings": int(team1Winnings),
+                            "expMistakes": int(team1ExpMistakes),
+                            "fanFactor": int(team1EndFanFactor),
+                            "purchases": team1Purchases,
+                            "notes": team1Notes
+                        },
+                        {
+                            "name": team2.strip(),
+                            "tv": int(team2TV),
+                            "inducementsGP": int(team2InducementGP.replace("gp", "") if type(team2InducementGP) is str else team2InducementGP),
+                            "gate": int(team2Gate),
+                            "fame": int(team2Fame) if team2Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team2Inducements)),
+                            "tds": int(team2TDs),
+                            "cas": int(team2Cas),
+                            "kills": int(team2Kills),
+                            "players": team2Players,
+                            "winnings": int(team2Winnings),
+                            "expMistakes": int(team2ExpMistakes),
+                            "fanFactor": int(team2EndFanFactor),
+                            "purchases": team2Purchases,
+                            "notes": team2Notes
+                        }
+                    ]
+                }
+                MATCHES.append(match)
+            except Exception as ex:
+                pass
+
+    if True:
+        print
+        print "Loading Season 3.5 Matches..."
+        s3p5 = load_workbook("imports/S3.5 Matches.xlsx", data_only=True)
+        print "    Sheet loaded! Now loading matches..."
+        sheetNames = s3p5.get_sheet_names()
+        sheetNames.reverse()
+        for sheetName in sheetNames:
+            print "        %s" % sheetName
+            matchSheet = s3p5[sheetName]
+            rows = []
+            for row in matchSheet.rows:
+                rows.append([cell.value for cell in row])
+
+            matchDate = rows[1][19]
+            team1 = rows[1][1]
+            team1TV = rows[1][13]
+            team1InducementGP = rows[4][1]
+            team1Gate = rows[8][12]
+            team1Fame = rows[10][14]
+            team1Inducements = [rows[i][1] for i in range(5, 11)]
+            team1TDs = 0
+            team1Cas = 0
+            team1Kills = 0
+            team1Fouls = 0
+            team1Players = []
+            for i in range(16, 32):
+                team1Players.append([rows[i][j] for j in range(2, 15)])
+                team1TDs += rows[i][3] if rows[i][3] else 0
+                team1Cas += rows[i][5] if rows[i][5] else 0
+                team1Kills += rows[i][6] if rows[i][6] else 0
+                team1Fouls += rows[i][7] if rows[i][7] else 0
+
+            team1Winnings = rows[33][1]
+            team1ExpMistakes = rows[33][6] if str(rows[33][6]).isdigit() else 0
+            team1EndFanFactor = rows[33][17] if rows[33][17] else 0
+            team1Purchases = [rows[i][1] for i in range(35, 38)]
+            team1Notes = rows[35][12]
+
+            team2 = rows[1][25]
+            team2TV = rows[1][37]
+            team2InducementGP = rows[4][23]
+            team2Gate = rows[8][34]
+            team2Fame = rows[10][36]
+            team2Inducements = [rows[i][23] for i in range(5, 11)]
+            team2TDs = 0
+            team2Cas = 0
+            team2Kills = 0
+            team2Fouls = 0
+            team2Players = []
+            for i in range(16, 32):
+                team2Players.append([rows[i][j] for j in range(23, 36)])
+                team2TDs += rows[i][24] if rows[i][24] else 0
+                team2Cas += rows[i][26] if rows[i][26] else 0
+                team2Kills += rows[i][27] if rows[i][27] else 0
+                team2Fouls += rows[i][28] if rows[i][28] else 0
+
+            team2Winnings = rows[33][23]
+            team2ExpMistakes = rows[33][28] if str(rows[33][28]).isdigit() else 0
+            team2EndFanFactor = rows[33][39] if rows[33][39] else 0
+            team2Purchases = [rows[i][23] for i in range(35, 38)]
+            team2Notes = rows[35][34]
+
+            try:
+                match = {
+                    "type": "Regular",
+                    "date": matchDate,
+                    "season": "Season 3.5",
+                    "teams": [
+                        {
+                            "name": team1.strip(),
+                            "tv": team1TV,
+                            "inducementsGP": int(team1InducementGP.replace("gp", "") if type(team1InducementGP) is str else team1InducementGP),
+                            "gate": int(team1Gate),
+                            "fame": int(team1Fame) if team1Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team1Inducements)),
+                            "tds": int(team1TDs),
+                            "cas": int(team1Cas),
+                            "kills": int(team1Kills),
+                            "players": team1Players,
+                            "winnings": int(team1Winnings),
+                            "expMistakes": int(team1ExpMistakes),
+                            "fanFactor": int(team1EndFanFactor),
+                            "purchases": team1Purchases,
+                            "notes": team1Notes
+                        },
+                        {
+                            "name": team2.strip(),
+                            "tv": int(team2TV),
+                            "inducementsGP": int(team2InducementGP.replace("gp", "") if type(team2InducementGP) is str else team2InducementGP),
+                            "gate": int(team2Gate),
+                            "fame": int(team2Fame) if team2Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team2Inducements)),
+                            "tds": int(team2TDs),
+                            "cas": int(team2Cas),
+                            "kills": int(team2Kills),
+                            "players": team2Players,
+                            "winnings": int(team2Winnings),
+                            "expMistakes": int(team2ExpMistakes),
+                            "fanFactor": int(team2EndFanFactor),
+                            "purchases": team2Purchases,
+                            "notes": team2Notes
+                        }
+                    ]
+                }
+                MATCHES.append(match)
+            except Exception as ex:
+                pass
 
     cnx = mysql.connector.connect(user=settings.mysql_username, password=settings.mysql_password, host=settings.mysql_server, database=settings.mysql_db)
     cnx.autocommit = True
@@ -1112,13 +1325,14 @@ if __name__ == '__main__':
     coachIDs = {}
     print
     print "Coaches"
-    for coach in COACHES:
-        print "    %s" % coach
-        cursor.execute("INSERT INTO coach VALUES(NULL,%s,%s,NULL,NULL)", (coach, ""))
+    for coachName, coachInfo in COACHES.iteritems():
+        print "    %s" % coachName
+        coachEmail = coachInfo["email"]
+        cursor.execute("INSERT INTO coach VALUES(NULL,%s,%s,NULL,NULL)", (coachName, coachEmail))
         coachID = cursor.lastrowid
-        coachIDs[coach] = coachID
+        coachIDs[coachName] = coachID
 
-        for coachAlias in COACH_MAP[coach]:
+        for coachAlias in coachInfo["aka"]:
             coachIDs[coachAlias] = coachID
 
     trophyIDs = {}
@@ -1189,6 +1403,43 @@ if __name__ == '__main__':
                 if skillType.startswith(initial):
                     cursor.execute("INSERT INTO player_type_skill_type_double VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
 
+
+    # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
+    print
+    print "Star Players"
+    starPlayerIDsByRaceID = {}
+    for starPlayer in STAR_PLAYERS:
+        name = starPlayer[0]
+        races = starPlayer[1]
+        skills = starPlayer[2]
+        value = starPlayer[3]
+        ma = starPlayer[4]
+        st = starPlayer[5]
+        ag = starPlayer[6]
+        av = starPlayer[7]
+        desc = starPlayer[8]
+
+        if desc == "":
+            desc = None
+
+        if "All Except" in races:
+            newRaces = raceIDs.keys()
+            for race in races[1:]:
+                newRaces.remove(race)
+            races = newRaces
+
+        for race in races:
+            print "    %s: %s" % (name, race)
+            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
+            starPlayerID = cursor.lastrowid
+            raceID = raceIDs[race]
+            if raceID not in starPlayerIDsByRaceID:
+                starPlayerIDsByRaceID[raceID] = {}
+            starPlayerIDsByRaceID[raceID][name] = starPlayerID
+
+            for skill in skills:
+                cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (starPlayerID, skillIDs[skill]))
+
     teamNameAliases = {
         "Riverdale Ravagers": ["Alliance of the Old Gods", "Rivendale Ravagers"],
         "Run! It's The PO PO": ["Watch Out For The PO PO", "Watch Out For The POPO", "Run it's the Po Po", "Run its the PO PO", "Watch out for the POPO", "Watch out for the PO PO"],
@@ -1220,6 +1471,8 @@ if __name__ == '__main__':
         cheerleaders = int(team[7])
         apothecary = int(team[8])
         players = team[10]
+        masterChef = int(team[12])
+        bribes = int(team[13])
 
         coachID = coachIDs[coachName]
         raceID = raceIDs[raceName]
@@ -1229,35 +1482,34 @@ if __name__ == '__main__':
             teamIDsBySeasonID[seasonID] = {}
 
         prevTeamID = None
-        prevSeasonID = seasonID - 1
-        while prevSeasonID > 0:
-            prevSeasonName = "Season %s" % prevSeasonID
-            prevSeasonID = seasonIDs[prevSeasonName]
-            prevSeasonTeams = teamIDsBySeasonID[prevSeasonID]
+        if len(seasonIDs) > 1:
+            if seasonName != "Season 5": # Season 5 restarted all teams
+                prevSeasonID = seasonID - 1
+                while prevSeasonID > 0:
+                    prevSeasonTeams = teamIDsBySeasonID[prevSeasonID]
+                    
+                    if teamName in prevSeasonTeams:
+                        prevTeamID = prevSeasonTeams[teamName]
+                        break
 
-            if teamName in prevSeasonTeams:
-                prevTeamID = prevSeasonTeams[teamName]
-                break
+                    teamAliases = getAliases(teamName, teamNameAliases)
+                    for alias in teamAliases:
+                        if alias in prevSeasonTeams:
+                            prevTeamID = prevSeasonTeams[alias]
+                            break
 
-            teamAliases = getAliases(teamName, teamNameAliases)
-            for alias in teamAliases:
-                if alias in prevSeasonTeams:
-                    prevTeamID = prevSeasonTeams[alias]
-                    break
+                    if prevTeamID:
+                        break
 
-            if prevTeamID:
-                break
-            prevSeasonID -= 1
+                    prevSeasonID -= 1
 
         if treasury > 9999:
             treasury /= 1000
         if value > 9999:
             value /= 1000
 
-        cursor.execute(
-                "INSERT IGNORE INTO team VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,1)",
-                (teamName, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary)
-        )
+        row = (teamName, coachID, raceID, seasonID, prevTeamID, value, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, masterChef, bribes)
+        cursor.execute("INSERT IGNORE INTO team VALUES(NULL," + ",".join(["%s" for x in row]) + ")", row)
         teamID = cursor.lastrowid
         teamIDsBySeasonID[seasonID][teamName] = teamID
         raceIDsByTeamID[teamID] = raceID
@@ -1269,18 +1521,31 @@ if __name__ == '__main__':
         for i, player in enumerate(players):
             # players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
             number = i + 1
+            isStarPlayer = 0
             playerName = player[0].strip() if player[0] else None
             playerPosition = player[1].strip() if player[1] else None
+            
+            playerTypeID = None
+            if playerPosition:
+                if playerPosition.startswith("Star: "):
+                    isStarPlayer = 1
+                    starPlayerName = playerPosition.replace("Star: ", "")
+                    starPlayerID = starPlayerIDsByRaceID[raceID][starPlayerName]
+                    playerTypeID = starPlayerID
+                    playerName = starPlayerName
+                else:
+                    playerTypeID = playerTypeIDsByRaceID[raceID][playerPosition]
+
             if not playerName and playerPosition:
                 playerName = "Player %s" % number
+
             print "        (%s/%s): %s" % (number, len(players), playerName)
             if not playerPosition:
                 continue
 
             if playerName.lower() == "journeyman":
                 continue
-
-            playerTypeID = playerTypeIDsByRaceID[raceID][playerPosition]
+            
             ma = player[2]
             st = player[3]
             ag = player[4]
@@ -1304,15 +1569,16 @@ if __name__ == '__main__':
             mvps = player[13] if player[13] else 0
 
             prevPlayerID = None
-            if prevTeamID is not None and prevSeasonID > 0:
-                playerReportsByNumber = playerIDsBySeasonIDAndTeamAndNumber[prevSeasonID][prevTeamID]
-                for prevPlayerReport in playerReportsByNumber.values():
-                    prevPlayerName = prevPlayerReport[2]
-                    if playerName.strip().lower() == prevPlayerName.strip().lower():
-                        prevPlayerID = prevPlayerReport[0]
-                        break
+            if isStarPlayer == 0:
+                if prevTeamID is not None and prevSeasonID > 0:
+                    playerReportsByNumber = playerIDsBySeasonIDAndTeamAndNumber[prevSeasonID][prevTeamID]
+                    for prevPlayerReport in playerReportsByNumber.values():
+                        prevPlayerName = prevPlayerReport[2]
+                        if playerName.strip().lower() == prevPlayerName.strip().lower():
+                            prevPlayerID = prevPlayerReport[0]
+                            break
 
-            playerReport = (number, playerName, teamID, playerTypeID, prevPlayerID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, 0)
+            playerReport = (number, playerName, teamID, playerTypeID, prevPlayerID, mng, niggling, maInjuries, stInjuries, agInjuries, avInjuries, interceptions, completions, touchdowns, casualties, kills, mvps, isStarPlayer)
             cursor.execute("INSERT INTO player VALUES(NULL," + ",".join(["%s" for pr in playerReport]) + ")", playerReport)
             playerID = cursor.lastrowid
             playerIDPlayerTypeIDs[playerID] = playerTypeID
@@ -1321,14 +1587,15 @@ if __name__ == '__main__':
             if playerID <= 0:
                 print "ERROR: Player not imported!"
 
-            for skillName in skillsNoInjuries:
-                if skillName not in skillIDs:
-                    pass
-                else:
-                    skillID = skillIDs[skillName]
-                    playerTypeSkills = playerTypeIDSkillIDs[playerTypeID]
-                    if skillID not in playerTypeSkills:
-                        cursor.execute("INSERT INTO player_skill VALUES(%s,%s)", (playerID, skillID))
+            if isStarPlayer == 0:
+                for skillName in skillsNoInjuries:
+                    if skillName not in skillIDs:
+                        pass
+                    else:
+                        skillID = skillIDs[skillName]
+                        playerTypeSkills = playerTypeIDSkillIDs[playerTypeID]
+                        if skillID not in playerTypeSkills:
+                            cursor.execute("INSERT INTO player_skill VALUES(%s,%s)", (playerID, skillID))
 
             if teamName not in playerIDs:
                 playerIDs[teamName] = []
@@ -1360,7 +1627,7 @@ if __name__ == '__main__':
     inducementAliases = {
         "Marketing Blitz": ["Fan Factor"],
         "Extra Team Training": ["Team Re-roll"],
-        "Bloodweiser Babe": ["Budweiser Babe", "Babe"]
+        "Bloodweiser Babe": ["Budweiser Babe", "Babe", "Bloodwiser Babe", "Bloodweiser Babes"]
     }
     inducementIDs = {}
     inducementIDsByRaceID = {}
@@ -1446,9 +1713,10 @@ if __name__ == '__main__':
                     purchaseIDs[name] = purchaseID
                     break
 
-    deckIDs = {}
     print
     print "Decks"
+    deckIDs = {}
+    deckNamesByDeckID = {}
     for deck in DECKS:
         name = deck[0]
         cost = deck[1]
@@ -1456,10 +1724,12 @@ if __name__ == '__main__':
         cursor.execute("INSERT INTO deck VALUES(NULL,%s,%s)", (name, cost))
         deckID = cursor.lastrowid
         deckIDs[name] = deckID
+        deckNamesByDeckID[deckID] = name
 
     print
     print "Cards"
     cardIDs = {}
+    deckIDsByCardID = {}
     for card in CARDS:
         name = card[0]
         aka = card[1]
@@ -1473,42 +1743,7 @@ if __name__ == '__main__':
         cursor.execute("INSERT IGNORE INTO card VALUES(NULL,%s,%s,%s,%s,%s,%s)", (deckID, name, aka, desc, timing, effect))
         cardID = cursor.lastrowid
         cardIDs[name] = cardID
-
-    # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
-    print
-    print "Star Players"
-    starPlayerIDsByRaceID = {}
-    for starPlayer in STAR_PLAYERS:
-        name = starPlayer[0]
-        races = starPlayer[1]
-        skills = starPlayer[2]
-        value = starPlayer[3]
-        ma = starPlayer[4]
-        st = starPlayer[5]
-        ag = starPlayer[6]
-        av = starPlayer[7]
-        desc = starPlayer[8]
-
-        if desc == "":
-            desc = None
-
-        if "All Except" in races:
-            newRaces = raceIDs.keys()
-            for race in races[1:]:
-                newRaces.remove(race)
-            races = newRaces
-
-        for race in races:
-            print "    %s: %s" % (name, race)
-            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
-            starPlayerID = cursor.lastrowid
-            raceID = raceIDs[race]
-            if raceID not in starPlayerIDsByRaceID:
-                starPlayerIDsByRaceID[raceID] = {}
-            starPlayerIDsByRaceID[raceID][name] = starPlayerID
-
-            for skill in skills:
-                cursor.execute("INSERT INTO player_type_skill VALUES(%s,%s)", (starPlayerID, skillIDs[skill]))
+        deckIDsByCardID[cardID] = deckID
 
     print
     print "Matches"
@@ -1616,6 +1851,7 @@ if __name__ == '__main__':
                 print "        Inducement: %s" % inducement
                 inducementID = None
                 playerTypeID = None
+                deckID = None
                 cardID = None
                 amount = 1
 
@@ -1635,16 +1871,14 @@ if __name__ == '__main__':
                         playerTypeID = playerTypeIDsByRaceID[raceID][inducement]
                 elif "Journeyman" in inducement:
                     addDesc = "\n'%s' also had %sx %s" % (team["name"], amount, inducement)
-                    print"            %s" % addDesc
+                    print "            %s" % addDesc.strip()
                     description += addDesc
                     cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
                     continue
                 elif " Card" in inducement:
-                    addDesc = "\n'%s' had an unknown %s as an inducement" % (team["name"], inducement)
-                    print"            %s" % addDesc
-                    description += addDesc
-                    cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
-                    continue
+                    deckName = inducement.replace(" Card", "")
+                    if deckName in deckIDs:
+                        deckID = deckIDs[deckName]
 
                 if inducementID is None:
                     if inducement in inducementIDs:
@@ -1653,22 +1887,34 @@ if __name__ == '__main__':
                         playerTypeID = starPlayerIDsByRaceID[raceID][inducement]
                     elif inducement in cardIDs:
                         cardID = cardIDs[inducement]
+                        deckID = deckIDsByCardID[cardID]
+                        deckName = deckNamesByDeckID[deckID]
+                        
+                        addDesc = "\n'%s' drew the %s card named \"%s\"" % (team["name"], deckName, inducement)
+                        print "            %s" % addDesc.strip()
+                        description += addDesc
+                        cursor.execute("UPDATE `match` SET description=%s WHERE id=%s", (description, matchID))
                     elif "petty cash" in inducement.lower():
                         pettyCash = inducement.lower().split()[0].replace("k", "")
                         teamNum = "1" if team["name"] == team1["name"] else "2"
                         cursor.execute("UPDATE `match` SET team" + teamNum + "_petty_cash=%s WHERE id=%s", (pettyCash, matchID))
                         continue
 
-                if inducementID is None and playerTypeID is None and cardID is None:
+                if inducementID is None and playerTypeID is None and deckID is None:
                     print "            Couldn't find inducement '%s' Skipping..." % inducement
                     continue
 
-                row = (matchID, teamID, inducementID, amount, playerTypeID, cardID)
+                row = (matchID, teamID, inducementID, amount, playerTypeID, deckID, cardID)
                 cursor.execute("INSERT INTO match_inducement VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
 
-            teamPurchases = team["purchases"].split("\n") if team["purchases"] else []
+            teamPurchases = []
+            if isinstance(team["purchases"], list):
+                teamPurchases = team["purchases"]
+            else:
+                teamPurchases = team["purchases"].split("\n") if team["purchases"] else []
+                
             for purchase in teamPurchases:
-                if purchase == "":
+                if purchase == "" or purchase is None:
                     continue
 
                 print "        Purchase: %s" % purchase
@@ -1716,6 +1962,7 @@ if __name__ == '__main__':
                 interceptions = player[2]
                 casualties = player[3]
                 kills = player[4]
+                fouls = None
                 mvp = player[5]
                 spp = player[6]
                 mng = "1" if player[7] else None
@@ -1723,6 +1970,16 @@ if __name__ == '__main__':
                 minusStat = player[9]
                 dead = player[10]
                 newSkill = player[11]
+
+                if len(player) > 12:
+                    fouls = player[5]
+                    mvp = player[6]
+                    spp = player[7]
+                    mng = "1" if player[8] else None
+                    niggling = player[9]
+                    minusStat = player[10]
+                    dead = player[11]
+                    newSkill = player[12]
 
                 mvInjury = None
                 stInjury = None
@@ -1746,7 +2003,7 @@ if __name__ == '__main__':
                     niggling = 1
                     mng = 1
 
-                row = (matchID, playerID, mng, niggling, mvInjury, stInjury, agInjury, avInjury, interceptions, completions, touchdowns, casualties, kills, mvp, None)
+                row = (matchID, playerID, mng, niggling, mvInjury, stInjury, agInjury, avInjury, interceptions, completions, touchdowns, casualties, kills, fouls, mvp, dead)
                 cursor.execute("INSERT INTO match_player VALUES(NULL," + ",".join("%s" for entry in row) + ")", row)
 
                 if newSkill is not None:
@@ -1774,7 +2031,7 @@ if __name__ == '__main__':
             winnerTeamID = teamIDsBySeasonID[seasonID][winnerTeamName]
             cursor.execute("UPDATE season SET winner_team_id=%s WHERE id=%s", (winnerTeamID, seasonID))
 
-    cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "3"))
+    cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "6"))
 
     print
     print "Done!"
