@@ -446,7 +446,7 @@ COACHES = {
     "Phillip": {"email": "pdponzer@gmail.com", "aka": ["Phillip Ponzer", "Phil"]},
     "Bryan": {"email": "bmankc2001@gmail.com", "aka": ["Bryan Bledsoe"]},
     "Chris": {"email": "ckthomason@gmail.com", "aka": ["The Spirit of Harambe", "Chris Thomason", "Patches O'Houlihan"]},
-    "Trever": {"email": "guidedbyhim@gmail.com", "aka": ["Trever Leikam", "Sun Tzu"]},
+    "Trever": {"email": "guidedbyhim@gmail.com", "aka": ["Trever Leikam", "Sun Tzu", "Trever \"Sun Tzu\" Leikam"]},
     "Daniel": {"email": "dwconnors84@gmail.com", "aka": ["Daniel Connors"]},
     "Joe R": {"email": "vanhalfling@gmail.com", "aka": ["Joe Roberts", "Joe \"profgoldfinch\" Roberts"]},
     "James V": {"email": "jdv311@gmail.com", "aka": ["James Valdez"]},
@@ -621,6 +621,7 @@ def getAliases(name, aliases):
 if __name__ == '__main__':
     TEAMS = []
     if True:
+        # Season 1 Rosters
         if True:
             print "Loading Season 1 Rosters..."
             s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True)
@@ -696,6 +697,7 @@ if __name__ == '__main__':
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
 
+        # Season 2 Rosters
         if True:
             print
             print "Loading Season 2 Rosters..."
@@ -776,6 +778,7 @@ if __name__ == '__main__':
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
 
+        # Season 3 Rosters
         if True:
             print
             print "Loading Season 3 Rosters..."
@@ -850,6 +853,7 @@ if __name__ == '__main__':
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
 
+        # Season 3.5 Rosters
         if True:
             print
             print "Loading Season 3.5 Rosters..."
@@ -932,7 +936,92 @@ if __name__ == '__main__':
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
 
+        # Season 4 Rosters
+        if True:
+            print
+            print "Loading Season 4 Rosters..."
+            s4 = load_workbook("imports/S4 Rosters.xlsx", data_only=True)
+            print "    Sheet loaded! Now loading teams/players..."
+            sheetNames = s4.get_sheet_names()[:13]
+            for sheetName in sheetNames:
+                rosterSheet = s4[sheetName]
+                rows = []
+                for row in rosterSheet.rows:
+                    rows.append([cell.value for cell in row])
+
+                teamName = rows[20][8]
+                raceName = rows[23][8]
+                coachName = rows[24][8]
+                teamValue = rows[25][8]
+                treasury = rows[26][8]
+                rerolls = rows[20][19]
+                fanFactor = rows[21][19]
+                assistantCoaches = rows[22][19] if rows[22][19] else 0
+                cheerleaders = rows[23][19] if rows[23][19] else 0
+                apothecary = rows[24][19] if rows[24][19] else 0
+                masterChef = rows[25][19] if rows[25][19] else 0
+                bribes = rows[26][19] if rows[26][19] else 0
+
+                if rows[25][11] != "HALFLING MASTER CHEF": # Then this utilizes the old style sheet without master chef and bribes added
+                    raceName = rows[21][8]
+                    coachName = rows[22][8]
+                    teamValue = rows[23][8]
+                    treasury = rows[24][8]
+
+                players = []
+                for row in rows[3:19]:
+                    playerName = row[2]
+                    playerPosition = row[3]
+                    ma = row[4]
+                    st = row[5]
+                    ag = row[6]
+                    av = row[7]
+                    skillsTemp = row[8].split(",") if row[8] else []
+                    skills = [skill.strip() for skill in skillsTemp]
+                    injuryNiggling = row[12]
+                    injuryMA = row[13]
+                    injuryST = row[14]
+                    injuryAG = row[15]
+                    injuryAV = row[16]
+                    if injuryNiggling:
+                        skills.append("Niggling")
+                    if injuryMA:
+                        skills.append("-MA")
+                    if injuryST:
+                        skills.append("-ST")
+                    if injuryAG:
+                        skills.append("-AG")
+                    if injuryAV:
+                        skills.append("-AV")
+
+                    if row[11]:
+                        pass
+
+                    status = "MNG" if row[11] else None
+                    completions = row[18]
+                    touchdowns = row[19]
+                    interceptions = row[17]
+                    casualties = row[20]
+                    kills = row[21]
+                    mvps = row[22]
+                    players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+
+                print "        %s" % teamName
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 4", players, teamValue, masterChef, bribes])
+
+                if coachName not in COACHES:
+                    coachFound = False
+                    for coachNameKey, coachInfo in COACHES.iteritems():
+                        if coachName in coachInfo["aka"]:
+                            coachFound = True
+                            break
+                    if not coachFound:
+                        print "ERROR: Coach '%s' not found!" % coachName
+                        exit()
+
+
     MATCHES = []
+    # Season 2 Matches
     if True:
         print
         print "Loading Season 2 Matches..."
@@ -1038,6 +1127,7 @@ if __name__ == '__main__':
             except Exception as ex:
                 pass
 
+    # Season 3 Matches
     if True:
         print
         print "Loading Season 3 Matches..."
@@ -1151,6 +1241,7 @@ if __name__ == '__main__':
             except Exception as ex:
                 pass
 
+    # Season 3.5 Matches
     if True:
         print
         print "Loading Season 3.5 Matches..."
@@ -1202,7 +1293,7 @@ if __name__ == '__main__':
             team2Fouls = 0
             team2Players = []
             for i in range(16, 32):
-                team2Players.append([rows[i][j] for j in range(23, 36)])
+                team2Players.append([rows[i][j] for j in range(24, 37)])
                 team2TDs += rows[i][24] if rows[i][24] else 0
                 team2Cas += rows[i][26] if rows[i][26] else 0
                 team2Kills += rows[i][27] if rows[i][27] else 0
@@ -1259,6 +1350,117 @@ if __name__ == '__main__':
                 MATCHES.append(match)
             except Exception as ex:
                 pass
+
+    # Season 4 Matches
+    if True:
+        print
+        print "Loading Season 4 Matches..."
+        s4 = load_workbook("imports/S4 Matches.xlsx", data_only=True)
+        print "    Sheet loaded! Now loading matches..."
+        sheetNames = s4.get_sheet_names()
+        sheetNames.reverse()
+        for sheetName in sheetNames:
+            print "        %s" % sheetName
+            matchSheet = s4[sheetName]
+            rows = []
+            for row in matchSheet.rows:
+                rows.append([cell.value for cell in row])
+
+            matchDate = rows[1][19]
+            team1 = rows[1][1]
+            team1TV = rows[1][13]
+            team1InducementGP = rows[4][1]
+            team1Gate = rows[8][12]
+            team1Fame = rows[10][14]
+            team1Inducements = [rows[i][1] for i in range(5, 11)]
+            team1TDs = 0
+            team1Cas = 0
+            team1Kills = 0
+            team1Fouls = 0
+            team1Players = []
+            for i in range(16, 32):
+                team1Players.append([rows[i][j] for j in range(2, 15)])
+                team1TDs += rows[i][3] if rows[i][3] else 0
+                team1Cas += rows[i][5] if rows[i][5] else 0
+                team1Kills += rows[i][6] if rows[i][6] else 0
+                team1Fouls += rows[i][7] if rows[i][7] else 0
+
+            team1Winnings = rows[33][1]
+            team1ExpMistakes = rows[33][6] if str(rows[33][6]).isdigit() else 0
+            team1EndFanFactor = rows[33][17] if rows[33][17] else 0
+            team1Purchases = [rows[i][1] for i in range(35, 38)]
+            team1Notes = rows[35][12]
+
+            team2 = rows[1][25]
+            team2TV = rows[1][37]
+            team2InducementGP = rows[4][23]
+            team2Gate = rows[8][34]
+            team2Fame = rows[10][36]
+            team2Inducements = [rows[i][23] for i in range(5, 11)]
+            team2TDs = 0
+            team2Cas = 0
+            team2Kills = 0
+            team2Fouls = 0
+            team2Players = []
+            for i in range(16, 32):
+                team2Players.append([rows[i][j] for j in range(24, 37)])
+                team2TDs += rows[i][24] if rows[i][24] else 0
+                team2Cas += rows[i][26] if rows[i][26] else 0
+                team2Kills += rows[i][27] if rows[i][27] else 0
+                team2Fouls += rows[i][28] if rows[i][28] else 0
+
+            team2Winnings = rows[33][23]
+            team2ExpMistakes = rows[33][28] if str(rows[33][28]).isdigit() else 0
+            team2EndFanFactor = rows[33][39] if rows[33][39] else 0
+            team2Purchases = [rows[i][23] for i in range(35, 38)]
+            team2Notes = rows[35][34]
+
+            try:
+                match = {
+                    "type": "Regular",
+                    "date": matchDate,
+                    "season": "Season 4",
+                    "teams": [
+                        {
+                            "name": team1.strip(),
+                            "tv": team1TV,
+                            "inducementsGP": int(team1InducementGP.replace("gp", "") if type(team1InducementGP) is str else team1InducementGP),
+                            "gate": int(team1Gate),
+                            "fame": int(team1Fame) if team1Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team1Inducements)),
+                            "tds": int(team1TDs),
+                            "cas": int(team1Cas),
+                            "kills": int(team1Kills),
+                            "players": team1Players,
+                            "winnings": int(team1Winnings),
+                            "expMistakes": int(team1ExpMistakes),
+                            "fanFactor": int(team1EndFanFactor),
+                            "purchases": team1Purchases,
+                            "notes": team1Notes
+                        },
+                        {
+                            "name": team2.strip(),
+                            "tv": int(team2TV),
+                            "inducementsGP": int(team2InducementGP.replace("gp", "") if type(team2InducementGP) is str else team2InducementGP),
+                            "gate": int(team2Gate),
+                            "fame": int(team2Fame) if team2Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team2Inducements)),
+                            "tds": int(team2TDs),
+                            "cas": int(team2Cas),
+                            "kills": int(team2Kills),
+                            "players": team2Players,
+                            "winnings": int(team2Winnings),
+                            "expMistakes": int(team2ExpMistakes),
+                            "fanFactor": int(team2EndFanFactor),
+                            "purchases": team2Purchases,
+                            "notes": team2Notes
+                        }
+                    ]
+                }
+                MATCHES.append(match)
+            except Exception as ex:
+                pass
+
 
     cnx = mysql.connector.connect(user=settings.mysql_username, password=settings.mysql_password, host=settings.mysql_server, database=settings.mysql_db)
     cnx.autocommit = True
@@ -1988,7 +2190,7 @@ if __name__ == '__main__':
                 if minusStat is not None:
                     if minusStat == "ST":
                         stInjury = 1
-                    elif minusStat == "MA":
+                    elif minusStat == "MA" or minusStat == "MV":
                         mvInjury = 1
                     elif minusStat == "AG":
                         agInjury = 1
