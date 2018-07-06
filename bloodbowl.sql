@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               5.5.27 - MySQL Community Server (GPL)
 -- Server OS:                    Win32
--- HeidiSQL Version:             9.4.0.5125
+-- HeidiSQL Version:             9.5.0.5196
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `card` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `deck_id` int(11) NOT NULL,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `aka` varchar(2) COLLATE utf8_unicode_ci NOT NULL,
+  `aka` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `timing` text COLLATE utf8_unicode_ci NOT NULL,
   `effect` text COLLATE utf8_unicode_ci NOT NULL,
@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS `coach` (
   `username` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `password` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`,`email`),
+  UNIQUE KEY `unique name` (`name`),
+  UNIQUE KEY `unique email` (`email`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -133,18 +134,21 @@ CREATE TABLE IF NOT EXISTS `match_inducement` (
   `inducement_id` int(11) DEFAULT NULL,
   `amount` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `player_type_id` int(11) DEFAULT NULL,
+  `deck_id` int(11) DEFAULT NULL,
   `card_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_match_inducement` (`match_id`,`team_id`,`inducement_id`),
-  UNIQUE KEY `unique_match_card` (`match_id`,`team_id`,`card_id`),
   UNIQUE KEY `unique_match_player_type` (`match_id`,`team_id`,`player_type_id`),
+  UNIQUE KEY `unique_match_deck_card_id` (`match_id`,`team_id`,`deck_id`,`card_id`),
   KEY `id` (`id`),
   KEY `team_id` (`team_id`),
   KEY `inducement_id` (`inducement_id`),
   KEY `match_id` (`match_id`),
-  KEY `card_id` (`card_id`),
   KEY `player_type_id` (`player_type_id`),
+  KEY `deck_id` (`deck_id`),
+  KEY `card_id` (`card_id`),
   CONSTRAINT `match_inducement_card_id` FOREIGN KEY (`card_id`) REFERENCES `card` (`id`),
+  CONSTRAINT `match_inducement_deck_id` FOREIGN KEY (`deck_id`) REFERENCES `deck` (`id`),
   CONSTRAINT `match_inducement_inducement_id` FOREIGN KEY (`inducement_id`) REFERENCES `inducement` (`id`),
   CONSTRAINT `match_inducement_match_id` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`),
   CONSTRAINT `match_inducement_player_type_id` FOREIGN KEY (`player_type_id`) REFERENCES `player_type` (`id`),
@@ -169,16 +173,15 @@ CREATE TABLE IF NOT EXISTS `match_player` (
   `touchdowns` tinyint(3) unsigned DEFAULT NULL,
   `casualties` tinyint(3) unsigned DEFAULT NULL,
   `kills` tinyint(3) unsigned DEFAULT NULL,
+  `fouls` tinyint(3) unsigned DEFAULT NULL,
   `mvp` tinyint(1) unsigned DEFAULT NULL,
-  `killed_by_player_id` int(11) DEFAULT NULL,
+  `dead` tinyint(1) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `player_id` (`player_id`),
   KEY `match_id` (`match_id`),
-  KEY `killed_by_player_id` (`killed_by_player_id`),
   KEY `id` (`id`),
   CONSTRAINT `match_player_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`),
-  CONSTRAINT `match_player_ibfk_2` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`),
-  CONSTRAINT `match_player_ibfk_3` FOREIGN KEY (`killed_by_player_id`) REFERENCES `player` (`id`)
+  CONSTRAINT `match_player_ibfk_2` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
@@ -444,7 +447,8 @@ CREATE TABLE IF NOT EXISTS `team` (
   `assistant_coaches` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `cheerleaders` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `apothecary` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `imported` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `halfling_master_chef` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `bribes` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_name_per_season` (`name`,`season_id`) USING BTREE,
   UNIQUE KEY `unique_prev_team_id` (`prev_team_id`),
@@ -467,7 +471,6 @@ CREATE TABLE IF NOT EXISTS `trophy` (
   `img` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `img` (`img`),
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
