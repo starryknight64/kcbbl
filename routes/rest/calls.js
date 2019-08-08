@@ -67,6 +67,9 @@ function getCoach(id) {
 function getCoaches(wheres, values, joins) {
   return db.getMany("coach", ["coach.id", "coach.name"], wheres, values, joins)
 }
+function getCoachesAuth(wheres, values, joins) {
+  return db.getMany("coach", undefined, wheres, values, joins)
+}
 function getCoachesForSeason(seasonID) {
   return getSeason(seasonID)
     .then((season) => {
@@ -649,6 +652,7 @@ module.exports = {
   search: search,
   getCoach: getCoach,
   getCoaches: getCoaches,
+  getCoachesAuth: getCoachesAuth,
   getCoachesForSeason: getCoachesForSeason,
   getInducement: getInducement,
   getInducements: getInducements,

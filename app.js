@@ -5,6 +5,9 @@ var logger = require("morgan")
 var cookieParser = require("cookie-parser")
 var bodyParser = require("body-parser")
 var Type = require("type-of-is")
+var db = require("./includes/db")
+var session = require('express-session')
+var MySQLStore = require('express-mysql-session')(session)
 
 var index = require("./routes/index")
 var seasons = require("./routes/seasons")
@@ -14,15 +17,29 @@ var players = require("./routes/players")
 var teams = require("./routes/teams")
 var search = require("./routes/search")
 var coachesREST = require("./routes/rest/coaches")
-var seasonsREST = require("./routes/rest/seasons")
+var inducementsREST = require("./routes/rest/inducements")
+var loginREST = require("./routes/rest/login")
 var matchesREST = require("./routes/rest/matches")
+var matchTypesREST = require("./routes/rest/matchTypes")
 var playersREST = require("./routes/rest/players")
 var playerTypesREST = require("./routes/rest/playerTypes")
+var purchasesREST = require("./routes/rest/purchases")
+var racesREST = require("./routes/rest/races")
+var seasonsREST = require("./routes/rest/seasons")
+var skillsREST = require("./routes/rest/skills")
 var teamsREST = require("./routes/rest/teams")
 var trophiesREST = require("./routes/rest/trophies")
-var racesREST = require("./routes/rest/races")
 
 var app = express()
+
+var sessionStore = new MySQLStore({}, db.db)
+app.use(session({
+    key: "",
+    secret: "",
+    store: sessionStore,
+    resave: true,
+    saveUninitialized: false
+}))
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"))
@@ -53,10 +70,15 @@ app.use("/players", players)
 app.use("/teams", teams)
 app.use("/search", search)
 app.use("/rest/coaches", coachesREST.router)
-app.use("/rest/seasons", seasonsREST.router)
+app.use("/rest/inducements", inducementsREST.router)
+app.use("/rest/login", loginREST.router)
 app.use("/rest/matches", matchesREST.router)
+app.use("/rest/matchtypes", matchTypesREST.router)
 app.use("/rest/players", playersREST.router)
 app.use("/rest/playertypes", playerTypesREST.router)
+app.use("/rest/purchases", purchasesREST.router)
+app.use("/rest/seasons", seasonsREST.router)
+app.use("/rest/skills", skillsREST.router)
 app.use("/rest/teams", teamsREST.router)
 app.use("/rest/trophies", trophiesREST.router)
 app.use("/rest/races", racesREST.router)
@@ -100,6 +122,5 @@ app.use(function (err, req, res, next) {
     error: err
   })
 })
-
 
 module.exports = app

@@ -179,6 +179,37 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
     })
 }
 
+function insert(table, cols, values) {
+    return new Promise((resolve, reject) => {
+        if (!Type.is(table, String)) {
+            return reject("Table name must be a string!")
+        }
+        if (!Type.is(cols, Array)) {
+            cols = []
+        }
+        if (!Type.is(values, Array)) {
+            return reject("Must provide at least one value to insert into table '" + table + "'!")
+        }
+        if (cols.length > 0 && cols.length != values.length) {
+            return reject("The number of columns and values do not match!")
+        }
+
+        var sql = "INSERT INTO `" + table + "` "
+        if (cols.length > 0) {
+            sql += "(`" + cols.join("`,`") + "`) "
+        }
+
+        sql += "VALUES (" + Array(values.length).fill("?").join(",") + ")"
+        console.log(sql)
+        db.query(sql, values, (error, results, fields) => {
+            if (error) {
+                return reject(error)
+            }
+            resolve(results.insertId)
+        })
+    })
+}
+
 module.exports = {
     db: db,
     get: get,

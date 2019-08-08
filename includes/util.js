@@ -53,7 +53,7 @@ function handleRESTError(res, error) {
     } else {
         err = error
     }
-    res.status(400).send(err)
+    res.status(400).json(err)
 }
 
 function handleError(res, error) {

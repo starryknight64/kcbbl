@@ -42,19 +42,20 @@ block body
 						ul.dropdown-menu#login-dp
 							li.row
 								.col-md-12 
-									| Login via
-									div
+									//| Login via
+									//div
 										a.btn.btn-fb(href="#")
 											<i class="fab fa-facebook-f"></i>
 											|&nbsp;&nbsp;Facebook
-									| or
-									form.form#login-nav(method="POST" action="login" accept-charset="UTF-8")
+									//| or
+									| Login
+									form.form#login-nav(method="POST" action="rest/login" accept-charset="UTF-8")
 										.form-group
 											label.sr-only(for="email-input") Email
-											input.form-control#email-input(type="email" placeholder="Email address..." required)
+											input.form-control#email-input(name="email" type="email" placeholder="Email address..." required)
 										.form-group
 											label.sr-only(for="password-input") Password
-											input.form-control#password-input(type="password" placeholder="Password..." required)
+											input.form-control#password-input(name="password" type="password" placeholder="Password..." required)
 											.help-block.text-right
 												a Forgot your password?
 										.form-group
