@@ -2,6 +2,7 @@ import collections
 import mysql.connector
 import settings
 from openpyxl import load_workbook
+from timer import Timer
 
 '''
 Created on Apr 22, 2017
@@ -59,6 +60,7 @@ ALTER Table `team` AUTO_INCREMENT=1;
 ALTER Table `trophy` AUTO_INCREMENT=1;
 
 '''
+
 TROPHIES = [
     ["Spike Bowl", "spike bowl.png"],
     ["Chaos Cup", "chaos cup.png"],
@@ -74,7 +76,9 @@ SEASONS = [
     ["Season 3", "2017-07-01", "2017-09-30", "Dungeon Bowl", "Rat Rat City"],
     ["Season 3.5", "2017-10-01", "2017-12-31", "Open Season", None],
     ["Season 4", "2018-01-01", "2018-03-31", "Witch King Cup", None],
-    ["Season 5", "2018-05-21", "2018-08-31", "Blood Bowl", None]
+    ["Season 5", "2018-05-21", "2018-08-31", "Blood Bowl", "Keepers Of The Nile"]#,
+    #["Season 6", "2018-10-30", "2019-07-11", "Blood Bowl", "The Everlasting Hobstompers"]#,
+    #["Season 7", "2019-07-29", "2019-12-31", "Blood Bowl", None]
 ]
 
 SKILL_TYPES = ["General", "Agility", "Passing", "Strength", "Mutation", "Extraordinary", "Improvement"]
@@ -331,6 +335,7 @@ PLAYER_TYPES = [
     ["Chaos Pact", 1, "Goblin Renegade", 40, 6, 2, 3, 7, ["Animosity", "Dodge", "Right Stuff", "Stunty"], "AM", "GSP"],
     ["Chaos Pact", 1, "Skaven Renegade", 50, 7, 3, 3, 7, ["Animosity"], "GM", "ASP"],
     ["Chaos Pact", 1, "Dark Elf Renegade", 70, 6, 3, 4, 8, ["Animosity"], "GAM", "SP"],
+    ["Chaos Pact", 1, "Orc Renegade", 50, 5, 3, 3, 9, ["Animosity"], "GM", "ASP"],
     ["Chaos Pact", 1, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAPM"],
     ["Chaos Pact", 1, "Ogre", 140, 5, 5, 2, 9, ["Loner", "Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAPM"],
     ["Chaos Pact", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "S", "GAPM"],
@@ -451,7 +456,7 @@ COACHES = {
     "Joe R": {"email": "vanhalfling@gmail.com", "aka": ["Joe Roberts", "Joe \"profgoldfinch\" Roberts"]},
     "James V": {"email": "jdv311@gmail.com", "aka": ["James Valdez"]},
     "David": {"email": "godzfirefly@gmail.com", "aka": ["David J Harshman"]},
-    "Kendal": {"email": "jon.kbowser@gmail.com", "aka": ["Kendal Bowser"]},
+    "Kendal": {"email": "jon.kbowser@gmail.com", "aka": ["Kendal Bowser", "Kendal Jon Bowser"]},
     "Patrick": {"email": "opcubby@gmail.com", "aka": ["Patrick Morissey"]},
     "Aaron M": {"email": "ammckinn90@gmail.com", "aka": ["Aaron Mckinney"]},
     "Flagg": {"email": "eyeofthedragon101@gmail.com", "aka": ["Flagg Thorin"]},
@@ -620,12 +625,15 @@ def getAliases(name, aliases):
 
 if __name__ == '__main__':
     TEAMS = []
+    t = Timer()
+    t1 = Timer()
     if True:
         # Season 1 Rosters
         if True:
             print "Loading Season 1 Rosters..."
-            s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True)
-            print "    Sheet loaded! Now loading teams/players..."
+            s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True, read_only=True)
+            print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+            t.start()
             # sheetNames = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]  # , "T9", "T10"]
             sheetNames = s1.get_sheet_names()[5:13]
             for sheetName in sheetNames:
@@ -696,13 +704,16 @@ if __name__ == '__main__':
                     if not coachFound:
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
+            print "Loaded rosters in %s" % t.elapsed()
 
         # Season 2 Rosters
         if True:
             print
             print "Loading Season 2 Rosters..."
-            s2 = load_workbook("imports/S2 Rosters.xlsx", data_only=True)
-            print "    Sheet loaded! Now loading teams/players..."
+            t.start()
+            s2 = load_workbook("imports/S2 Rosters.xlsx", data_only=True, read_only=True)
+            print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+            t.start()
             sheetNames = s2.get_sheet_names()[4:21]
             for sheetName in sheetNames:
                 rosterSheet = s2[sheetName]
@@ -777,13 +788,16 @@ if __name__ == '__main__':
                     if not coachFound:
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
+            print "Loaded rosters in %s" % t.elapsed()
 
         # Season 3 Rosters
         if True:
             print
             print "Loading Season 3 Rosters..."
-            s3 = load_workbook("imports/S3 Rosters.xlsx", data_only=True)
-            print "    Sheet loaded! Now loading teams/players..."
+            t.start()
+            s3 = load_workbook("imports/S3 Rosters.xlsx", data_only=True, read_only=True)
+            print "    Sheet loaded in %s! Now loading rosters..." % t.elapsed()
+            t.start()
             sheetNames = s3.get_sheet_names()[0:22]
             for sheetName in sheetNames:
                 rosterSheet = s3[sheetName]
@@ -852,13 +866,16 @@ if __name__ == '__main__':
                     if not coachFound:
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
+            print "Loaded rosters in %s" % t.elapsed()
 
         # Season 3.5 Rosters
         if True:
             print
             print "Loading Season 3.5 Rosters..."
-            s3p5 = load_workbook("imports/S3.5 Rosters.xlsx", data_only=True)
-            print "    Sheet loaded! Now loading teams/players..."
+            t.start()
+            s3p5 = load_workbook("imports/S3.5 Rosters.xlsx", data_only=True, read_only=True)
+            print "    Sheet loaded in %s! Now loading rosters..." % t.elapsed()
+            t.start()
             sheetNames = s3p5.get_sheet_names()[:27]
             for sheetName in sheetNames:
                 rosterSheet = s3p5[sheetName]
@@ -935,13 +952,16 @@ if __name__ == '__main__':
                     if not coachFound:
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
+            print "Loaded rosters in %s" % t.elapsed()
 
         # Season 4 Rosters
         if True:
             print
             print "Loading Season 4 Rosters..."
-            s4 = load_workbook("imports/S4 Rosters.xlsx", data_only=True)
-            print "    Sheet loaded! Now loading teams/players..."
+            t.start()
+            s4 = load_workbook("imports/S4 Rosters.xlsx", data_only=True, read_only=True)
+            print "    Sheet loaded in %s! Now loading rosters..." % t.elapsed()
+            t.start()
             sheetNames = s4.get_sheet_names()[:13]
             for sheetName in sheetNames:
                 rosterSheet = s4[sheetName]
@@ -1018,6 +1038,88 @@ if __name__ == '__main__':
                     if not coachFound:
                         print "ERROR: Coach '%s' not found!" % coachName
                         exit()
+            print "Loaded rosters in %s" % t.elapsed()
+ 
+        # Season 5 Rosters
+        if True:
+            print
+            print "Loading Season 5 Rosters..."
+            t.start()
+            s5 = load_workbook("imports/S5 Rosters.xlsx", data_only=True, read_only=True)
+            print "    Sheet loaded in %s! Now loading rosters..." % t.elapsed()
+            t.start()
+            sheetNames = s5.get_sheet_names()[:13]
+            for sheetName in sheetNames:
+                rosterSheet = s5[sheetName]
+                rows = []
+                for row in rosterSheet.rows:
+                    rows.append([cell.value for cell in row])
+
+                teamName = rows[20][8]
+                raceName = rows[23][8]
+                coachName = rows[24][8]
+                teamValue = rows[25][8]
+                treasury = rows[26][8]
+                rerolls = rows[20][19]
+                fanFactor = rows[21][19]
+                assistantCoaches = rows[22][19] if rows[22][19] else 0
+                cheerleaders = rows[23][19] if rows[23][19] else 0
+                apothecary = rows[24][19] if rows[24][19] else 0
+                masterChef = rows[25][19] if rows[25][19] else 0
+                bribes = rows[26][19] if rows[26][19] else 0
+
+                players = []
+                for row in rows[3:19]:
+                    playerName = row[2]
+                    playerPosition = row[3]
+                    ma = row[4]
+                    st = row[5]
+                    ag = row[6]
+                    av = row[7]
+                    skillsTemp = row[8].split(",") if row[8] else []
+                    skills = [skill.strip() for skill in skillsTemp]
+                    injuryNiggling = row[12]
+                    injuryMA = row[13]
+                    injuryST = row[14]
+                    injuryAG = row[15]
+                    injuryAV = row[16]
+                    if injuryNiggling:
+                        skills.append("Niggling")
+                    if injuryMA:
+                        skills.append("-MA")
+                    if injuryST:
+                        skills.append("-ST")
+                    if injuryAG:
+                        skills.append("-AG")
+                    if injuryAV:
+                        skills.append("-AV")
+
+                    if row[11]:
+                        pass
+
+                    status = "MNG" if row[11] else None
+                    completions = row[18]
+                    touchdowns = row[19]
+                    interceptions = row[17]
+                    casualties = row[20]
+                    kills = row[21]
+                    mvps = row[22]
+                    players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
+
+                print "        %s" % teamName
+                TEAMS.append([teamName, coachName, raceName, treasury, rerolls, fanFactor, assistantCoaches, cheerleaders, apothecary, "Season 5", players, teamValue, masterChef, bribes])
+
+                if coachName not in COACHES:
+                    coachFound = False
+                    for coachNameKey, coachInfo in COACHES.iteritems():
+                        if coachName in coachInfo["aka"]:
+                            coachFound = True
+                            break
+                    if not coachFound:
+                        print "ERROR: Coach '%s' not found!" % coachName
+                        exit()
+            print "Loaded rosters in %s" % t.elapsed()
+
 
 
     MATCHES = []
@@ -1025,8 +1127,10 @@ if __name__ == '__main__':
     if True:
         print
         print "Loading Season 2 Matches..."
-        s3 = load_workbook("imports/S2 Matches.xlsx", data_only=True)
-        print "    Sheet loaded! Now loading matches..."
+        t.start()
+        s3 = load_workbook("imports/S2 Matches.xlsx", data_only=True, read_only=True)
+        print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+        t.start()
         sheetNames = s3.get_sheet_names()
         for sheetName in sheetNames:
             print "        %s" % sheetName
@@ -1126,13 +1230,16 @@ if __name__ == '__main__':
                 MATCHES.append(match)
             except Exception as ex:
                 pass
+        print "Loaded matches in %s" % t.elapsed()
 
     # Season 3 Matches
     if True:
         print
         print "Loading Season 3 Matches..."
-        s3 = load_workbook("imports/S3 Matches.xlsx", data_only=True)
-        print "    Sheet loaded! Now loading matches..."
+        t.start()
+        s3 = load_workbook("imports/S3 Matches.xlsx", data_only=True, read_only=True)
+        print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+        t.start()
         sheetNames = s3.get_sheet_names()
         sheetNames.reverse()
         for sheetName in sheetNames:
@@ -1240,13 +1347,16 @@ if __name__ == '__main__':
                 MATCHES.append(match)
             except Exception as ex:
                 pass
+        print "Loaded matches in %s" % t.elapsed()
 
     # Season 3.5 Matches
     if True:
         print
         print "Loading Season 3.5 Matches..."
-        s3p5 = load_workbook("imports/S3.5 Matches.xlsx", data_only=True)
-        print "    Sheet loaded! Now loading matches..."
+        t.start()
+        s3p5 = load_workbook("imports/S3.5 Matches.xlsx", data_only=True, read_only=True)
+        print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+        t.start()
         sheetNames = s3p5.get_sheet_names()
         sheetNames.reverse()
         for sheetName in sheetNames:
@@ -1350,13 +1460,16 @@ if __name__ == '__main__':
                 MATCHES.append(match)
             except Exception as ex:
                 pass
+        print "Loaded matches in %s" % t.elapsed()
 
     # Season 4 Matches
     if True:
         print
         print "Loading Season 4 Matches..."
-        s4 = load_workbook("imports/S4 Matches.xlsx", data_only=True)
-        print "    Sheet loaded! Now loading matches..."
+        t.start()
+        s4 = load_workbook("imports/S4 Matches.xlsx", data_only=True, read_only=True)
+        print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+        t.start()
         sheetNames = s4.get_sheet_names()
         sheetNames.reverse()
         for sheetName in sheetNames:
@@ -1460,7 +1573,123 @@ if __name__ == '__main__':
                 MATCHES.append(match)
             except Exception as ex:
                 pass
+        print "Loaded matches in %s" % t.elapsed()
 
+    # Season 5 Matches
+    if True:
+        print
+        print "Loading Season 5 Matches..."
+        t.start()
+        s5 = load_workbook("imports/S5 Matches.xlsx", data_only=True, read_only=True)
+        print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+        t.start()
+        sheetNames = s5.get_sheet_names()[1:]
+        sheetNames.reverse()
+        for sheetName in sheetNames:
+            print "        %s" % sheetName
+            matchSheet = s5[sheetName]
+            rows = []
+            for row in matchSheet.rows:
+                rows.append([cell.value for cell in row])
+
+            matchDate = rows[1][19]
+            team1 = rows[1][1]
+            team1TV = rows[1][13]
+            team1InducementGP = rows[4][1]
+            team1Gate = rows[8][12]
+            team1Fame = rows[10][14]
+            team1Inducements = [rows[i][1] for i in range(5, 11)]
+            team1TDs = 0
+            team1Cas = 0
+            team1Kills = 0
+            team1Fouls = 0
+            team1Players = []
+            for i in range(16, 32):
+                team1Players.append([rows[i][j] for j in range(2, 15)])
+                team1TDs += rows[i][3] if rows[i][3] else 0
+                team1Cas += rows[i][5] if rows[i][5] else 0
+                team1Kills += rows[i][6] if rows[i][6] else 0
+                team1Fouls += rows[i][7] if rows[i][7] else 0
+
+            team1Winnings = rows[33][1]
+            team1ExpMistakes = rows[33][6] if str(rows[33][6]).isdigit() else 0
+            team1EndFanFactor = rows[33][17] if rows[33][17] else 0
+            team1Purchases = [rows[i][1] for i in range(35, 38)]
+            team1Notes = rows[35][12]
+
+            team2 = rows[1][25]
+            team2TV = rows[1][37]
+            team2InducementGP = rows[4][23]
+            team2Gate = rows[8][34]
+            team2Fame = rows[10][36]
+            team2Inducements = [rows[i][23] for i in range(5, 11)]
+            team2TDs = 0
+            team2Cas = 0
+            team2Kills = 0
+            team2Fouls = 0
+            team2Players = []
+            for i in range(16, 32):
+                team2Players.append([rows[i][j] for j in range(24, 37)])
+                team2TDs += rows[i][24] if rows[i][24] else 0
+                team2Cas += rows[i][26] if rows[i][26] else 0
+                team2Kills += rows[i][27] if rows[i][27] else 0
+                team2Fouls += rows[i][28] if rows[i][28] else 0
+
+            team2Winnings = rows[33][23]
+            team2ExpMistakes = rows[33][28] if str(rows[33][28]).isdigit() else 0
+            team2EndFanFactor = rows[33][39] if rows[33][39] else 0
+            team2Purchases = [rows[i][23] for i in range(35, 38)]
+            team2Notes = rows[35][34]
+
+            try:
+                match = {
+                    "type": "Regular",
+                    "date": matchDate,
+                    "season": "Season 5",
+                    "teams": [
+                        {
+                            "name": team1.strip(),
+                            "tv": team1TV,
+                            "inducementsGP": int(team1InducementGP.replace("gp", "") if type(team1InducementGP) is str else team1InducementGP),
+                            "gate": int(team1Gate),
+                            "fame": int(team1Fame) if team1Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team1Inducements)),
+                            "tds": int(team1TDs),
+                            "cas": int(team1Cas),
+                            "kills": int(team1Kills),
+                            "players": team1Players,
+                            "winnings": int(team1Winnings),
+                            "expMistakes": int(team1ExpMistakes),
+                            "fanFactor": int(team1EndFanFactor),
+                            "purchases": team1Purchases,
+                            "notes": team1Notes
+                        },
+                        {
+                            "name": team2.strip(),
+                            "tv": int(team2TV),
+                            "inducementsGP": int(team2InducementGP.replace("gp", "") if type(team2InducementGP) is str else team2InducementGP),
+                            "gate": int(team2Gate),
+                            "fame": int(team2Fame) if team2Fame else 0,
+                            "inducements": list(filter(lambda x: x is not None, team2Inducements)),
+                            "tds": int(team2TDs),
+                            "cas": int(team2Cas),
+                            "kills": int(team2Kills),
+                            "players": team2Players,
+                            "winnings": int(team2Winnings),
+                            "expMistakes": int(team2ExpMistakes),
+                            "fanFactor": int(team2EndFanFactor),
+                            "purchases": team2Purchases,
+                            "notes": team2Notes
+                        }
+                    ]
+                }
+                MATCHES.append(match)
+            except Exception as ex:
+                pass
+        print "Loaded matches in %s" % t.elapsed()
+
+    print "Loaded spreadsheets in %s. Importing into database..." % t1.elapsed()
+    t.start()
 
     cnx = mysql.connector.connect(user=settings.mysql_username, password=settings.mysql_password, host=settings.mysql_server, database=settings.mysql_db)
     cnx.autocommit = True
@@ -2234,6 +2463,10 @@ if __name__ == '__main__':
             cursor.execute("UPDATE season SET winner_team_id=%s WHERE id=%s", (winnerTeamID, seasonID))
 
     cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "6"))
+
+    print
+    print "Loaded data into database took %s" % t.elapsed()
+    print "Import took %s" % t1.elapsed()
 
     print
     print "Done!"
