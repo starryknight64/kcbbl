@@ -30,6 +30,7 @@ TRUNCATE `player_type_skill_type_normal`;
 TRUNCATE `purchase`;
 TRUNCATE `race`;
 TRUNCATE `season`;
+TRUNCATE `sessions`;
 TRUNCATE `skill`;
 TRUNCATE `skill_type`;
 TRUNCATE `team`;
@@ -128,6 +129,7 @@ SKILLS = [
     ["Loner", "Extraordinary", "Loners, through inexperience, arrogance, animal ferocity or just plain stupidity, do not work well with the rest of the team. As a result, a Loner may use team re-rolls but has to roll a D6 first. On a roll of 4+, he may use the team re-roll as normal. On a roll of 1-3 the original result stands without being re-rolled but the team re-roll is lost (i.e., used)."],
     ["Mighty Blow", "Strength", "Add 1 to any Armour or Injury roll made by a player with this skill when an opponent is Knocked Down by this player during a block. Note that you only modify one of the dice rolls, so if you decide to use Mighty Blow to modify the Armour roll, you may not modify the Injury roll as well. Mighty Blow cannot be used with the Stab or Chainsaw skills."],
     ["Multiple Block", "Strength", "At the start of a Block Action a player who is adjacent to at least two opponents may choose to throw blocks against two of them. Make each block in turn as normal except that each defender's strength is increased by 2. The player cannot follow up either block when using this skill, so Multiple Block can be used instead of Frenzy, but both skills cannot be used together. To have the option to throw the second block the player must still be on his feet after the first block."],
+    ["Monstrous Mouth", "Extraordinary", "A player with a Monstrous Mouth is allowed to re-roll the D6 if they fail a Catch roll. It also allows the player to re-roll the D6 if they drop a hand-off or fail to make an interception. In addition, the Strip Ball skill will not work against a player with a Monstrous Mouth."],   
     ["Nerves of Steel", "Passing", "The player ignores modifiers for enemy tackle zones when he attempts to pass, catch or intercept."],
     ["No Hands", "Extraordinary", "The player is unable to pick up, intercept or carry the ball and will fail any catch roll automatically, either because he literally has no hands or because his hands are full. If he attempts to pick up the ball then it will bounce, and will cause a turnover if it is his team's turn."],
     ["Nurgle's Rot", "Extraordinary", "This player has a horrible infectious disease which spreads when he kills an opponent during a Block, Blitz or Foul Action. Instead of truly dying, the infected opponent becomes a new rookie Rotter. To do so, the opponent must have been removed from the roster during step 2.1 of the Post-game sequence, his Strength cannot exceed 4, and he cannot have the Decay, Regeneration or Stunty skills. The new Rotter can be added to the Nurgle team for free during step 5 of Updating Your Team Roster (see page 29) if the team has an open Roster slot. This new Rotter still counts at full value towards the total value of the Nurgle team."],
@@ -176,48 +178,48 @@ SKILLS = [
 ]
 RACES = [
     ["Amazon", "Long ago, driven by a desire for adventure, the Valkyries of the Norse settlement in Lustria sailed away from their men-folk and founded a colony deep within the estuary of the river Amaxon. Now these ferocious warriors have taken to the Blood Bowl pitch - and Nuffle save those who dare play against them!"],
-    ["Chaos", "Chaos teams are not noted for the subtlety or originality of their game play. A simple drive up the centre of the pitch, maiming and injuring as many opposing players as possible, is about the limit of their game plan. They rarely, if ever, worry about such minor considerations like picking up the ball and scoring touchdowns - not while there are any players left alive on the opposing team, anyway."],
+    ["Chaos Chosen", "Chaos Chosen teams are not noted for the subtlety or originality of their game play. A simple drive up the centre of the pitch, maiming and injuring as many opposing players as possible, is about the limit of their game plan. They rarely, if ever, worry about such minor considerations like picking up the ball and scoring touchdowns - not while there are any players left alive on the opposing team, anyway."],
     ["Chaos Dwarf", "Chaos Dwarfs are the twisted descendants of Dwarf explorers who have been terribly affected by the forces of Chaos, turning them into evil, self-centred creatures. In one way, however, they haven't changed at all - they still love playing Blood Bowl! Chaos Dwarfs are not very numerous and make great use of sneaky Hobgoblin slaves to perform all kinds of tasks, including playing on their Blood Bowl teams."],
     ["Dark Elf", "Evil beyond belief, skilled without doubt, the Dark Elves take to the pitch to show the world their superiority. Dark Elf teams prefer a malevolent and spiteful running game over the passing of their goodly cousins. Backed up by the ruthless Witch Elves and dangerous assassins, a Dark Elf team has all the tools to power through rather than around any opposition line."],
     ["Dwarf", "Dwarfs seem to be ideal Blood Bowl players, being compact, tough, well-armoured and having a stubborn knack of refusing to die! Most successful Dwarf teams work to the principle that if they can take out all the other team's potential scorers, and wear down the rest, then there won't be anybody left to stop them scoring the winning touchdowns!"],
-    ["Elf", "When the NAF collapsed, many Elven teams were left penniless. Those teams that have survived the fallout are not as rich as the High Elf teams nor as well equipped, but they sure know how to play the game. Sporting facemasks and mohawks, they take to the pitch to relive the glory days they once played in."],
+    ["Elven Union", "When the NAF collapsed, many Elven teams were left penniless. Those teams that have survived the fallout are not as rich as the High Elf teams nor as well equipped, but they sure know how to play the game. Sporting facemasks and mohawks, they take to the pitch to relive the glory days they once played in."],
     ["Goblin", "A Goblin team's game plan owes much more to hope than potential. Goblins can make quite good catchers because they are small and agile, but the art of throwing is sadly lost to them, while the chances of their blocking anything larger than a Halfling are remote to say the least. Still, this never seems to bother Goblin players, and occasionally the use of a particularly devious secret weapon will even allow a Goblin team to win a match."],
     ["Halfling", "The technical deficiency of Halfling teams is legendary. They're too short to throw or catch, they run at half pace, and the whole team can spend all afternoon trying to block an Ogre without any chance of success. Most Halfling coaches try to make up for quality with quantity. After all, if you can get half a dozen players in the opposing team's End Zone and, by some miracle, manage to end up with the ball, then there is a small chance that one or two of them won't be jelly by the time you throw the thing."],
     ["High Elf", "The Elven Kingdom sponsored High Elf teams, feature a dangerous passing game and some of the most arrogant players you will find. Rich beyond the dreams of most teams, the High Elves often feature many Princes and noble born Elves on the team and what they cannot beat, they'll buy."],
     ["Human", "Although Human teams do not have the individual strengths or outstanding abilities available to other races, they do not suffer from any outstanding weakness either. This makes Human teams extremely flexible, equally at home running the ball, passing it, or ignoring it and pounding the opposition into the turf instead!"],
-    ["Khemri", "Over 8,000 years ago, the Khemri played the first games of Blood Bowl against the Slann. But, as the Kingdom died off, so did the game until its rediscovery. And as the game returned, it was inevitable that the ancient players and stars of the Khemri would return to the pitch they once played on."],
+    ["Khemri Tomb Kings", "Over 8,000 years ago, the Khemri played the first games of Blood Bowl against the Slann. But, as the Kingdom died off, so did the game until its rediscovery. And as the game returned, it was inevitable that the ancient players and stars of the Khemri would return to the pitch they once played on."],
     ["Lizardman", "The Mage-Priests foretold the game of Blood Bowl thousands of years before it was discovered by the Dwarf Roze-El. So it is no surprise that the Lizardmen play Blood Bowl. Providing an odd blend of dexterity and strength, the Lustrian team can almost last the distance against a power team such as Chaos, while remaining able to pull off the running plays of the Skaven."],
-    ["Necromantic", "The damned and the cursed do not always lurk in the forests or in the graveyards of the Old World. Sometimes they come together, forming a group to hunt those more fortunate of souls. Finding relief in crazed outbursts of terrible violence, these groups do the best they can to ease their suffering - they pop off for a nice game of Blood Bowl."],
+    ["Necromantic Horror", "The damned and the cursed do not always lurk in the forests or in the graveyards of the Old World. Sometimes they come together, forming a group to hunt those more fortunate of souls. Finding relief in crazed outbursts of terrible violence, these groups do the best they can to ease their suffering - they pop off for a nice game of Blood Bowl."],
     ["Norse", "Norse teams have a well deserved reputation for ferocity both on and off the playing pitch. The Norse that takes up Blood Bowl is a truly unedifying specimen, interested only in beer, women and song off the playing pitch, and beer, women and bloody carnage while on it!"],
     ["Nurgle", "Nurgle teams are a form of Chaos team whose players worship the god Nurgle. Nurgle is the Chaos god of corruption and disease, and he rewards his players by granting them a rather unpleasant disease known as Nurgle's Rot. The fact that Nurgle teams smell awful is assumed rather than proven. True, they are all made up of semi decomposed flesh surrounded by swarms of flies, but by the time anyone gets close enough to get a really accurate whiff, he has inevitably caught one of Nurgle's nasty diseases, and he usually dies before he can suggest a new personal hygiene regime."],
     ["Ogre", "Ogre teams have existed since the forming of the NAF and have even had some success such as winning the XV Blood Bowl. However, as any right-minded person will tell you, having more than one Ogre in the same place at the same time is a disaster in the making. The key to an Ogre team is the Snotlings. If they are close enough to jab an Ogre in the leg to remind him that they are playing in a match then you may have the makings of a team."],
     ["Orc", "Orcs have been playing Blood Bowl since the game was invented, and Orc teams such as the Gouged Eye and Severed Heads are amongst the best in the league. Orc teams are tough and hard-hitting, grinding down the opposition's line to create gaps for their excellent Orc Blitzers to exploit."],
     ["Skaven", "They may not be all that strong, they certainly aren't tough, but boy oh boy are Skaven fast! Many an opponent has been left in the starting blocks as fast-moving Skaven players scamper through a gap in the line and run in for a lightning fast touchdown."],
-    ["Undead", "In the Old World the dead do not rest easy. Vampires lurk in haunted castles, Necromancers seek to escape death by searching for forbidden knowledge, the Liche-lords rule over legions of corpses, and on the Blood Bowl field players who died long ago return to the scenes of their former glory and play Blood Bowl once again..."],
+    ["Shambling Undead", "In the Old World the dead do not rest easy. Vampires lurk in haunted castles, Necromancers seek to escape death by searching for forbidden knowledge, the Liche-lords rule over legions of corpses, and on the Blood Bowl field players who died long ago return to the scenes of their former glory and play Blood Bowl once again..."],
     ["Vampire", "Although Vampire teams include a number of extremely capable players, they are let down by the unreliability of the Vampires. While they should be concentrating on the game, their attention often wanders to their hunger and before you know it they are off for a quick bite!"],
     ["Wood Elf", "For Wood Elves the Long pass is everything, even more so than their High Elf cousins, and all of their effort goes into being an expert at throwing or receiving. No Wood Elf worth his salt is going to be weighed down by extra Armour and be forced to lurk about, attempting to knock opposing players over. Instead they rely on their natural athletic ability to keep them out of trouble, which is normally enough - it takes a very agile or lucky opponent to lay a hand on a Wood Elf!"],
     ["Chaos Pact", "Chaos Pact teams are a mix of evil and chaotic races. The Marauders while enthusiastic have to be coached to fill the different needs of the team while other races provide the muscle and fineness to support the Marauders. However due to the arrogance, stupidity, or animalistic nature of the team members, it is rare to see a well organized and effective Chaos Pact team. The Chaos All-Stars are the best example of how great this team can be with the right coach."],
     ["Slann", "The Slann team is an ancient race of space travellers stranded on our planets many ages ago. After realizing that rescue was never coming they settled down and began ordering the Lizardmen around as their leaders. While most Slann prefer to become fat and lazy lording over the Lizardmen, a few of younger and more energetic members enjoy travelling the realm and playing Blood Bowl. While the Slann have no passing game to speak of, their ability to leap, dive, and intercept are second to none."],
-    ["Underworld", "On occasion the Skaven and Goblins living below all the hated races walking above in the sun team together to form Blood Bowl teams. The Underworld Creepers are the best known and most successful of these Underworld teams to date. However these teams often have very poor records as they spend most of their time infighting and blaming each other for the errors for each play. The one feature of this team that makes many fans attend is that the players sleep and bathe in Warpstone (and some eat it). While this kills off most of the potential players before they ever join a team, the ones that do survive often develop fascinating mutations."],
+    ["Underworld Denizens", "On occasion the Skaven and Goblins living below all the hated races walking above in the sun team together to form Blood Bowl teams. The Underworld Creepers are the best known and most successful of these Underworld teams to date. However these teams often have very poor records as they spend most of their time infighting and blaming each other for the errors for each play. The one feature of this team that makes many fans attend is that the players sleep and bathe in Warpstone (and some eat it). While this kills off most of the potential players before they ever join a team, the ones that do survive often develop fascinating mutations."],
     ["Bretonnian", "In the fair land of Bretonnia arrogant Bretonnian nobles and their most trusted yeomen are questing for an alternative grail - the coveted Bloodweiser trophy. All too convinced of their own skill, the young knights fill out their team with lineman levy, drafted from the many local and remarkably incompetent all-peasant teams."],
     ["Daemons of Khorne", "Blood for the Blood God! This is the chant of the frenzied fans of the Khorne team demanding blood for Khorne and the players are happy to give it to them often by launching opponents off the pitch for sacrificial mayhem. Uncontrollable rage turns the team into virtually unstoppable blitzers making the sidelines very dangerous. The Lord of Rage blesses the team with his Daemons along with the most feared raving blitzer monstrosity to walk into Blood Bowl: the Bloodthirster. Khorne desires, nay expects, the field and a victory to be his, and bloody..."],
     ["Simyin", "The Simyin handle the ball well with all the Extra Arms. The Silverback and Gorillas break up opposing formations with mass-Grab, while the Chimpanzees make excellent ball-hunters. Bonobos are versatile and the Orangutan can develop into a powerful thrower."]
 ]
 
 PLAYER_TYPES = [
-    ["Amazon", 16, "Linewoman", 50, 6, 3, 3, 7, ["Dodge"], "G", "ASP"],
-    ["Amazon", 2, "Thrower", 70, 6, 3, 3, 7, ["Dodge", "Pass"], "GP", "AS"],
-    ["Amazon", 2, "Catcher", 70, 6, 3, 3, 7, ["Dodge", "Catch"], "GA", "SP"],
-    ["Amazon", 4, "Blitzer", 90, 6, 3, 3, 7, ["Dodge", "Block"], "GS", "AP"],
+    ["Amazon", 16, "Tribal Linewoman", 50, 6, 3, 3, 7, ["Dodge"], "G", "ASP"],
+    ["Amazon", 2, "Eagle Warrior Thrower", 70, 6, 3, 3, 7, ["Dodge", "Pass"], "GP", "AS"],
+    ["Amazon", 2, "Piranha Warrior Catcher", 70, 6, 3, 3, 7, ["Dodge", "Catch"], "GA", "SP"],
+    ["Amazon", 4, "Koka Kalim Blitzer", 90, 6, 3, 3, 7, ["Dodge", "Block"], "GS", "AP"],
 
-    ["Chaos", 16, "Beastman", 60, 6, 3, 3, 8, ["Horns"], "GSM", "AP"],
-    ["Chaos", 4, "Chaos Warrior", 100, 5, 4, 3, 9, [], "GSM", "AP"],
-    ["Chaos", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "SM", "GAP"],
+    ["Chaos Chosen", 16, "Beastman", 60, 6, 3, 3, 8, ["Horns"], "GSM", "AP"],
+    ["Chaos Chosen", 4, "Chaos Warrior", 100, 5, 4, 3, 9, [], "GSM", "AP"],
+    ["Chaos Chosen", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "SM", "GAP"],
 
     ["Chaos Dwarf", 16, "Hobgoblin", 40, 6, 3, 3, 7, [], "G", "ASP"],
-    ["Chaos Dwarf", 6, "Blocker", 70, 4, 3, 2, 9, ["Block", "Tackle", "Thick Skull"], "GS", "APM"],
+    ["Chaos Dwarf", 6, "Chaos Dwarf", 70, 4, 3, 2, 9, ["Block", "Tackle", "Thick Skull"], "GS", "APM"],
     ["Chaos Dwarf", 2, "Bull Centaur", 130, 6, 4, 2, 9, ["Sprint", "Sure Feet", "Thick Skull"], "GS", "AP"],
-    ["Chaos Dwarf", 1, "Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "S", "GAPM"],
+    ["Chaos Dwarf", 1, "Enslaved Minotaur", 150, 5, 5, 2, 8, ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull", "Wild Animal"], "S", "GAPM"],
 
     ["Dark Elf", 16, "Lineman", 70, 6, 3, 4, 8, [], "GA", "SP"],
     ["Dark Elf", 2, "Runner", 80, 7, 3, 4, 7, ["Dump-off"], "GAP", "S"],
@@ -231,10 +233,10 @@ PLAYER_TYPES = [
     ["Dwarf", 2, "Troll Slayer", 90, 5, 3, 2, 8, ["Block", "Dauntless", "Frenzy", "Thick Skull"], "GS", "AP"],
     ["Dwarf", 1, "Deathroller", 160, 4, 7, 1, 10, ["Loner", "Break Tackle", "Dirty Player", "Juggernaut", "Mighty Blow", "No Hands", "Secret Weapon", "Stand Firm"], "S", "GAP"],
 
-    ["Elf", 16, "Lineman", 60, 6, 3, 4, 7, [], "GA", "SP"],
-    ["Elf", 2, "Thrower", 70, 6, 3, 4, 7, ["Pass"], "GAP", "S"],
-    ["Elf", 4, "Catcher", 100, 6, 3, 4, 7, ["Catch", "Nerves of Steel"], "GA", "SP"],
-    ["Elf", 2, "Blitzer", 110, 7, 3, 4, 8, ["Block", "Side Step"], "GA", "SP"],
+    ["Elven Union", 16, "Lineman", 60, 6, 3, 4, 7, [], "GA", "SP"],
+    ["Elven Union", 2, "Thrower", 70, 6, 3, 4, 7, ["Pass"], "GAP", "S"],
+    ["Elven Union", 4, "Catcher", 100, 6, 3, 4, 7, ["Catch", "Nerves of Steel"], "GA", "SP"],
+    ["Elven Union", 2, "Blitzer", 110, 7, 3, 4, 8, ["Block", "Side Step"], "GA", "SP"],
 
     ["Goblin", 16, "Goblin", 40, 6, 2, 3, 7, ["Dodge", "Right Stuff", "Stunty"], "A", "GSP"],
     ["Goblin", 1, "Doom Diver", 60, 6, 2, 3, 7, ["Right Stuff", "Stunty", "Swoop"], "A", "GSP"],
@@ -246,6 +248,8 @@ PLAYER_TYPES = [
     ["Goblin", 2, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAP"],
 
     ["Halfling", 16, "Hopeful", 30, 5, 2, 3, 6, ["Dodge", "Right Stuff", "Stunty"], "A", "GSP"],
+    ["Halfling", 2, "Catcher", 50, 5, 2, 3, 6, ["Catch", "Dodge", "Right Stuff", "Sprint", "Stunty"], "A", "GSP"],
+    ["Halfling", 2, "Hefty", 50, 5, 2, 3, 7, ["Dodge", "Fend", "Stunty"], "AP", "GS"],
     ["Halfling", 2, "Treeman", 120, 2, 6, 1, 10, ["Mighty Blow", "Stand Firm", "Strong Arm", "Take Root", "Thick Skull", "Throw Team-Mate", "Timmm-ber!"], "S", "GAP"],
 
     ["High Elf", 16, "Lineman", 70, 6, 3, 4, 8, [], "GA", "SP"],
@@ -259,40 +263,40 @@ PLAYER_TYPES = [
     ["Human", 4, "Blitzer", 90, 7, 3, 3, 8, ["Block"], "GS", "AP"],
     ["Human", 1, "Ogre", 140, 5, 5, 2, 9, ["Loner", "Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAP"],
 
-    ["Khemri", 16, "Skeleton", 40, 5, 3, 2, 7, ["Regeneration", "Thick Skull"], "G", "ASP"],
-    ["Khemri", 2, "Thro-Ra", 70, 6, 3, 2, 7, ["Pass", "Regeneration", "Sure Hands"], "GP", "AS"],
-    ["Khemri", 2, "Blitz-Ra", 90, 6, 3, 2, 8, ["Block", "Regeneration"], "GS", "AP"],
-    ["Khemri", 4, "Tomb Guardian", 100, 4, 5, 1, 9, ["Decay", "Regeneration"], "S", "GAP"],
+    ["Khemri Tomb Kings", 16, "Skeleton", 40, 5, 3, 2, 7, ["Regeneration", "Thick Skull"], "G", "ASP"],
+    ["Khemri Tomb Kings", 2, "Thro-Ra", 70, 6, 3, 2, 7, ["Pass", "Regeneration", "Sure Hands"], "GP", "AS"],
+    ["Khemri Tomb Kings", 2, "Blitz-Ra", 90, 6, 3, 2, 8, ["Block", "Regeneration"], "GS", "AP"],
+    ["Khemri Tomb Kings", 4, "Tomb Guardian", 100, 4, 5, 1, 9, ["Decay", "Regeneration"], "S", "GAP"],
 
     ["Lizardman", 16, "Skink", 60, 8, 2, 3, 7, ["Dodge", "Stunty"], "A", "GSP"],
     ["Lizardman", 6, "Saurus", 80, 6, 4, 1, 9, [], "GS", "AP"],
     ["Lizardman", 1, "Kroxigor", 140, 6, 5, 1, 9, ["Loner", "Bone-head", "Mighty Blow", "Prehensile Tail", "Thick Skull"], "S", "GAP"],
 
-    ["Necromantic", 16, "Zombie", 40, 4, 3, 2, 8, ["Regeneration"], "G", "ASP"],
-    ["Necromantic", 2, "Ghoul", 70, 7, 3, 3, 7, ["Dodge"], "GA", "SP"],
-    ["Necromantic", 2, "Wight", 90, 6, 3, 3, 8, ["Block", "Regeneration"], "GS", "AP"],
-    ["Necromantic", 2, "Flesh Golem", 110, 4, 4, 2, 9, ["Regeneration", "Stand Firm", "Thick Skull"], "GS", "AP"],
-    ["Necromantic", 2, "Werewolf", 120, 8, 3, 3, 8, ["Claws", "Frenzy", "Regeneration"], "GA", "SP"],
+    ["Necromantic Horror", 16, "Zombie", 40, 4, 3, 2, 8, ["Regeneration"], "G", "ASP"],
+    ["Necromantic Horror", 2, "Ghoul Runner", 70, 7, 3, 3, 7, ["Dodge"], "GA", "SP"],
+    ["Necromantic Horror", 2, "Wight Blitzer", 90, 6, 3, 3, 8, ["Block", "Regeneration"], "GS", "AP"],
+    ["Necromantic Horror", 2, "Flesh Golem", 110, 4, 4, 2, 9, ["Regeneration", "Stand Firm", "Thick Skull"], "GS", "AP"],
+    ["Necromantic Horror", 2, "Werewolf", 120, 8, 3, 3, 8, ["Claws", "Frenzy", "Regeneration"], "GA", "SP"],
 
     ["Norse", 16, "Lineman", 50, 6, 3, 3, 7, ["Block"], "G", "ASP"],
     ["Norse", 2, "Thrower", 70, 6, 3, 3, 7, ["Block", "Pass"], "GP", "AS"],
     ["Norse", 2, "Catcher", 90, 7, 3, 3, 7, ["Block", "Dauntless"], "GA", "SP"],
-    ["Norse", 2, "Blitzer", 90, 6, 3, 3, 7, ["Block", "Frenzy", "Jump Up"], "GS", "AP"],
-    ["Norse", 2, "Werewolf", 110, 6, 4, 2, 8, ["Frenzy"], "GS", "AP"],
+    ["Norse", 2, "Berserker", 90, 6, 3, 3, 7, ["Block", "Frenzy", "Jump Up"], "GS", "AP"],
+    ["Norse", 2, "Ulfwerenar", 110, 6, 4, 2, 8, ["Frenzy"], "GS", "AP"],
     ["Norse", 1, "Yhetee", 140, 5, 5, 1, 8, ["Loner", "Claws", "Disturbing Presence", "Frenzy", "Wild Animal"], "S", "GAP"],
 
     ["Nurgle", 16, "Rotter", 40, 5, 3, 3, 8, ["Decay", "Nurgle's Rot"], "GM", "ASP"],
     ["Nurgle", 4, "Pestigor", 80, 6, 3, 3, 8, ["Horns", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
-    ["Nurgle", 4, "Warrior", 110, 4, 4, 2, 9, ["Disturbing Presence", "Foul Appearance", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
-    ["Nurgle", 1, "Beast", 140, 4, 5, 1, 9, ["Loner", "Disturbing Presence", "Foul Appearance", "Mighty Blow", "Nurgle's Rot", "Really Stupid", "Regeneration", "Tentacles"], "S", "GAPM"],
+    ["Nurgle", 4, "Bloater", 110, 4, 4, 2, 9, ["Disturbing Presence", "Foul Appearance", "Nurgle's Rot", "Regeneration"], "GSM", "AP"],
+    ["Nurgle", 1, "Rotspawn", 140, 4, 5, 1, 9, ["Loner", "Disturbing Presence", "Foul Appearance", "Mighty Blow", "Nurgle's Rot", "Really Stupid", "Regeneration", "Tentacles"], "S", "GAPM"],
 
-    ["Ogre", 16, "Snotling", 20, 5, 1, 3, 5, ["Dodge", "Right Stuff", "Side Step", "Stunty", "Titchy"], "A", "GSP"],
+    ["Ogre", 16, "Runt", 20, 5, 1, 3, 5, ["Dodge", "Right Stuff", "Side Step", "Stunty", "Titchy"], "A", "GSP"],
     ["Ogre", 6, "Ogre", 140, 5, 5, 2, 9, ["Bone-head", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], "S", "GAP"],
 
     ["Orc", 16, "Lineman", 50, 5, 3, 3, 9, [], "G", "ASP"],
     ["Orc", 4, "Goblin", 40, 6, 2, 3, 7, ["Right Stuff", "Dodge", "Stunty"], "A", "GSP"],
     ["Orc", 2, "Thrower", 70, 5, 3, 3, 8, ["Sure Hands", "Pass"], "GP", "AS"],
-    ["Orc", 4, "Black Orc Blocker", 80, 4, 4, 2, 9, [], "GS", "AP"],
+    ["Orc", 4, "Black Orc", 80, 4, 4, 2, 9, [], "GS", "AP"],
     ["Orc", 4, "Blitzer", 80, 6, 3, 3, 9, ["Block"], "GS", "AP"],
     ["Orc", 1, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "S", "GAP"],
 
@@ -302,11 +306,11 @@ PLAYER_TYPES = [
     ["Skaven", 2, "Blitzer", 90, 4, 4, 2, 9, ["Block"], "GS", "APM"],
     ["Skaven", 1, "Rat Ogre", 150, 6, 3, 3, 9, ["Loner", "Frenzy", "Mighty Blow", "Prehensile Tail", "Wild Animal"], "S", "GAPM"],
 
-    ["Undead", 16, "Skeleton", 40, 5, 3, 2, 7, ["Regeneration", "Thick Skull"], "G", "ASP"],
-    ["Undead", 16, "Zombie", 40, 4, 3, 2, 8, ["Regeneration"], "G", "ASP"],
-    ["Undead", 4, "Ghoul", 70, 7, 3, 3, 7, ["Dodge"], "GA", "SP"],
-    ["Undead", 2, "Wight", 90, 6, 3, 3, 8, ["Block", "Regeneration"], "GS", "AP"],
-    ["Undead", 2, "Mummy", 120, 3, 5, 1, 9, ["Mighty Blow", "Regeneration"], "S", "GAP"],
+    ["Shambling Undead", 16, "Skeleton", 40, 5, 3, 2, 7, ["Regeneration", "Thick Skull"], "G", "ASP"],
+    ["Shambling Undead", 16, "Zombie", 40, 4, 3, 2, 8, ["Regeneration"], "G", "ASP"],
+    ["Shambling Undead", 4, "Ghoul Runner", 70, 7, 3, 3, 7, ["Dodge"], "GA", "SP"],
+    ["Shambling Undead", 2, "Wight Blitzer", 90, 6, 3, 3, 8, ["Block", "Regeneration"], "GS", "AP"],
+    ["Shambling Undead", 2, "Mummy", 120, 3, 5, 1, 9, ["Mighty Blow", "Regeneration"], "S", "GAP"],
 
     ["Vampire", 16, "Thrall", 40, 6, 3, 3, 7, [], "G", "ASP"],
     ["Vampire", 6, "Vampire", 110, 6, 4, 4, 8, ["Blood Lust", "Hypnotic Gaze", "Regeneration"], "GAS", "P"],
@@ -346,38 +350,54 @@ PLAYER_TYPES = [
     ["Slann", 4, "Blitzer", 110, 7, 3, 3, 8, ["Diving Tackle", "Jump Up", "Leap", "Very Long Legs"], "GAS", "P"],
     ["Slann", 1, "Kroxigor", 140, 6, 5, 1, 9, ["Loner", "Bone-head", "Mighty Blow", "Prehensile Tail", "Thick Skull"], "S", "GAP"],
 
-    ["Underworld", 12, "Goblin", 40, 6, 2, 3, 7, ["Right Stuff", "Dodge", "Stunty"], "AM", "GSP"],
-    ["Underworld", 2, "Skaven Lineman", 50, 7, 3, 3, 7, ["Animosity"], "GM", "ASP"],
-    ["Underworld", 2, "Skaven Thrower", 70, 7, 3, 3, 7, ["Animosity", "Pass", "Sure Hands"], "GPM", "AS"],
-    ["Underworld", 2, "Skaven Blitzer", 90, 7, 3, 3, 8, ["Animosity", "Block"], "GSM", "AP"],
-    ["Underworld", 1, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
+    ["Underworld Denizens", 12, "Goblin", 40, 6, 2, 3, 7, ["Right Stuff", "Dodge", "Stunty"], "AM", "GSP"],
+    ["Underworld Denizens", 2, "Skaven Lineman", 50, 7, 3, 3, 7, ["Animosity"], "GM", "ASP"],
+    ["Underworld Denizens", 2, "Skaven Thrower", 70, 7, 3, 3, 7, ["Animosity", "Pass", "Sure Hands"], "GPM", "AS"],
+    ["Underworld Denizens", 2, "Skaven Blitzer", 90, 7, 3, 3, 8, ["Animosity", "Block"], "GSM", "AP"],
+    ["Underworld Denizens", 1, "Troll", 110, 4, 5, 1, 9, ["Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
 ]
 STAR_PLAYERS = [
+    ["\"Rotten\" Rick Bupkeis", ["Necromantic Horror", "Shambling Undead"], ["Loner", "Dirty Player", "Regeneration", "Sneaky Git"], 110, 4, 3, 2, 8, ""],
+    ["Asperon Thorn", ["Dark Elf", "Elven Union", "High Elf"], ["Loner", "Hail Mary Pass", "Kick-Off Return", "Pass", "Safe Throw", "Sure Hands"], 160, 6, 3, 4, 8, ""],
     ["Barik Farblast", ["Dwarf"], ["Loner", "Hail Mary Pass", "Pass", "Secret Weapon", "Strong Arm", "Sure Hands", "Thick Skull"], 60, 6, 3, 3, 8, ""],
     ["Bertha Bigfist", ["Amazon", "Halfling", "Ogre"], ["Loner", "Bone-head", "Break Tackle", "Dodge", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], 290, 6, 5, 2, 9, ""],
+    ["Big Jobo Hairyfoot", ["Halfling", "Ogre"], ["Loner", "Dirty Player", "Stand Firm", "Stunty", "Tackle", "Wrestle"], 120, 4, 3, 2, 8, ""],
+    ["Bilerot Vomitflesh", ["Chaos Chosen", "Nurgle"], ["Loner", "Dirty Player", "Disturbing Presence", "Foul Appearance"], 180, 4, 5, 2, 9, ""],
     ["Bo Gallante", ["High Elf"], ["Loner", "Dodge", "Side Step", "Sprint", "Sure Feet"], 160, 8, 3, 4, 7, ""],
     ["Bomber Dribblesnot", ["Goblin", "Ogre", "Orc", "Chaos Pact", "Underworld"], ["Loner", "Accurate", "Bombardier", "Dodge", "Right Stuff", "Secret Weapon", "Stunty"], 60, 6, 2, 3, 7, ""],
-    ["Boomer Eziasson", ["Dwarf", "Norse"], ["Loner", "Accurate", "Block", "Bombardier", "Secret Weapon", "Thick Skull"], 60, 4, 3, 2, 9, ""],
+    ["Boomer Eziasson", ["Dwarf", "Norse"], ["Loner", "Accurate", "Block", "Bombardier", "Secret Weapon", "Thick Skull"], 60, 6, 2, 3, 9, ""],
     ["Brick Far'th", ["Chaos", "Nurgle", "Ogre"], ["Loner", "Bone-head", "Mighty Blow", "Nerves of Steel", "Strong Arm", "Thick Skull", "Throw Team-Mate"], 290, 5, 5, 2, 9, "Note: When inducing this player, you must have 2 slots open on your roster so that you can also induce Grotty. This counts only as one Star Player inducement."],
+    ["Bryce \"The Slice\" Cambuel", ["Khemri Tomb Kings", "Shambling Undead"], ["Loner", "Chainsaw", "Regeneration", "Secret Weapon", "Stand Firm", "Thick Skull"], 130, 5, 3, 2, 8, ""],
+    ["Bulla Shardhorn", ["Nurgle"], ["Loner", "Block", "Extra Arms", "Foul Appearance", "Horns", "Nurgle's Rot", "Regeneration", "Stab", "Two Heads"], 230, 6, 3, 3, 8, ""],
+    ["Captain Colander", ["Halfling"], ["Loner", "Catch", "Disturbing Presence", "Dodge", "Fend", "Jump Up", "Regeneration", "Right Stuff", "Side Step", "Stunty"], 100, 6, 2, 3, 7, ""],
+    ["Cindy Piewhistle", ["Halfling"], ["Loner", "Accurate", "Bombardier", "Dodge", "Secret Weapon", "Stunty"], 50, 5, 2, 3, 6, ""],
     ["Count Luthor Von Drakenborg", ["Necromantic", "Undead", "Vampire"], ["Loner", "Block", "Hypnotic Gaze", "Regeneration", "Side Step"], 390, 6, 5, 4, 9, ""],
     ["Crazy Igor", ["Vampire", "Chaos Pact"], ["Loner", "Dauntless", "Regeneration", "Thick Skull"], 120, 6, 3, 3, 8, "Note: Crazy Igor can be bitten by a Vampire on your team as if he was a Thrall."],
-    ["Deeproot Strongbranch", ["Halfling"], ["Loner", "Block", "Mighty Blow", "Stand Firm", "Strong Arm", "Thick Skull", "Throw Team-Mate"], 300, 2, 7, 1, 10, ""],
+    ["Curnoth Darkwold", ["Wood Elf"], ["Loner", "Dodge", "Frenzy", "Jump Up", "Leap", "Wrestle"], 240, 7, 3, 4, 7, ""],
+    ["Deeproot Strongbranch", ["Halfling"], ["Loner", "Block", "Mighty Blow", "Stand Firm", "Strong Arm", "Thick Skull", "Throw Team-Mate", "Timmm-ber!"], 300, 2, 7, 1, 10, ""],
     ["Dolfar Longstride", ["Elf", "High Elf", "Wood Elf", "Bretonnian"], ["Loner", "Diving Catch", "Hail Mary Pass", "Kick", "Kick-Off Return", "Pass Block"], 150, 7, 3, 4, 7, ""],
     ["Eldril Sidewinder", ["Dark Elf", "Elf", "High Elf", "Wood Elf"], ["Loner", "Catch", "Dodge", "Hypnotic Gaze", "Nerves of Steel", "Pass Block"], 200, 8, 3, 4, 7, ""],
+    ["Elijah Doom", ["Dark Elf", "Elven Union"], ["Loner", "Fend", "Guard", "Stand Firm", "Wrestle"], 190, 6, 3, 4, 9, ""],
     ["Fezglitch", ["Skaven", "Underworld"], ["Loner", "Ball & Chain", "Disturbing Presence", "Foul Appearance", "No Hands", "Secret Weapon"], 100, 4, 7, 3, 7, ""],
     ["Flint Churnblade", ["Dwarf"], ["Loner", "Block", "Chainsaw", "Secret Weapon", "Thick Skull"], 130, 5, 3, 2, 8, ""],
+    ["Frank N Stein", ["Human", "Necromantic Horror", "Shambling Undead"], ["Loner", "Break Tackle", "Mighty Blow", "Regeneration", "Stand Firm", "Thick Skull"], 270, 4, 5, 1, 9, ""],
     ["Fungus the Loon", ["Goblin"], ["Loner", "Ball & Chain", "Mighty Blow", "No Hands", "Secret Weapon", "Stunty"], 80, 4, 7, 3, 7, ""],
     ["Furious George", ["Simyin"], ["Loner", "Catch", "Dodge", "Extra Arms", "Pass Block", "Strip Ball", "Wrestle"], 170, 7, 3, 3, 7, ""],
+    ["G'Ral Blodschuker", ["Necromantic Horror", "Shambling Undead", "Vampire"], ["Loner", "Catch", "Dodge", "Sure Feet", "Wrestle"], 160, 7, 3, 3, 7, ""],
     ["Glart Smashrip Jr.", ["Skaven", "Underworld"], ["Loner", "Block", "Claws", "Juggernaut"], 210, 7, 4, 3, 8, ""],
-    ["Glart Smashrip Sr.", ["Skaven"], ["Loner", "Block", "Claws", "Grab", "Juggernaut", "Sure Feet"], 190, 5, 4, 2, 8, ""],
+    ["Glart Smashrip Sr.", ["Skaven", "Underworld"], ["Loner", "Block", "Claws", "Grab", "Juggernaut", "Stand Firm"], 190, 5, 4, 2, 8, ""],
+    ["Gloriel Summerbloom", ["Wood Elf"], ["Loner", "Accurate", "Dodge", "Pass", "Side Step", "Sure Hands"], 160, 7, 2, 4, 7, ""],
+    ["Gobbler Grimlich", ["Chaos Chosen", "Chaos Pact", "Underworld Denizens"], ["Loner", "Big Hand", "Disturbing Presence", "Leap", "Monstrous Mouth", "Regeneration", "Tentacles", "Very Long Legs"], 230, 5, 4, 2, 9, ""],
     ["Grashnak Blackhoof", ["Chaos", "Chaos Dwarf", "Nurgle", "Daemons of Khorne"], ["Loner", "Frenzy", "Horns", "Mighty Blow", "Thick Skull"], 310, 6, 6, 2, 8, ""],
+    ["Gretchen Wachter", ["Necromantic Horror", "Shambling Undead", "Vampire"], ["Loner", "Disturbing Presence", "Dodge", "Foul Appearance", "Jump Up", "No Hands", "Regeneration", "Shadowing", "Sidestep"], 280, 7, 3, 4, 8, ""],
     ["Griff Oberwald", ["Human", "Bretonnian"], ["Loner", "Block", "Dodge", "Fend", "Sprint", "Sure Feet"], 320, 7, 4, 4, 8, ""],
     ["Grim Ironjaw", ["Dwarf"], ["Loner", "Block", "Dauntless", "Frenzy", "Multiple Block", "Thick Skull"], 220, 5, 4, 3, 8, ""],
     ["Grotty", ["Chaos", "Nurgle", "Ogre"], ["Loner", "Dodge", "Right Stuff", "Stunty"], 0, 6, 2, 4, 7, "Note: When inducing this player, you must have 2 slots open on your roster so that you can also induce Brick Far'th. This counts only as one Star Player inducement."],
+    ["Guffle Pusmaw", ["Chaos Chosen", "Chaos Pact", "Nurgle"], ["Loner", "Foul Appearance", "Monstrous Mouth", "Nurgle's Rot"], 210000, 5, 3, 4, 9, ""],
     ["Hack Enslash", ["Khemri", "Necromantic", "Undead"], ["Loner", "Chainsaw", "Regeneration", "Secret Weapon", "Side Step"], 120, 6, 3, 2, 7, ""],
     ["Hakflem Skuttlespike", ["Skaven"], ["Loner", "Dodge", "Extra Arms", "Prehensile Tail", "Two Heads"], 200, 9, 3, 4, 7, ""],
     ["Headsplitter", ["Skaven"], ["Loner", "Frenzy", "Mighty Blow", "Prehensile Tail"], 340, 6, 6, 3, 8, ""],
-    ["Helmut Wulf", ["Amazon", "Human", "Lizardman", "Norse", "Vampire", "Slann"], ["Loner", "Chainsaw", "Secret Weapon", "Stand Firm"], 110, 6, 3, 3, 8, ""],
+    ["Helmut Wulf", ["Amazon", "Chaos Pact", "Human", "Lizardman", "Norse", "Vampire", "Slann"], ["Loner", "Chainsaw", "Secret Weapon", "Stand Firm"], 110, 6, 3, 3, 8, ""],
     ["Hemlock", ["Lizardman", "Slann"], ["Loner", "Block", "Dodge", "Side Step", "Jump Up", "Stab", "Stunty"], 170, 8, 2, 3, 7, ""],
     ["Horkon Heartripper", ["Dark Elf"], ["Loner", "Dodge", "Leap", "Multiple Block", "Shadowing", "Stab"], 210, 7, 3, 4, 7, ""],
     ["Hthark the Unstoppable", ["Chaos Dwarf"], ["Loner", "Block", "Break Tackle", "Juggernaut", "Sprint", "Sure Feet", "Thick Skull"], 330, 6, 5, 2, 9, ""],
@@ -385,18 +405,25 @@ STAR_PLAYERS = [
     ["Humerus Carpal", ["Khemri"], ["Loner", "Catch", "Dodge", "Regeneration", "Nerves of Steel"], 130, 7, 2, 3, 7, ""],
     ["Icepelt Hammerblow", ["Norse"], ["Loner", "Claws", "Disturbing Presence", "Frenzy", "Regeneration", "Thick Skull"], 330, 5, 6, 1, 8, ""],
     ["Ithaca Benoin", ["Dark Elf", "Khemri"], ["Loner", "Accurate", "Dump-off", "Nerves of Steel", "Pass", "Regeneration", "Sure Hands"], 220, 7, 3, 3, 7, ""],
-    ["J Ealice", ["Necromantic", "Undead", "Vampire"], ["Loner", "Catch", "Diving Catch", "Dodge", "Sprint"], 180, 8, 3, 3, 7, ""],
-    ["Jordell Fleshbreeze", ["Elf", "Wood Elf"], ["Loner", "Block", "Diving Catch", "Dodge", "Leap", "Side Step"], 260, 8, 3, 5, 7, ""],
+    ["Ivan \"The Animal\" Deathshroud", ["Khemri Tomb Kings", "Necromantic Horror", "Shambling Undead"], ["Loner", "Block", "Disturbing Presence", "Juggernaut", "Regeneration", "Strip Ball", "Tackle"], 230, 6, 4, 2, 8, ""],
+    ["J Earlice", ["Necromantic", "Undead", "Vampire"], ["Loner", "Catch", "Diving Catch", "Dodge", "Sprint"], 180, 8, 3, 3, 7, ""],
+    ["Jeremiah Kool", ["Dark Elf"], ["Loner", "Block", "Diving Catch", "Dodge", "Dump-off", "Kick-Off Return", "Nerves of Steel", "Pass", "Side Step"], 390, 8, 3, 5, 8, ""],
+    ["Jordell Freshbreeze", ["Elf", "Wood Elf"], ["Loner", "Block", "Diving Catch", "Dodge", "Leap", "Side Step"], 260, 8, 3, 5, 7, ""],
     ["Karla Von Kill", ["Amazon", "Bretonnian", "Halfling", "Human", "Norse"], ["Loner", "Block", "Dauntless", "Dodge", "Jump Up"], 220, 6, 4, 3, 8, ""],
     ["King Boombastic", ["Simyin"], ["Loner", "Break Tackle", "Grab", "Piling On", "Wild Animal"], 270, 6, 5, 1, 9, ""],
-    ["Lewdgrip Whiparm", ["Chaos", "Nurgle", "Chaos Pact"], ["Loner", "Pass", "Strong Arm", "Sure Hands", "Tentacles"], 150, 6, 3, 3, 9, ""],
+    ["Kiroth Krakeneye", ["Dark Elf", "Elven Union"], ["Loner", "Disturbing Presence", "Foul Appearance", "Pass Block", "Tackle", "Tentacles"], 170, 7, 3, 4, 8, ""],
+    ["Kreek Rustgouger", ["Skaven", "Underworld Denizens"], ["Loner", "Ball & Chain", "Mighty Blow", "No Hands", "Prehensile Tail", "Secret Weapon"], 130000, 5, 7, 2, 9, ""],
+    ["Lewdgrip Whiparm", ["Chaos", "Nurgle", "Chaos Pact"], ["Loner", "Dodge", "Pass", "Strong Arm", "Sure Hands", "Tentacles"], 150, 6, 3, 3, 9, ""],
     ["Lord Borak the Despoiler", ["Chaos", "Nurgle"], ["Loner", "Block", "Dirty Player", "Mighty Blow"], 300, 5, 5, 3, 9, ""],
     ["Lottabottol", ["Lizardman", "Slann"], ["Loner", "Catch", "Diving Tackle", "Jump Up", "Leap", "Pass Block", "Shadowing", "Very Long Legs"], 220, 8, 3, 3, 8, ""],
     ["Lucien the Swift", ["Elf", "High Elf", "Wood Elf"], ["Loner", "Block", "Mighty Blow", "Tackle"], 390, 7, 3, 4, 8, "Note: When inducing this player, you must have 2 slots open on your roster so that you can also induce Valen the Swift. This counts only as one Star Player inducement."],
-    ["Madcap Miggz", ["Goblin"], ["Loner", "Break Tackle", "Claws", "Leap", "Very Long Legs", "Wild Animal"], 170, 6, 4, 3, 8, ""],
+    ["Madcap Miggz", ["Goblin", "Underworld"], ["Loner", "Break Tackle", "Claws", "Leap", "Very Long Legs", "Wild Animal", "No Hands"], 170, 6, 4, 3, 8, ""],
+    ["Maple Highgrove", ["Wood Elf"], ["Loner", "Grab", "Mighty Blow", "Stand Firm", "Tentacles", "Thick Skull"], 300, 3, 5, 1, 10, ""],
     ["Max Spleenripper", ["Chaos", "Nurgle"], ["Loner", "Chainsaw", "Secret Weapon"], 130, 5, 4, 3, 8, ""],
     ["Mighty Zug", ["Human", "Bretonnian"], ["Loner", "Block", "Mighty Blow"], 260, 4, 5, 2, 9, ""],
+    ["Mordrix Hex", ["Dark Elf"], ["Loner", "Block", "Dauntless", "Dodge", "Fend", "Frenzy", "Mighty Blow"], 230, 7, 3, 4, 7, ""],
     ["Morg 'n' Thorg", ["All Except", "Khemri", "Necromantic", "Undead"], ["Loner", "Block", "Mighty Blow", "Thick Skull", "Throw Team-Mate"], 430, 6, 6, 3, 10, ""],
+    ["Neddley Verruca", ["Halfling"], ["Loner", "Dodge", "Secret Weapon", "Stab", "Stunty", "Leap", "Very Long Legs"], 70, 5, 2, 3, 6, ""],
     ["Nobbla Blackwart", ["Chaos Dwarf", "Goblin", "Ogre", "Underworld"], ["Loner", "Block", "Dodge", "Chainsaw", "Secret Weapon", "Stunty"], 130, 6, 2, 3, 7, ""],
     ["Prince Moranion", ["Elf", "High Elf"], ["Loner", "Block", "Dauntless", "Tackle", "Wrestle"], 230, 7, 4, 4, 8, ""],
     ["Puggy Baconbreath", ["Halfling", "Human"], ["Loner", "Block", "Dodge", "Nerves of Steel", "Right Stuff", "Stunty"], 140, 5, 3, 3, 6, ""],
@@ -405,18 +432,26 @@ STAR_PLAYERS = [
     ["Rashnak Backstabber", ["Chaos Dwarf"], ["Loner", "Dodge", "Side Step", "Sneaky Git", "Stab"], 200, 7, 3, 3, 7, ""],
     ["Ripper Bolgrot", ["Goblin", "Orc"], ["Loner", "Grab", "Mighty Blow", "Regeneration", "Throw Team-Mate"], 270, 4, 6, 1, 9, ""],
     ["Roxanna Darknail", ["Amazon", "Dark Elf"], ["Loner", "Dodge", "Frenzy", "Jump Up", "Juggernaut", "Leap"], 250, 8, 3, 5, 7, ""],
+    ["Rumbelow Sheepskin", ["Halfling"], ["Loner", "Block", "Horns", "Juggernaut", "No Hands", "Tackle", "Thick Skull"], 170, 6, 3, 3, 7, ""],
     ["Scrappa Sorehead", ["Goblin", "Ogre", "Orc"], ["Loner", "Dirty Player", "Dodge", "Leap", "Right Stuff", "Sprint", "Stunty", "Sure Feet", "Very Long Legs"], 150, 7, 4, 1, 9, ""],
+    ["Scyla Anfingrimm", ["Chaos Chosen", "Norse"], ["Loner", "Claws", "Frenzy", "Prehensile Tail", "Thick Skull", "Wild Animal"], 250, 5, 5, 1, 9, ""],
     ["Setekh", ["Khemri", "Necromantic", "Undead"], ["Loner", "Block", "Break Tackle", "Juggernaut", "Regeneration", "Strip Ball"], 220, 6, 4, 2, 8, ""],
     ["Sinnedbad", ["Khemri", "Undead"], ["Loner", "Block", "Jump Up", "Pass Block", "Regeneration", "Secret Weapon", "Side Step", "Stab"], 80, 6, 3, 2, 7, ""],
     ["Skitter Stab-Stab", ["Skaven", "Underworld"], ["Loner", "Dodge", "Prehensile Tail", "Shadowing", "Stab"], 160, 9, 2, 4, 7, ""],
+    ["Skrull Halfheight", ["Khemri Tomb Kings", "Shambling Undead"], ["Loner", "Accurate", "Nerves of Steel", "Pass", "Regeneration", "Sure Hands", "Thick Skull"], 190, 6, 3, 3, 8, ""],
     ["Slibli", ["Lizardman", "Slann"], ["Loner", "Block", "Grab", "Guard", "Stand Firm"], 250, 7, 4, 1, 8, ""],
     ["Soaren Hightower", ["High Elf"], ["Loner", "Fend", "Kick-Off Return", "Pass", "Safe Throw", "Sure Hands", "Strong Arm"], 180, 6, 3, 4, 8, ""],
+    ["Swiftvine Glimmershard", ["Wood Elf"], ["Loner", "Disturbing Presence", "Fend", "Side Step", "Stab", "Stunty"], 130, 7, 2, 3, 6, ""],
+    ["Throttlesnot \"The Impaler\"", ["Necromantic Horror", "Shambling Undead"], ["Loner", "Dirty Player", "Dodge", "Leap", "Regeneration", "Secret Weapon", "Stab", "Stunty"], 100, 6, 2, 3, 7, ""],
+    ["Tolly Glocklinger", ["Nurgle"], ["Loner", "Ball & Chain", "Disturbing Presence", "Foul Appearance", "No Hands", "Nurgle's Rot", "Secret Weapon", "Stand Firm"], 110, 3, 7, 2, 9, ""],
     ["Ugroth Bolgrot", ["Orc", "Chaos Pact"], ["Loner", "Chainsaw", "Secret Weapon"], 100, 5, 3, 3, 9, ""],
     ["Valen the Swift", ["Elf", "High Elf", "Wood Elf"], ["Loner", "Accurate", "Nerves of Steel", "Pass", "Safe Throw", "Sure Hands"], 390, 7, 3, 5, 7, "Note: When inducing this player, you must have 2 slots open on your roster so that you can also induce Lucien the Swift. This counts only as one Star Player inducement."],
     ["Varag Ghoul-Chewer", ["Orc"], ["Loner", "Block", "Jump Up", "Mighty Blow", "Thick Skull"], 290, 6, 4, 3, 9, ""],
     ["Wilhelm Chaney", ["Necromantic", "Norse", "Vampire"], ["Loner", "Catch", "Claws", "Frenzy", "Regeneration", "Wrestle"], 240, 8, 4, 3, 8, ""],
     ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf", "Bretonnian"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""],
+    ["Withergrasp Doubledrool", ["Chaos Chosen", "Chaos Pact", "Nurgle"], ["Loner", "Prehensile Tail", "Tackle", "Tentacles", "Two Heads", "Wrestle"], 170, 6, 3, 3, 8, ""],
     ["Zara the Slayer", ["Amazon", "Dwarf", "Halfling", "High Elf", "Human", "Norse", "Wood Elf", "Bretonnian"], ["Loner", "Block", "Dauntless", "Dodge", "Jump Up", "Stab", "Stakes"], 270, 6, 4, 3, 8, ""],
+    ["Zolcath the Zoat", ["Amazon", "Lizardman", "Wood Elf"], ["Loner", "Disturbing Presence", "Juggernaut", "Mighty Blow", "Prehensile Tail", "Regeneration", "Sure Feet"], 280, 5, 5, 2, 9, ""],
     ["Zzharg Madeye", ["Chaos Dwarf", "Chaos Pact"], ["Loner", "Hail Mary Pass", "Pass", "Secret Weapon", "Strong Arm", "Sure Hands", "Tackle", "Thick Skull"], 90, 4, 4, 2, 9, ""]
 ]
 
@@ -1953,6 +1988,14 @@ if __name__ == '__main__':
         for alias in aliases:
             skillIDs[alias] = skillID
 
+    raceAliases = {
+        "Chaos Chosen": ["Chaos"],
+        "Elven Union": ["Elf"],
+        "Khemri Tomb Kings": ["Khemri"],
+        "Necromantic Horror": ["Necromantic"],
+        "Shambling Undead": ["Undead"],
+        "Underworld Denizens": ["Underworld"]
+    }
     raceIDs = {}
     print
     print "Races"
@@ -1963,6 +2006,10 @@ if __name__ == '__main__':
         cursor.execute("INSERT INTO race VALUES(NULL,%s,%s)", (name, desc))
         raceID = cursor.lastrowid
         raceIDs[name] = raceID
+
+        aliases = getAliases(name, raceAliases)
+        for alias in aliases:
+            raceIDs[alias] = raceID
 
     coachIDs = {}
     print
@@ -2002,11 +2049,56 @@ if __name__ == '__main__':
         seasonID = cursor.lastrowid
         seasonIDs[name] = seasonID
 
-    # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
+    playerTypeAliases = {
+        "Amazon": {
+            "Tribal Linewoman": ["Linewoman"],
+            "Eagle Warrior Thrower": ["Thrower"],
+            "Piranha Warrior Catcher": ["Catcher"],
+            "Koka Kalim Blitzer": ["Blitzer"]
+        },
+        "Chaos Dwarf": {
+            "Chaos Dwarf": ["Blocker"],
+            "Enslaved Minotaur": ["Minotaur"]
+        },
+        "Chaos Pact": {
+            "Human Renegade": ["Marauder"]
+        },
+        "Necromantic Horror": {
+            "Ghoul Runner": ["Ghoul"],
+            "Wight Blitzer": ["Wight"]
+        },
+        "Necromantic": {
+            "Ghoul Runner": ["Ghoul"],
+            "Wight Blitzer": ["Wight"]
+        },
+        "Norse": {
+            "Berserker": ["Blitzer"],
+            "Ulfwerenar": ["Werewolf"]
+        },
+        "Nurgle": {
+            "Bloater": ["Warrior"],
+            "Rotspawn": ["Beast"]
+        },
+        "Ogre": {
+            "Runt": ["Snotling"]
+        },
+        "Orc": {
+            "Black Orc": ["Black Orc Blocker"]
+        },
+        "Shambling Undead": {
+            "Ghoul Runner": ["Ghoul"],
+            "Wight Blitzer": ["Wight"]
+        },
+        "Undead": {
+            "Ghoul Runner": ["Ghoul"],
+            "Wight Blitzer": ["Wight"]
+        }
+    }
     playerTypeIDsByRaceID = {}
     playerTypeIDSkillIDs = {}
     print
     print "Players Types"
+    # ["Underworld", 1, "Warpstone Troll", 110, 4, 5, 1, 9, [ "Loner", "Always Hungry", "Mighty Blow", "Really Stupid", "Regeneration", "Throw Team-Mate"], "SM", "GAP"]
     for playerType in PLAYER_TYPES:
         race = playerType[0]
         maxAmt = playerType[1]
@@ -2028,6 +2120,13 @@ if __name__ == '__main__':
         if raceID not in playerTypeIDsByRaceID:
             playerTypeIDsByRaceID[raceID] = {}
         playerTypeIDsByRaceID[raceID][name] = playerTypeID
+
+        if race in playerTypeAliases:
+            aliases = playerTypeAliases[race]
+            for positional, posAliases in aliases.iteritems():
+                if name == positional or name in posAliases:
+                    for posAlias in posAliases:
+                        playerTypeIDsByRaceID[raceID][posAlias] = playerTypeID
 
         playerTypeIDSkillIDs[playerTypeID] = []
         for skill in skills:
@@ -2067,14 +2166,24 @@ if __name__ == '__main__':
         if "All Except" in races:
             newRaces = raceIDs.keys()
             for race in races[1:]:
+                raceID = raceIDs[race]
                 newRaces.remove(race)
+                for race2 in races[1:]:
+                    if raceIDs[race2] == raceID and race2 in newRaces:
+                        newRaces.remove(race2)
             races = newRaces
 
+
+        addedRaceIDs = []
         for race in races:
-            print "    %s: %s" % (name, race)
-            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceIDs[race], value, desc))
-            starPlayerID = cursor.lastrowid
             raceID = raceIDs[race]
+            if raceID in addedRaceIDs:
+                continue
+            addedRaceIDs.append(raceID)
+
+            print "    %s: %s" % (name, race)
+            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceID, value, desc))
+            starPlayerID = cursor.lastrowid
             if raceID not in starPlayerIDsByRaceID:
                 starPlayerIDsByRaceID[raceID] = {}
             starPlayerIDsByRaceID[raceID][name] = starPlayerID
@@ -2328,11 +2437,20 @@ if __name__ == '__main__':
                     raceNames = raceIDs.keys()
                     exceptRaceNames = raceCosts["Exceptions"]
                     for exceptRaceName in exceptRaceNames:
+                        exceptRaceID = raceIDs[exceptRaceName]
                         raceNames.remove(exceptRaceName)
+                        for race, raceID  in raceIDs.iteritems():
+                            if raceID == exceptRaceID and race in raceNames:
+                                raceNames.remove(race)
 
+                    addedRaceIDs = []
                     for raceName in raceNames:
-                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
                         raceID = raceIDs[raceName]
+                        if raceID in addedRaceIDs:
+                            continue
+                        addedRaceIDs.append(raceID)
+
+                        print "    %s: %s (%s,000 gp)" % (name, raceName, cost)
                         cursor.execute("INSERT INTO purchase VALUES(NULL,%s,%s,%s,%s)", (name, cost, raceID, desc))
                         purchaseID = cursor.lastrowid
                         if raceID not in purchaseIDsByRaceID:
