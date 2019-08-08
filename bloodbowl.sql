@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               5.5.27 - MySQL Community Server (GPL)
 -- Server OS:                    Win32
--- HeidiSQL Version:             9.5.0.5196
+-- HeidiSQL Version:             10.2.0.5599
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -13,6 +13,7 @@
 
 
 -- Dumping database structure for kcbbl
+DROP DATABASE IF EXISTS `kcbbl`;
 CREATE DATABASE IF NOT EXISTS `kcbbl` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
 USE `kcbbl`;
 
@@ -34,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `card` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.coach
 DROP TABLE IF EXISTS `coach`;
 CREATE TABLE IF NOT EXISTS `coach` (
@@ -49,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `coach` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.deck
 DROP TABLE IF EXISTS `deck`;
 CREATE TABLE IF NOT EXISTS `deck` (
@@ -61,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `deck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.inducement
 DROP TABLE IF EXISTS `inducement`;
 CREATE TABLE IF NOT EXISTS `inducement` (
@@ -77,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `inducement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.match
 DROP TABLE IF EXISTS `match`;
 CREATE TABLE IF NOT EXISTS `match` (
@@ -125,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `match` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.match_inducement
 DROP TABLE IF EXISTS `match_inducement`;
 CREATE TABLE IF NOT EXISTS `match_inducement` (
@@ -156,6 +162,7 @@ CREATE TABLE IF NOT EXISTS `match_inducement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.match_player
 DROP TABLE IF EXISTS `match_player`;
 CREATE TABLE IF NOT EXISTS `match_player` (
@@ -185,6 +192,7 @@ CREATE TABLE IF NOT EXISTS `match_player` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.match_player_skill
 DROP TABLE IF EXISTS `match_player_skill`;
 CREATE TABLE IF NOT EXISTS `match_player_skill` (
@@ -203,6 +211,7 @@ CREATE TABLE IF NOT EXISTS `match_player_skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.match_purchase
 DROP TABLE IF EXISTS `match_purchase`;
 CREATE TABLE IF NOT EXISTS `match_purchase` (
@@ -227,6 +236,7 @@ CREATE TABLE IF NOT EXISTS `match_purchase` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.match_type
 DROP TABLE IF EXISTS `match_type`;
 CREATE TABLE IF NOT EXISTS `match_type` (
@@ -238,6 +248,7 @@ CREATE TABLE IF NOT EXISTS `match_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.meta
 DROP TABLE IF EXISTS `meta`;
 CREATE TABLE IF NOT EXISTS `meta` (
@@ -251,6 +262,7 @@ CREATE TABLE IF NOT EXISTS `meta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.player
 DROP TABLE IF EXISTS `player`;
 CREATE TABLE IF NOT EXISTS `player` (
@@ -285,6 +297,7 @@ CREATE TABLE IF NOT EXISTS `player` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.player_skill
 DROP TABLE IF EXISTS `player_skill`;
 CREATE TABLE IF NOT EXISTS `player_skill` (
@@ -298,6 +311,7 @@ CREATE TABLE IF NOT EXISTS `player_skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.player_type
 DROP TABLE IF EXISTS `player_type`;
 CREATE TABLE IF NOT EXISTS `player_type` (
@@ -320,6 +334,7 @@ CREATE TABLE IF NOT EXISTS `player_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.player_type_skill
 DROP TABLE IF EXISTS `player_type_skill`;
 CREATE TABLE IF NOT EXISTS `player_type_skill` (
@@ -333,6 +348,7 @@ CREATE TABLE IF NOT EXISTS `player_type_skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.player_type_skill_type_double
 DROP TABLE IF EXISTS `player_type_skill_type_double`;
 CREATE TABLE IF NOT EXISTS `player_type_skill_type_double` (
@@ -346,6 +362,7 @@ CREATE TABLE IF NOT EXISTS `player_type_skill_type_double` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.player_type_skill_type_normal
 DROP TABLE IF EXISTS `player_type_skill_type_normal`;
 CREATE TABLE IF NOT EXISTS `player_type_skill_type_normal` (
@@ -359,6 +376,7 @@ CREATE TABLE IF NOT EXISTS `player_type_skill_type_normal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.purchase
 DROP TABLE IF EXISTS `purchase`;
 CREATE TABLE IF NOT EXISTS `purchase` (
@@ -374,6 +392,7 @@ CREATE TABLE IF NOT EXISTS `purchase` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.race
 DROP TABLE IF EXISTS `race`;
 CREATE TABLE IF NOT EXISTS `race` (
@@ -386,6 +405,7 @@ CREATE TABLE IF NOT EXISTS `race` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.season
 DROP TABLE IF EXISTS `season`;
 CREATE TABLE IF NOT EXISTS `season` (
@@ -405,6 +425,18 @@ CREATE TABLE IF NOT EXISTS `season` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
+-- Dumping structure for table kcbbl.sessions
+DROP TABLE IF EXISTS `sessions`;
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.skill
 DROP TABLE IF EXISTS `skill`;
 CREATE TABLE IF NOT EXISTS `skill` (
@@ -420,6 +452,7 @@ CREATE TABLE IF NOT EXISTS `skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.skill_type
 DROP TABLE IF EXISTS `skill_type`;
 CREATE TABLE IF NOT EXISTS `skill_type` (
@@ -431,6 +464,7 @@ CREATE TABLE IF NOT EXISTS `skill_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.team
 DROP TABLE IF EXISTS `team`;
 CREATE TABLE IF NOT EXISTS `team` (
@@ -463,6 +497,7 @@ CREATE TABLE IF NOT EXISTS `team` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 -- Dumping structure for table kcbbl.trophy
 DROP TABLE IF EXISTS `trophy`;
 CREATE TABLE IF NOT EXISTS `trophy` (
@@ -475,6 +510,7 @@ CREATE TABLE IF NOT EXISTS `trophy` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Data exporting was unselected.
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

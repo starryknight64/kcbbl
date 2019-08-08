@@ -2522,7 +2522,7 @@ if __name__ == '__main__':
                     if " w/ " in inducement:
                         mercTemp = inducement.split("w/")
                         inducement = mercTemp[0].strip()
-                        mercSkills = [m.strip() for m in mercTemp[1]]
+                        mercSkills = mercTemp[1].strip()
                         if len(mercSkills) > 0:
                             addDesc = "\n'%s' Mercenary %s also had the following skills: %s" % (team["name"], inducement, "/".join(mercSkills))
                             print "            %s" % addDesc.strip()
