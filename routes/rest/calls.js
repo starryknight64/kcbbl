@@ -414,6 +414,22 @@ function getCurrentSeason() {
     return getSeason(meta.value)
   })
 }
+function getPreviousSeason(seasonID) {
+  return db.getMany("season", undefined, ["id"], [seasonID], undefined, ["<"], undefined, "ORDER BY id DESC").then((seasons) => {
+    if( seasons.length > 0 ) {
+      return Promise.resolve(seasons[0])
+    }
+    return Promise.resolve(null)
+  })
+}
+function getNextSeason(seasonID) {
+  return db.getMany("season", undefined, ["id"], [seasonID], undefined, [">"], undefined, "ORDER BY id ASC").then((seasons) => {
+    if( seasons.length > 0 ) {
+      return Promise.resolve(seasons[0])
+    }
+    return Promise.resolve(null)
+  })
+}
 function getSeason(id) {
   return db.get("season", id).then((season) => {
     return getTrophy(season.trophy_id).then((trophy) => {
@@ -683,6 +699,8 @@ module.exports = {
   getRace: getRace,
   getRaces: getRaces,
   getCurrentSeason: getCurrentSeason,
+  getPreviousSeason: getPreviousSeason,
+  getNextSeason: getNextSeason,
   getSeason: getSeason,
   getSeasons: getSeasons,
   getSeasonsForCoach: getSeasonsForCoach,

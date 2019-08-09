@@ -13,6 +13,10 @@ body {
   border-bottom-right-radius: 10px;
 }
 
+.seasonsPaging {
+  padding-top: 20px;
+}
+
 .navbar-collapse.in {
   max-height: 100%;
 }

@@ -14,9 +14,9 @@ router.get("/", function (req, res, next) {
           Promise.all(promises).then((playersData) => {
             for( var i in teams ) {
               if( playersData[i] ) {
-                teams["players"] = playersData[i]
+                teams[i]["players"] = playersData[i]
               } else {
-                teams["players"] = []
+                teams[i]["players"] = []
               }
             }
             var renderJSON = {

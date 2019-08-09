@@ -9,20 +9,26 @@ append body
 			.col-md-3
 				h1 #{selectedSeason.name}
 			.col-md-4
-				nav
-					ul.pagination
-						li
-							a(href=prev)
-								span &laquo;
-						each season, i in seasons
-							li
-								a(id=season.id href="/seasons/"+season.id)
-									span #{season.id}
-										if currentSeason.id == season.id
-											| &nbsp;(in progress)
-						li
-							a(href=next)
-								span &raquo;
+				nav.seasonsPaging
+					.btn-group
+						if prevSeason
+							a.btn.btn-default(href="/seasons/"+prevSeason.id role="button") &laquo;
+						.btn-group(role="group")
+							button.btn.btn-default.dropdown-toggle(data-toggle="dropdown" type="button") 
+								| #{selectedSeason.name}
+								if currentSeason.id == selectedSeason.id
+									| &nbsp;(in progress)
+								| &nbsp;&nbsp;
+								span.caret
+							ul.dropdown-menu
+								each season, i in seasons
+									li
+										a(href="/seasons/"+season.id) #{season.name}
+											if season.id == selectedSeason.id
+												| &nbsp;(selected)
+						if nextSeason
+							a.btn.btn-default(href="/seasons/"+nextSeason.id role="button") &raquo;
+
 		.row.season-body
 			.col-md-4
 				.panel.panel-default

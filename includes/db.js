@@ -92,7 +92,7 @@ function get(table, id, cols) {
     })
 }
 
-function getMany(table, cols, wheres, values, joins, cmp, tail) {
+function getMany(table, cols, wheres, values, joins, cmp, tail, order) {
     if (!Type.is(table, String)) {
         return Promise.reject("Table name must be a string!")
     }
@@ -117,6 +117,9 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
     if (!tail) {
         tail = ""
     }
+    if (!order) {
+        order = " ORDER BY `" + table + "`.id ASC"
+    }
 
     var sql = "SELECT DISTINCT " + cols.join(",") + " FROM `" + table + "` "
     if (joins.length > 0) {
@@ -126,7 +129,11 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
         wheresCmp = {
             "AND": ["=? AND ", "=?"],
             "OR": ["=? OR ", "=?"],
-            "SEARCH": [" LIKE ? OR ", " LIKE ?"]
+            "SEARCH": [" LIKE ? OR ", " LIKE ?"],
+            "<": ["<? AND ", "<?"],
+            "<=": ["<=? AND ", "<=?"],
+            ">": [">? AND ", ">?"],
+            ">=": [">=? AND ", ">=?"]
         }
         wheresJoin = wheresCmp[cmp][0]
         wheresEnd = wheresCmp[cmp][1]
@@ -153,7 +160,7 @@ function getMany(table, cols, wheres, values, joins, cmp, tail) {
             }
         }
     }
-    sql += tail + " ORDER BY `" + table + "`.id ASC"
+    sql += tail + " " + order
 
     var sqlKey = sql + " " + values.join(",")
     if (sqlKey in cachedQueries) {

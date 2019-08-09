@@ -13,10 +13,10 @@ router.get("/", function (req, res, next) {
           }
           Promise.all(promises).then((skillData) => {
             for( var i in players ) {
-              if( skilldata[i] ) {
-                players["skills"] = skillData[i]
+              if( skillData[i] ) {
+                players[i]["skills"] = skillData[i]
               } else {
-                players["skills"] = []
+                players[i]["skills"] = []
               }
             }
             var renderJSON = {
@@ -50,10 +50,10 @@ router.get("/:teamid/seasons/:seasonid", function (req, res, next) {
               }
               Promise.all(promises).then((skillData) => {
                 for( var i in players ) {
-                  if( skilldata[i] ) {
-                    players["skills"] = skillData[i]
+                  if( skillData[i] ) {
+                    players[i]["skills"] = skillData[i]
                   } else {
-                    players["skills"] = []
+                    players[i]["skills"] = []
                   }
                 }
                 var renderJSON = {
@@ -89,17 +89,17 @@ router.get("/:id", function (req, res, next) {
             }
             Promise.all(promises).then((skillData) => {
               for( var i in players ) {
-                if( skilldata[i] ) {
-                  players["skills"] = skillData[i]
+                if( skillData[i] ) {
+                  players[i]["skills"] = skillData[i]
                 } else {
-                  players["skills"] = []
+                  players[i]["skills"] = []
                 }
               }
               var renderJSON = {
                 "seasons": seasons,
                 "teams": teams,
                 "curSeason": curSeason,
-                "curTeam": teams[0],
+                "curTeam": team,
                 "players": players,
                 "stats": getTeamStats(players)
               }
