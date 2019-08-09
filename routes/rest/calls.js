@@ -337,6 +337,7 @@ function getPlayers(wheres, values, joins) {
           players[i].niggling_injury = players[i].niggling_injury ? true : false
           players[i].dead = players[i].dead ? true : false
         }
+
         return Promise.resolve(players)
       })
     })
@@ -483,6 +484,13 @@ function getSkillsForPlayer(playerID) {
       return getSkills(["player_skill.player_id"], [player.id], ["INNER JOIN player_skill ON player_skill.skill_id=skill.id"]).then((playerSkills) => {
         return Promise.resolve(playerTypeSkills.concat(playerSkills))
       })
+    })
+  })
+}
+function getSkillsForPlayerIDAndPlayerTypeID(playerID, playerTypeID) {
+  return getSkills(["player_type_skill.player_type_id"], [playerTypeID], ["INNER JOIN player_type_skill ON player_type_skill.skill_id=skill.id"]).then((playerTypeSkills) => {
+    return getSkills(["player_skill.player_id"], [playerID], ["INNER JOIN player_skill ON player_skill.skill_id=skill.id"]).then((playerSkills) => {
+      return Promise.resolve(playerTypeSkills.concat(playerSkills))
     })
   })
 }
@@ -684,6 +692,7 @@ module.exports = {
   getSkill: getSkill,
   getSkills: getSkills,
   getSkillsForPlayer: getSkillsForPlayer,
+  getSkillsForPlayerIDAndPlayerTypeID: getSkillsForPlayerIDAndPlayerTypeID,
   getSkillsForPlayerAndMatch: getSkillsForPlayerAndMatch,
   getTeam: getTeam,
   getTeams: getTeams,

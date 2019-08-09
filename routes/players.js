@@ -20,7 +20,7 @@ function getImprovements(skills) {
 
 router.get("/", function (req, res, next) {
   calls.getPlayers().then((players) => {
-    calls.getSkillsForPlayer(players[0].id).then((skills) => {
+    calls.getSkillsForPlayerIDAndPlayerTypeID(players[0].id, players[0].type.id).then((skills) => {
       calls.getSeasonsForPlayer(players[0].id).then((seasons) => {
         calls.getCurrentSeason().then((curSeason) => {
           var improvements = getImprovements(skills)
@@ -34,7 +34,7 @@ router.get("/", function (req, res, next) {
 router.get("/:id", function (req, res, next) {
   var id = req.params.id
   calls.getPlayer(id).then((player) => {
-    calls.getSkillsForPlayer(player.id).then((skills) => {
+    calls.getSkillsForPlayerIDAndPlayerTypeID(player.id, player.type.id).then((skills) => {
       calls.getSeasonsForPlayer(player.id).then((seasons) => {
         calls.getCurrentSeason().then((curSeason) => {
           calls.getPlayers().then((players) => {

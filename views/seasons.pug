@@ -44,22 +44,30 @@ append body
 						h3.panel-title Stats
 					.panel-body
 						.list-group
-							a.list-group-item(href="#") 
-								h4.list-group-item-heading Most Casualties (15)
-								h5.list-group-item-heading Population: Orc
-								p.list-group-item-text Phillip
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most TDs (29)
-								h5.list-group-item-heading Fink Foulers
-								p.list-group-item-text Daniel
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most Kills (5)
-								h5.list-group-item-heading GoldDiggers
-								p.list-group-item-text Flagg
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most SPPs (87)
-								h5.list-group-item-heading Blood Mountain Berserkers
-								p.list-group-item-text David
+							if stats.mostCas > 0
+								a.list-group-item(href="/teams/"+stats.mostCasTeam.id) 
+									h4.list-group-item-heading Most Casualties (#{stats.mostCas})
+									h5.list-group-item-heading #{stats.mostCasTeam.name}
+									p.list-group-item-text #{stats.mostCasTeam.race.name} Team
+									p.list-group-item-text Coached by #{stats.mostCasTeam.coach.name}
+							if stats.mostTDs > 0
+								a.list-group-item(href="/teams/"+stats.mostTDsTeam.id) 
+									h4.list-group-item-heading Most TDs (#{stats.mostTDs})
+									h5.list-group-item-heading #{stats.mostTDsTeam.name}
+									p.list-group-item-text #{stats.mostTDsTeam.race.name} Team
+									p.list-group-item-text Coached by #{stats.mostTDsTeam.coach.name}
+							if stats.mostKills > 0
+								a.list-group-item(href="/teams/"+stats.mostKillsTeam.id) 
+									h4.list-group-item-heading Most Kills (#{stats.mostKills})
+									h5.list-group-item-heading #{stats.mostKillsTeam.name}
+									p.list-group-item-text #{stats.mostKillsTeam.race.name} Team
+									p.list-group-item-text Coached by #{stats.mostKillsTeam.coach.name}
+							if stats.mostSPPs > 0
+								a.list-group-item(href="/teams/"+stats.mostSPPsTeam.id) 
+									h4.list-group-item-heading Most SPPs (#{stats.mostSPPs})
+									h5.list-group-item-heading #{stats.mostSPPsTeam.name}
+									p.list-group-item-text #{stats.mostSPPsTeam.race.name} Team
+									p.list-group-item-text Coached by #{stats.mostSPPsTeam.coach.name}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading

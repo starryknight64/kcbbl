@@ -12,14 +12,9 @@ append body
 						.col-md-8
 							h1 #{curPlayer.name}
 							p
-								if curPlayer.team.race.name == curPlayer.type.name
-									| #{curPlayer.type.name} 
-								else
-									| #{curPlayer.team.race.name} #{curPlayer.type.name} 
-								| on the 
-								a(href="/teams/"+curPlayer.team.id) 
-									| #{curPlayer.team.name}
-								|  team coached by 
+								| #{curPlayer.type.name} on the 
+								a(href="/teams/"+curPlayer.team.id) #{curPlayer.team.name}
+								| &nbsp;#{curPlayer.team.race.name} team coached by 
 								a(href="/coaches/"+curPlayer.team.coach.id) #{curPlayer.team.coach.name}
 							p
 								.col-md-3

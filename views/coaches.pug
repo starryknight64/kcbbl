@@ -25,22 +25,26 @@ append body
 						h3.panel-title Stats
 					.panel-body
 						.list-group
-							a.list-group-item(href="#") 
-								h4.list-group-item-heading Most Casualties (9)
-								h5.list-group-item-heading Mad'zug
-								p.list-group-item-text Population: Orc
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most TDs (7)
-								h5.list-group-item-heading Bad'zug
-								p.list-group-item-text Population: Orc
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most Kills (1)
-								h5.list-group-item-heading Mad'zug
-								p.list-group-item-text Population: Orc
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most SPPs (33)
-								h5.list-group-item-heading Bad'zug
-								p.list-group-item-text Population: Orc
+							if stats.mostCas > 0
+								a.list-group-item(href="/teams/"+stats.mostCasTeam.id) 
+									h4.list-group-item-heading Most Casualties (#{stats.mostCas})
+									h5.list-group-item-heading #{stats.mostCasTeam.name}
+									p.list-group-item-text #{stats.mostCasTeam.race.name} Team
+							if stats.mostTDs > 0
+								a.list-group-item(href="/teams/"+stats.mostTDsTeam.id) 
+									h4.list-group-item-heading Most TDs (#{stats.mostTDs})
+									h5.list-group-item-heading #{stats.mostTDsTeam.name}
+									p.list-group-item-text #{stats.mostTDsTeam.race.name} Team
+							if stats.mostKills > 0
+								a.list-group-item(href="/teams/"+stats.mostKillsTeam.id) 
+									h4.list-group-item-heading Most Kills (#{stats.mostKills})
+									h5.list-group-item-heading #{stats.mostKillsTeam.name}
+									p.list-group-item-text #{stats.mostKillsTeam.race.name} Team
+							if stats.mostSPPs > 0
+								a.list-group-item(href="/teams/"+stats.mostSPPsTeam.id) 
+									h4.list-group-item-heading Most SPPs (#{stats.mostSPPs})
+									h5.list-group-item-heading #{stats.mostSPPsTeam.name}
+									p.list-group-item-text #{stats.mostSPPsTeam.race.name} Team
 			.col-md-4
 				.panel.panel-default
 					.panel-heading

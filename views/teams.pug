@@ -34,22 +34,54 @@ append body
 						h3.panel-title Stats
 					.panel-body
 						.list-group
-							a.list-group-item(href="#") 
-								h4.list-group-item-heading Most Casualties (9)
-								h5.list-group-item-heading Mad'zug
-								p.list-group-item-text Population: Orc
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most TDs (7)
-								h5.list-group-item-heading Bad'zug
-								p.list-group-item-text Population: Orc
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most Kills (1)
-								h5.list-group-item-heading Mad'zug
-								p.list-group-item-text Population: Orc
-							a.list-group-item(href="#")
-								h4.list-group-item-heading Most SPPs (33)
-								h5.list-group-item-heading Bad'zug
-								p.list-group-item-text Population: Orc
+							if stats.mostCas > 0
+								a.list-group-item(href="/players/"+stats.mostCasPlayer.id) 
+									h4.list-group-item-heading Most Casualties (#{stats.mostCas})
+									h5.list-group-item-heading #{stats.mostCasPlayer.name}
+									p.list-group-item-text #{stats.mostCasPlayer.type.name}
+									p.list-group-item-text
+										if stats.mostCasPlayer.skills.length > 0
+											each skill, i in stats.mostCasPlayer.skills
+												if i+1 < stats.mostCasPlayer.skills.length
+													| #{skill.name}, 
+												else
+													| #{skill.name}
+							if stats.mostTDs > 0
+								a.list-group-item(href="/players/"+stats.mostTDsPlayer.id) 
+									h4.list-group-item-heading Most TDs (#{stats.mostTDs})
+									h5.list-group-item-heading #{stats.mostTDsPlayer.name}
+									p.list-group-item-text #{stats.mostTDsPlayer.type.name}
+									p.list-group-item-text
+										if stats.mostTDsPlayer.skills.length > 0
+											each skill, i in stats.mostTDsPlayer.skills
+												if i+1 < stats.mostTDsPlayer.skills.length
+													| #{skill.name}, 
+												else
+													| #{skill.name}
+							if stats.mostKills > 0
+								a.list-group-item(href="/players/"+stats.mostKillsPlayer.id) 
+									h4.list-group-item-heading Most Kills (#{stats.mostKills})
+									h5.list-group-item-heading #{stats.mostKillsPlayer.name}
+									p.list-group-item-text #{stats.mostKillsPlayer.type.name}
+									p.list-group-item-text
+										if stats.mostKillsPlayer.skills.length > 0
+											each skill, i in stats.mostKillsPlayer.skills
+												if i+1 < stats.mostKillsPlayer.skills.length
+													| #{skill.name}, 
+												else
+													| #{skill.name}
+							if stats.mostSPPs > 0
+								a.list-group-item(href="/players/"+stats.mostSPPsPlayer.id) 
+									h4.list-group-item-heading Most SPPs (#{stats.mostSPPs})
+									h5.list-group-item-heading #{stats.mostSPPsPlayer.name}
+									p.list-group-item-text #{stats.mostSPPsPlayer.type.name}
+									p.list-group-item-text
+										if stats.mostSPPsPlayer.skills.length > 0
+											each skill, i in stats.mostSPPsPlayer.skills
+												if i+1 < stats.mostSPPsPlayer.skills.length
+													| #{skill.name}, 
+												else
+													| #{skill.name}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading.clearfix
@@ -57,7 +89,16 @@ append body
 					.panel-body
 						.list-group
 							each player, i in players
-								a.list-group-item(href="/players/"+player.id) #{player.number}: #{player.name}
+								a.list-group-item(href="/players/"+player.id)
+									h5.list-group-item-heading #{player.number}: #{player.name}
+									p.list-group-item-text #{player.type.name}
+									p.list-group-item-text
+										if player.skills.length > 0
+											each skill, i in player.skills
+												if i+1 < player.skills.length
+													| #{skill.name}, 
+												else
+													| #{skill.name}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading

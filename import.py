@@ -671,7 +671,7 @@ if __name__ == '__main__':
         if True:
             print "Loading Season 1 Rosters..."
             s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True, read_only=True)
-            print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+            print "    Sheet loaded in %s! Now loading rosters..." % t.elapsed()
             t.start()
             # sheetNames = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8"]  # , "T9", "T10"]
             sheetNames = s1.get_sheet_names()[5:13]
@@ -752,7 +752,7 @@ if __name__ == '__main__':
             print "Loading Season 2 Rosters..."
             t.start()
             s2 = load_workbook("imports/S2 Rosters.xlsx", data_only=True, read_only=True)
-            print "    Sheet loaded in %s! Now loading matches..." % t.elapsed()
+            print "    Sheet loaded in %s! Now loading rosters..." % t.elapsed()
             t.start()
             sheetNames = s2.get_sheet_names()[4:21]
             for sheetName in sheetNames:
@@ -789,6 +789,8 @@ if __name__ == '__main__':
                     av = row[7]
                     skillsTemp = row[8].split(",") if row[8] else []
                     skills = [skill.strip() for skill in skillsTemp]
+                    newSkills = row[9].split(",") if row[9] else []
+                    skills.extend([newSkill.strip() for newSkill in newSkills])
                     injuryNiggling = row[12]
                     injuryMA = row[13]
                     injuryST = row[14]
@@ -867,11 +869,13 @@ if __name__ == '__main__':
                     av = row[7]
                     skillsTemp = row[8].split(",") if row[8] else []
                     skills = [skill.strip() for skill in skillsTemp]
+                    newSkills = row[9].split(",") if row[9] else []
+                    skills.extend([newSkill.strip() for newSkill in newSkills])
                     injuryNiggling = row[12]
-                    injuryMA = row[13]
-                    injuryST = row[14]
-                    injuryAG = row[15]
-                    injuryAV = row[16]
+                    injuryMA = row[15]
+                    injuryST = row[16]
+                    injuryAG = row[17]
+                    injuryAV = row[18]
                     if injuryNiggling:
                         skills.append("Niggling")
                     if injuryMA:
@@ -887,12 +891,12 @@ if __name__ == '__main__':
                         pass
 
                     status = "MNG" if row[11] else None
-                    completions = row[18]
-                    touchdowns = row[19]
-                    interceptions = row[17]
-                    casualties = row[20]
-                    kills = row[21]
-                    mvps = row[22]
+                    completions = row[20]
+                    touchdowns = row[21]
+                    interceptions = row[19]
+                    casualties = row[22]
+                    kills = row[23]
+                    mvps = row[24]
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
@@ -954,11 +958,13 @@ if __name__ == '__main__':
                     av = row[7]
                     skillsTemp = row[8].split(",") if row[8] else []
                     skills = [skill.strip() for skill in skillsTemp]
+                    newSkills = row[9].split(",") if row[9] else []
+                    skills.extend([newSkill.strip() for newSkill in newSkills])
                     injuryNiggling = row[12]
-                    injuryMA = row[13]
-                    injuryST = row[14]
-                    injuryAG = row[15]
-                    injuryAV = row[16]
+                    injuryMA = row[15]
+                    injuryST = row[16]
+                    injuryAG = row[17]
+                    injuryAV = row[18]
                     if injuryNiggling:
                         skills.append("Niggling")
                     if injuryMA:
@@ -974,12 +980,12 @@ if __name__ == '__main__':
                         pass
 
                     status = "MNG" if row[11] else None
-                    completions = row[18]
-                    touchdowns = row[19]
-                    interceptions = row[17]
-                    casualties = row[20]
-                    kills = row[21]
-                    mvps = row[22]
+                    completions = row[20]
+                    touchdowns = row[21]
+                    interceptions = row[19]
+                    casualties = row[22]
+                    kills = row[23]
+                    mvps = row[24]
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
@@ -1041,11 +1047,13 @@ if __name__ == '__main__':
                     av = row[7]
                     skillsTemp = row[8].split(",") if row[8] else []
                     skills = [skill.strip() for skill in skillsTemp]
+                    newSkills = row[9].split(",") if row[9] else []
+                    skills.extend([newSkill.strip() for newSkill in newSkills])
                     injuryNiggling = row[12]
-                    injuryMA = row[13]
-                    injuryST = row[14]
-                    injuryAG = row[15]
-                    injuryAV = row[16]
+                    injuryMA = row[15]
+                    injuryST = row[16]
+                    injuryAG = row[17]
+                    injuryAV = row[18]
                     if injuryNiggling:
                         skills.append("Niggling")
                     if injuryMA:
@@ -1061,12 +1069,12 @@ if __name__ == '__main__':
                         pass
 
                     status = "MNG" if row[11] else None
-                    completions = row[18]
-                    touchdowns = row[19]
-                    interceptions = row[17]
-                    casualties = row[20]
-                    kills = row[21]
-                    mvps = row[22]
+                    completions = row[20]
+                    touchdowns = row[21]
+                    interceptions = row[19]
+                    casualties = row[22]
+                    kills = row[23]
+                    mvps = row[25]
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
@@ -1122,11 +1130,13 @@ if __name__ == '__main__':
                     av = row[7]
                     skillsTemp = row[8].split(",") if row[8] else []
                     skills = [skill.strip() for skill in skillsTemp]
+                    newSkills = row[9].split(",") if row[9] else []
+                    skills.extend([newSkill.strip() for newSkill in newSkills])
                     injuryNiggling = row[12]
-                    injuryMA = row[13]
-                    injuryST = row[14]
-                    injuryAG = row[15]
-                    injuryAV = row[16]
+                    injuryMA = row[15]
+                    injuryST = row[16]
+                    injuryAG = row[17]
+                    injuryAV = row[18]
                     if injuryNiggling:
                         skills.append("Niggling")
                     if injuryMA:
@@ -1142,12 +1152,12 @@ if __name__ == '__main__':
                         pass
 
                     status = "MNG" if row[11] else None
-                    completions = row[18]
-                    touchdowns = row[19]
-                    interceptions = row[17]
-                    casualties = row[20]
-                    kills = row[21]
-                    mvps = row[22]
+                    completions = row[20]
+                    touchdowns = row[21]
+                    interceptions = row[19]
+                    casualties = row[22]
+                    kills = row[23]
+                    mvps = row[25]
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
@@ -1203,11 +1213,13 @@ if __name__ == '__main__':
                     av = row[7]
                     skillsTemp = row[8].split(",") if row[8] else []
                     skills = [skill.strip() for skill in skillsTemp]
+                    newSkills = row[9].split(",") if row[9] else []
+                    skills.extend([newSkill.strip() for newSkill in newSkills])
                     injuryNiggling = row[12]
-                    injuryMA = row[13]
-                    injuryST = row[14]
-                    injuryAG = row[15]
-                    injuryAV = row[16]
+                    injuryMA = row[15]
+                    injuryST = row[16]
+                    injuryAG = row[17]
+                    injuryAV = row[18]
                     if injuryNiggling:
                         skills.append("Niggling")
                     if injuryMA:
@@ -1223,12 +1235,12 @@ if __name__ == '__main__':
                         pass
 
                     status = "MNG" if row[11] else None
-                    completions = row[18]
-                    touchdowns = row[19]
-                    interceptions = row[17]
-                    casualties = row[20]
-                    kills = row[21]
-                    mvps = row[22]
+                    completions = row[20]
+                    touchdowns = row[21]
+                    interceptions = row[19]
+                    casualties = row[22]
+                    kills = row[23]
+                    mvps = row[25]
                     players.append([playerName, playerPosition, ma, st, ag, av, skills, status, completions, touchdowns, interceptions, casualties, kills, mvps])
 
                 print "        %s" % teamName
@@ -2241,11 +2253,11 @@ if __name__ == '__main__':
             if seasonID != season5ID: # Season 5 restarted all teams
                 prevSeasonID = seasonID - 1
                 
-                minSeasonID = 0
+                minSeasonID = 1
                 if seasonID > season5ID and season5ID is not None:
                     minSeasonID = season5ID
 
-                while prevSeasonID > minSeasonID:
+                while prevSeasonID >= minSeasonID and prevSeasonID > 0:
                     prevSeasonTeams = teamIDsBySeasonID[prevSeasonID]
                     
                     if teamName in prevSeasonTeams:
@@ -2811,7 +2823,7 @@ if __name__ == '__main__':
             winnerTeamID = teamIDsBySeasonID[seasonID][winnerTeamName]
             cursor.execute("UPDATE season SET winner_team_id=%s WHERE id=%s", (winnerTeamID, seasonID))
 
-    cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "8"))
+    cursor.execute("INSERT INTO meta VALUES(NULL,%s,%s)", ("season.current", "9"))
 
     print
     print "Loaded data into database took %s" % t.elapsed()
