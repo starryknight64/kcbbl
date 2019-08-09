@@ -81,7 +81,11 @@ append body
 					.panel-body
 						.list-group
 							each coach, i in selectedSeasonCoaches
-								a.list-group-item(href="/coaches/"+coach.id) #{coach.name}
+								a.list-group-item(href="/coaches/"+coach.id)
+									h5.list-group-item-heading #{coach.name}
+									each team, i in selectedSeasonTeams
+										if team.coach.id == coach.id
+											p.list-group-item-text #{team.name}
 		.row
 			.col-md-4
 				.panel.panel-default
@@ -90,4 +94,7 @@ append body
 					.panel-body
 						.list-group
 							each team, i in selectedSeasonTeams
-								a.list-group-item(href="/teams/"+team.id) #{team.name}
+								a.list-group-item(href="/teams/"+team.id)
+									h5.list-group-item-heading #{team.name}
+									p.list-group-item-text #{team.race.name} Team
+									p.list-group-item-text Coached by #{team.coach.name}

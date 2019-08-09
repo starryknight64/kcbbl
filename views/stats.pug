@@ -1,0 +1,102 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Stats
+
+append body
+	.container.body-container
+		.row
+			.col-md-3
+				h1 Stats
+
+		.row.season-body
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Teams Overall
+					.panel-body
+						.list-group
+							a.list-group-item(href="/teams/"+stats.teamsMostTDsTeam.id)
+								h4.list-group-item-heading Most Touchdowns (#{stats.teamsMostTDs})
+								h5.list-group-item-heading #{stats.teamsMostTDsTeam.name}
+								p.list-group-item-text #{stats.teamsMostTDsTeam.race.name} Team
+								p.list-group-item-text Coached by #{stats.teamsMostTDsTeam.coach.name} in #{stats.teamsMostTDsTeam.season.name}
+							a.list-group-item(href="/teams/"+stats.teamsMostCmpTeam.id)
+								h4.list-group-item-heading Most Completions (#{stats.teamsMostCmp})
+								h5.list-group-item-heading #{stats.teamsMostCmpTeam.name}
+								p.list-group-item-text #{stats.teamsMostCmpTeam.race.name} Team
+								p.list-group-item-text Coached by #{stats.teamsMostCmpTeam.coach.name} in #{stats.teamsMostCmpTeam.season.name}
+							a.list-group-item(href="/teams/"+stats.teamsMostIntTeam.id)
+								h4.list-group-item-heading Most Interceptions (#{stats.teamsMostInt})
+								h5.list-group-item-heading #{stats.teamsMostIntTeam.name}
+								p.list-group-item-text #{stats.teamsMostIntTeam.race.name} Team
+								p.list-group-item-text Coached by #{stats.teamsMostIntTeam.coach.name} in #{stats.teamsMostIntTeam.season.name}
+							a.list-group-item(href="/teams/"+stats.teamsMostCasTeam.id)
+								h4.list-group-item-heading Most Casualties (#{stats.teamsMostCas})
+								h5.list-group-item-heading #{stats.teamsMostCasTeam.name}
+								p.list-group-item-text #{stats.teamsMostCasTeam.race.name} Team
+								p.list-group-item-text Coached by #{stats.teamsMostCasTeam.coach.name} in #{stats.teamsMostCasTeam.season.name}
+							a.list-group-item(href="/teams/"+stats.teamsMostKillsTeam.id)
+								h4.list-group-item-heading Most Kills (#{stats.teamsMostKills})
+								h5.list-group-item-heading #{stats.teamsMostKillsTeam.name}
+								p.list-group-item-text #{stats.teamsMostKillsTeam.race.name} Team
+								p.list-group-item-text Coached by #{stats.teamsMostKillsTeam.coach.name} in #{stats.teamsMostKillsTeam.season.name}
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Players Overall
+					.panel-body
+						.list-group
+							a.list-group-item(href="/players/"+stats.playersMostTDsPlayer.id)
+								h4.list-group-item-heading Most Touchdowns (#{stats.playersMostTDs})
+								h5.list-group-item-heading #{stats.playersMostTDsPlayer.name}
+								p.list-group-item-text #{stats.playersMostTDsPlayer.team.name}
+								p.list-group-item-text #{stats.playersMostTDsPlayer.type.name} Player | #{stats.playersMostTDsPlayer.team.race.name} Team
+								p.list-group-item-text Coached by #{stats.playersMostTDsPlayer.team.coach.name} in #{stats.playersMostTDsPlayer.team.season.name}
+							a.list-group-item(href="/players/"+stats.playersMostCmpPlayer.id)
+								h4.list-group-item-heading Most Completions (#{stats.playersMostCmp})
+								h5.list-group-item-heading #{stats.playersMostCmpPlayer.name}
+								p.list-group-item-text #{stats.playersMostCmpPlayer.team.name}
+								p.list-group-item-text #{stats.playersMostCmpPlayer.type.name} Player | #{stats.playersMostCmpPlayer.team.race.name} Team
+								p.list-group-item-text Coached by #{stats.playersMostCmpPlayer.team.coach.name} in #{stats.playersMostCmpPlayer.team.season.name}
+							a.list-group-item(href="/players/"+stats.playersMostIntPlayer.id)
+								h4.list-group-item-heading Most Interceptions (#{stats.playersMostInt})
+								h5.list-group-item-heading #{stats.playersMostIntPlayer.name}
+								p.list-group-item-text #{stats.playersMostIntPlayer.team.name}
+								p.list-group-item-text #{stats.playersMostIntPlayer.type.name} Player | #{stats.playersMostIntPlayer.team.race.name} Team
+								p.list-group-item-text Coached by #{stats.playersMostIntPlayer.team.coach.name} in #{stats.playersMostIntPlayer.team.season.name}
+							a.list-group-item(href="/players/"+stats.playersMostCasPlayer.id)
+								h4.list-group-item-heading Most Casualties (#{stats.playersMostCas})
+								h5.list-group-item-heading #{stats.playersMostCasPlayer.name}
+								p.list-group-item-text #{stats.playersMostCasPlayer.team.name}
+								p.list-group-item-text #{stats.playersMostCasPlayer.type.name} Player | #{stats.playersMostCasPlayer.team.race.name} Team
+								p.list-group-item-text Coached by #{stats.playersMostCasPlayer.team.coach.name} in #{stats.playersMostCasPlayer.team.season.name}
+							a.list-group-item(href="/players/"+stats.playersMostKillsPlayer.id)
+								h4.list-group-item-heading Most Kills (#{stats.playersMostKills})
+								h5.list-group-item-heading #{stats.playersMostKillsPlayer.name}
+								p.list-group-item-text #{stats.playersMostKillsPlayer.team.name}
+								p.list-group-item-text #{stats.playersMostKillsPlayer.type.name} Player | #{stats.playersMostKillsPlayer.team.race.name} Team
+								p.list-group-item-text Coached by #{stats.playersMostKillsPlayer.team.coach.name} in #{stats.playersMostKillsPlayer.team.season.name}
+
+			.col-md-4
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Coaches Overall
+					.panel-body
+						.list-group
+							a.list-group-item(href="/coaches/"+stats.coachesMostTDsCoach.id)
+								h4.list-group-item-heading Most Touchdowns (#{stats.coachesMostTDs})
+								h5.list-group-item-heading #{stats.coachesMostTDsCoach.name}
+							a.list-group-item(href="/coaches/"+stats.coachesMostCmpCoach.id)
+								h4.list-group-item-heading Most Completions (#{stats.coachesMostCmp})
+								h5.list-group-item-heading #{stats.coachesMostCmpCoach.name}
+							a.list-group-item(href="/coaches/"+stats.coachesMostIntCoach.id)
+								h4.list-group-item-heading Most Interceptions (#{stats.coachesMostInt})
+								h5.list-group-item-heading #{stats.coachesMostIntCoach.name}
+							a.list-group-item(href="/coaches/"+stats.coachesMostCasCoach.id)
+								h4.list-group-item-heading Most Casualties (#{stats.coachesMostCas})
+								h5.list-group-item-heading #{stats.coachesMostCasCoach.name}
+							a.list-group-item(href="/coaches/"+stats.coachesMostKillsCoach.id)
+								h4.list-group-item-heading Most Kills (#{stats.coachesMostKills})
+								h5.list-group-item-heading #{stats.coachesMostKillsCoach.name}
+								

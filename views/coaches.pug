@@ -53,6 +53,7 @@ append body
 						.list-group
 							each team, i in teams
 								a.list-group-item(href="/teams/"+team.id) #{team.name}
+									p.list-group-item-text #{team.race.name} Team from #{team.season.name}
 			.col-md-4
 				.panel.panel-default
 					.panel-heading
