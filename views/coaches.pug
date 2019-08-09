@@ -7,7 +7,9 @@ append body
 	.container.body-container
 		.row
 			.col-md-4
-				h1 Coach #{curCoach.name}
+				h1
+					span.glyphicon.glyphicon-user
+					| &nbsp;Coach #{curCoach.name}
 			.col-md-4
 				h1.btn-group
 					button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a coach...&nbsp;
@@ -17,7 +19,7 @@ append body
 							li
 								a(href="/coaches/"+coach.id) #{coach.name}
 									if coach.id == curCoach.id
-										| &nbsp;(you)
+										| &nbsp;(selected)
 		.row
 			.col-md-4
 				.panel.panel-default
@@ -52,7 +54,8 @@ append body
 					.panel-body
 						.list-group
 							each team, i in teams
-								a.list-group-item(href="/teams/"+team.id) #{team.name}
+								a.list-group-item(href="/teams/"+team.id) 
+									h5.list-group-item-heading #{team.name}
 									p.list-group-item-text #{team.race.name} Team from #{team.season.name}
 			.col-md-4
 				.panel.panel-default
@@ -61,4 +64,8 @@ append body
 					.panel-body
 						.list-group
 							each season, i in seasons
-								a.list-group-item(href="/seasons/"+season.id) #{season.name}
+								a.list-group-item(href="/seasons/"+season.id)
+									h5.list-group-item-heading #{season.name}
+									each team, i in teams
+										if team.season.id == season.id
+											p.list-group-item-text #{team.name}

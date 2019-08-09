@@ -5,30 +5,28 @@ var calls = require("./rest/calls")
 router.get("/", function (req, res, next) {
   calls.getCoaches().then((coaches) => {
     calls.getSeasonsForCoach(coaches[0].id).then((seasons) => {
-      calls.getTeamsForCoach(coaches[0].id, undefined, true).then((teamsUnique) => {
-        calls.getTeamsForCoach(coaches[0].id, undefined, false).then((teams) => {
-          var promises = []
-          for( var i in teams ) {
-            promises.push(calls.getPlayersForTeam(teams[i].id))
+      calls.getTeamsForCoach(coaches[0].id).then((teams) => {
+        var promises = []
+        for (var i in teams) {
+          promises.push(calls.getPlayersForTeam(teams[i].id))
+        }
+        Promise.all(promises).then((playersData) => {
+          for (var i in teams) {
+            if (playersData[i]) {
+              teams[i]["players"] = playersData[i]
+            } else {
+              teams[i]["players"] = []
+            }
           }
-          Promise.all(promises).then((playersData) => {
-            for( var i in teams ) {
-              if( playersData[i] ) {
-                teams[i]["players"] = playersData[i]
-              } else {
-                teams[i]["players"] = []
-              }
-            }
-            var renderJSON = {
-              "coaches": coaches, 
-              "curCoach": coaches[0], 
-              "teams": teamsUnique, 
-              "seasons": seasons,
-              "stats": getCoachStats(teams)
-            }
+          var renderJSON = {
+            "coaches": coaches,
+            "curCoach": coaches[0],
+            "teams": teams,
+            "seasons": seasons,
+            "stats": getCoachStats(teams)
+          }
 
-            res.render("coaches", renderJSON)
-          })
+          res.render("coaches", renderJSON)
         })
       })
     })
@@ -39,31 +37,29 @@ router.get("/", function (req, res, next) {
 router.get("/:id", function (req, res, next) {
   var id = req.params.id
   calls.getCoach(id).then((coach) => {
-    calls.getTeamsForCoach(coach.id, undefined, true).then((teamsUnique) => {
-      calls.getTeamsForCoach(coach.id, undefined, false).then((teams) => {
-        calls.getSeasonsForCoach(coach.id).then((seasons) => {
-          calls.getCoaches().then((coaches) => {
-            var promises = []
-            for( var i in teams ) {
-              promises.push(calls.getPlayersForTeam(teams[i].id))
+    calls.getTeamsForCoach(coach.id).then((teams) => {
+      calls.getSeasonsForCoach(coach.id).then((seasons) => {
+        calls.getCoaches().then((coaches) => {
+          var promises = []
+          for (var i in teams) {
+            promises.push(calls.getPlayersForTeam(teams[i].id))
+          }
+          Promise.all(promises).then((playersData) => {
+            for (var i in teams) {
+              if (playersData[i]) {
+                teams[i]["players"] = playersData[i]
+              } else {
+                teams[i]["players"] = []
+              }
             }
-            Promise.all(promises).then((playersData) => {
-              for( var i in teams ) {
-                if( playersData[i] ) {
-                  teams[i]["players"] = playersData[i]
-                } else {
-                  teams[i]["players"] = []
-                }
-              }
-              var renderJSON =  {
-                "coaches": coaches,
-                "curCoach": coach,
-                "teams": teamsUnique,
-                "seasons": seasons,
-                "stats": getCoachStats(teams)
-              }
-              res.render("coaches", renderJSON)
-            })
+            var renderJSON = {
+              "coaches": coaches,
+              "curCoach": coach,
+              "teams": teams,
+              "seasons": seasons,
+              "stats": getCoachStats(teams)
+            }
+            res.render("coaches", renderJSON)
           })
         })
       })
@@ -83,33 +79,33 @@ function getCoachStats(teams) {
   var mostKillsTeam = null
   var mostSPPsTeam = null
 
-  for( var j in teams ) {
+  for (var j in teams) {
     var totalCas = 0
     var totalTDs = 0
     var totalKills = 0
     var totalSPPs = 0
 
     var players = teams[j].players
-    for( var i in players ) {
+    for (var i in players) {
       totalCas += players[i].casualties
       totalTDs += players[i].touchdowns
       totalKills += players[i].kills
       totalSPPs += players[i].spp
     }
 
-    if( totalCas > mostCas ) {
+    if (totalCas > mostCas) {
       mostCas = totalCas
       mostCasTeam = teams[j]
     }
-    if( totalTDs > mostTDs ) {
+    if (totalTDs > mostTDs) {
       mostTDs = totalTDs
       mostTDsTeam = teams[j]
     }
-    if( totalKills > mostKills ) {
+    if (totalKills > mostKills) {
       mostKills = totalKills
       mostKillsTeam = teams[j]
     }
-    if( totalSPPs > mostSPPs ) {
+    if (totalSPPs > mostSPPs) {
       mostSPPs = totalSPPs
       mostSPPsTeam = teams[j]
     }

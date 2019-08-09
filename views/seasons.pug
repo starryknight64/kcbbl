@@ -7,7 +7,9 @@ append body
 	.container.body-container
 		.row
 			.col-md-3
-				h1 #{selectedSeason.name}
+				h1
+					span.glyphicon.glyphicon-calendar
+					| &nbsp;#{selectedSeason.name}
 			.col-md-4
 				nav.seasonsPaging
 					.btn-group

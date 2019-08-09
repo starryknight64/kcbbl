@@ -468,10 +468,9 @@ function getSeasons(wheres, values, joins) {
 }
 
 function getSeasonsForCoach(coachID) {
-  return getCoach(coachID)
-    .then((coach) => {
-      return getSeasons(["team.coach_id"], [coach.id], ["INNER JOIN team ON team.season_id = season.id"])
-    })
+  return getCoach(coachID).then((coach) => {
+    return getSeasons(["team.coach_id"], [coach.id], ["INNER JOIN team ON team.season_id = season.id"])
+  })
 }
 function getSeasonsForTeam(teamID) {
   return getTeam(teamID).then((team) => {
