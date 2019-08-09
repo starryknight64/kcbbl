@@ -7,32 +7,38 @@ var calls = require("./rest/calls")
 router.get("/", function (req, res, next) {
   return calls.getSeasons().then((seasons) => {
     return calls.getCurrentSeason().then((curSeason) => {
-      return calls.getWinningTeamForSeason(curSeason.id).then((winningTeam) => {
-        return calls.getCoachesForSeason(curSeason.id).then((coaches) => {
-          return calls.getTeamsForSeason(curSeason.id).then((teams) => {
-            var promises = []
-            for( var i in teams ) {
-              promises.push(calls.getPlayersForTeam(teams[i].id))
-            }
-            Promise.all(promises).then((playersData) => {
-              for( var i in teams ) {
-                if( playersData[i] ) {
-                  teams[i]["players"] = playersData[i]
-                } else {
-                  teams[i]["players"] = []
+      return calls.getPreviousSeason(curSeason.id).then((prevSeason) => {
+        return calls.getNextSeason(curSeason.id).then((nextSeason) => {
+          return calls.getWinningTeamForSeason(curSeason.id).then((winningTeam) => {
+            return calls.getCoachesForSeason(curSeason.id).then((coaches) => {
+              return calls.getTeamsForSeason(curSeason.id).then((teams) => {
+                var promises = []
+                for( var i in teams ) {
+                  promises.push(calls.getPlayersForTeam(teams[i].id))
                 }
-              }
-              var renderJSON = {
-                seasons: seasons,
-                currentSeason: curSeason,
-                selectedSeason: curSeason,
-                selectedSeasonWinningTeam: winningTeam,
-                selectedSeasonCoaches: coaches,
-                selectedSeasonTeams: teams,
-                trophyImage: curSeason.trophy.img,
-                stats: getSeasonStats(teams)
-              }
-              res.render("seasons", renderJSON)
+                Promise.all(promises).then((playersData) => {
+                  for( var i in teams ) {
+                    if( playersData[i] ) {
+                      teams[i]["players"] = playersData[i]
+                    } else {
+                      teams[i]["players"] = []
+                    }
+                  }
+                  var renderJSON = {
+                    seasons: seasons,
+                    currentSeason: curSeason,
+                    prevSeason: prevSeason,
+                    nextSeason: nextSeason,
+                    selectedSeason: curSeason,
+                    selectedSeasonWinningTeam: winningTeam,
+                    selectedSeasonCoaches: coaches,
+                    selectedSeasonTeams: teams,
+                    trophyImage: curSeason.trophy.img,
+                    stats: getSeasonStats(teams)
+                  }
+                  res.render("seasons", renderJSON)
+                })
+              })
             })
           })
         })
