@@ -45,6 +45,12 @@ append body
 											td #{positional.agility}
 											td #{positional.armor}
 											td.nowrap #{positional.value},000 gp
+							each purchase, j in race.purchases
+								.col-md-4
+									if purchase.max
+										| 0-#{purchase.max} #{purchase.name} (#{purchase.cost}k)
+									else
+										| 0+ #{purchase.name} (#{purchase.cost}k)
 							table.table
 								tr
 									th.nowrap Star&nbsp;Players

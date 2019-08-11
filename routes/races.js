@@ -24,7 +24,6 @@ router.get("/", function (req, res, next) {
       }
 
       Promise.all(promises).then((playerTypeSkillsData) => {
-
         for (var i in playerTypes) {
           if (playerTypeSkillsData[i]) {
             playerTypes[i]["skills"] = playerTypeSkillsData[i]
@@ -32,7 +31,35 @@ router.get("/", function (req, res, next) {
             playerTypes[i]["skills"] = []
           }
         }
-        res.render("races", { races: races })
+
+        promises = []
+        for (var i in races) {
+          promises.push(calls.getPurchases(["race_id", "race_id"], [races[i].id, null], undefined, "OR", "GROUP BY name"))
+        }
+        Promise.all(promises).then((purchasesData) => {
+          for (var i in races) {
+            if (purchasesData[i]) {
+              races[i]["purchases"] = purchasesData[i]
+              if (races[i].name == "Goblin") {
+                for (var j in races[i]["purchases"]) {
+                  if (races[i]["purchases"][j].name == "Bribe" && races[i]["purchases"][j].race_id == null) {
+                    races[i]["purchases"].splice(j)
+                  }
+                }
+              } else if (races[i].name == "Halfling") {
+                for (var j in races[i]["purchases"]) {
+                  if (races[i]["purchases"][j].name == "Halfling Master Chef" && races[i]["purchases"][j].race_id == null) {
+                    races[i]["purchases"].splice(j)
+                  }
+                }
+              }
+            } else {
+              races[i]["purchases"] = []
+            }
+          }
+
+          res.render("races", { races: races })
+        })
       })
     })
   })

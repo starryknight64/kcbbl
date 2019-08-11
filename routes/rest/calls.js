@@ -396,8 +396,8 @@ function getPlayerTypes(wheres, values, joins) {
 function getPurchase(id) {
   return db.get("purchase", id)
 }
-function getPurchases(wheres, values, joins) {
-  return db.getMany("purchase", undefined, wheres, values, joins)
+function getPurchases(wheres, values, joins, cmp, tail, order) {
+  return db.getMany("purchase", undefined, wheres, values, joins, cmp, tail, order)
 }
 
 

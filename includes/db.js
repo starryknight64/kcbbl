@@ -160,7 +160,7 @@ function getMany(table, cols, wheres, values, joins, cmp, tail, order) {
             }
         }
     }
-    sql += tail + " " + order
+    sql += " " + tail + " " + order
 
     var sqlKey = sql + " " + values.join(",")
     if (sqlKey in cachedQueries) {
