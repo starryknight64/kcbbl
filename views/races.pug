@@ -20,18 +20,18 @@ append body
 							p #{race.description}
 							table.table
 								tr
-									th Max
+									th.center Max
 									th Name
 									th Skills
-									th MA
-									th ST
-									th AG
-									th AV
+									th.center MA
+									th.center ST
+									th.center AG
+									th.center AV
 									th Cost
 								each positional, j in race.positionals
 									if positional.star_player == 0
 										tr
-											td.nowrap 0-#{positional.max}
+											td.nowrap.center 0-#{positional.max}
 											td #{positional.name}
 											td 
 												each skill, k in positional.skills
@@ -40,10 +40,10 @@ append body
 													else
 														| #{skill.name}
 
-											td #{positional.movement}
-											td #{positional.strength}
-											td #{positional.agility}
-											td #{positional.armor}
+											td.center #{positional.movement}
+											td.center #{positional.strength}
+											td.center #{positional.agility}
+											td.center #{positional.armor}
 											td.nowrap #{positional.value},000 gp
 							each purchase, j in race.purchases
 								.col-md-4

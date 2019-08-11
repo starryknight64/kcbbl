@@ -17,6 +17,10 @@ body {
   white-space: nowrap;
 }
 
+.center {
+  text-align: center;
+}
+
 .seasonsPaging {
   padding-top: 20px;
 }
