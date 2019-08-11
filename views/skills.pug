@@ -1,0 +1,18 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Skills
+
+append body
+	.container.body-container
+		.row
+			.col-md-3
+				h1 
+					span.glyphicon.glyphicon-info-sign
+					| &nbsp;Skills
+
+		.row.season-body
+			each skill, i in skills
+				.panel.panel-default
+					.panel-heading #{skill.name} (#{skill.type.name})
+					.panel-body #{skill.description}

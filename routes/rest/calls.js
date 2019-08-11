@@ -523,6 +523,13 @@ function getSkillsForPlayerAndMatch(playerID, matchID) {
   })
 }
 
+function getSkillType(id) {
+  return db.get("skill_type", id)
+}
+function getSkillTypes(wheres, values, joins) {
+  return db.getMany("skill_type", undefined, wheres, values, joins)
+}
+
 function getTeam(id) {
   return db.get("team", id).then((team) => {
     return getCoach(team.coach_id).then((coach) => {
@@ -719,6 +726,8 @@ module.exports = {
   getSkillsForPlayerIDAndPlayerTypeID: getSkillsForPlayerIDAndPlayerTypeID,
   getSkillsForPlayerTypeID: getSkillsForPlayerTypeID,
   getSkillsForPlayerAndMatch: getSkillsForPlayerAndMatch,
+  getSkillType: getSkillType,
+  getSkillTypes: getSkillTypes,
   getTeam: getTeam,
   getTeams: getTeams,
   getTeamsForCoach: getTeamsForCoach,
