@@ -13,7 +13,6 @@
 
 
 -- Dumping database structure for kcbbl
-DROP DATABASE IF EXISTS `kcbbl`;
 CREATE DATABASE IF NOT EXISTS `kcbbl` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
 USE `kcbbl`;
 
@@ -317,6 +316,7 @@ DROP TABLE IF EXISTS `player_type`;
 CREATE TABLE IF NOT EXISTS `player_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `max` tinyint(2) unsigned NOT NULL,
   `movement` tinyint(3) unsigned NOT NULL,
   `strength` tinyint(3) unsigned NOT NULL,
   `agility` tinyint(3) unsigned NOT NULL,

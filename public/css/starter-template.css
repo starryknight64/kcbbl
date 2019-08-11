@@ -13,6 +13,10 @@ body {
   border-bottom-right-radius: 10px;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .seasonsPaging {
   padding-top: 20px;
 }
@@ -69,6 +73,10 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0; 
   background-color: white; 
   padding: 5px;
+}
+
+.race-crest {
+  width: 100%;
 }
 
 .ellipsis {

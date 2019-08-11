@@ -1,0 +1,59 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Races
+
+append body
+	.container.body-container
+		.row
+			.col-md-3
+				h1 
+					span.glyphicon.glyphicon-info-sign
+					| &nbsp;Races
+
+		.row.season-body
+			each race, i in races
+				.panel.panel-default
+					.panel-heading #{race.name}
+					.panel-body 
+						.col-md-10
+							p #{race.description}
+							table.table
+								tr
+									th Max
+									th Name
+									th Skills
+									th MA
+									th ST
+									th AG
+									th AV
+									th Cost
+								each positional, j in race.positionals
+									if positional.star_player == 0
+										tr
+											td.nowrap 0-#{positional.max}
+											td #{positional.name}
+											td 
+												each skill, k in positional.skills
+													if k+1 < positional.skills.length
+														| #{skill.name}, 
+													else
+														| #{skill.name}
+
+											td #{positional.movement}
+											td #{positional.strength}
+											td #{positional.agility}
+											td #{positional.armor}
+											td.nowrap #{positional.value},000 gp
+							table.table
+								tr
+									th.nowrap Star&nbsp;Players
+									td
+										each positional, j in race.positionals
+											if positional.star_player == 1
+												if j+1 < race.positionals.length
+													| #{positional.name} (#{positional.value}k), 
+												else
+													| #{positional.name} (#{positional.value}k)
+						.col-md-2
+							img.race-crest(src="/images/races/crests/"+race.name.toLowerCase().replace(" ","%20")+".png")

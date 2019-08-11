@@ -2125,7 +2125,7 @@ if __name__ == '__main__':
         double = playerType[10]
 
         print "    %s: %s" % (race, name)
-        cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 0, raceIDs[race], value, None))
+        cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, maxAmt, ma, st, ag, av, 0, raceIDs[race], value, None))
         playerTypeID = cursor.lastrowid
 
         raceID = raceIDs[race]
@@ -2194,7 +2194,7 @@ if __name__ == '__main__':
             addedRaceIDs.append(raceID)
 
             print "    %s: %s" % (name, race)
-            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, ma, st, ag, av, 1, raceID, value, desc))
+            cursor.execute("INSERT INTO player_type VALUES(NULL,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", (name, 1, ma, st, ag, av, 1, raceID, value, desc))
             starPlayerID = cursor.lastrowid
             if raceID not in starPlayerIDsByRaceID:
                 starPlayerIDsByRaceID[raceID] = {}

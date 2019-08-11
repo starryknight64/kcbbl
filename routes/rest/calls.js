@@ -407,6 +407,9 @@ function getRace(id) {
 function getRaces(wheres, values, joins) {
   return db.getMany("race", undefined, wheres, values, joins)
 }
+function getAllRaces() {
+  return db.getMany("race", undefined, undefined, undefined, undefined, undefined, undefined, " ORDER BY name ASC")
+}
 
 
 function getCurrentSeason() {
@@ -508,6 +511,9 @@ function getSkillsForPlayerIDAndPlayerTypeID(playerID, playerTypeID) {
       return Promise.resolve(playerTypeSkills.concat(playerSkills))
     })
   })
+}
+function getSkillsForPlayerTypeID(playerTypeID) {
+  return getSkills(["player_type_skill.player_type_id"], [playerTypeID], ["INNER JOIN player_type_skill ON player_type_skill.skill_id=skill.id"])
 }
 function getSkillsForPlayerAndMatch(playerID, matchID) {
   return getPlayer(playerID).then((player) => {
@@ -697,6 +703,7 @@ module.exports = {
   getPurchases: getPurchases,
   getRace: getRace,
   getRaces: getRaces,
+  getAllRaces: getAllRaces,
   getCurrentSeason: getCurrentSeason,
   getPreviousSeason: getPreviousSeason,
   getNextSeason: getNextSeason,
@@ -710,6 +717,7 @@ module.exports = {
   getSkills: getSkills,
   getSkillsForPlayer: getSkillsForPlayer,
   getSkillsForPlayerIDAndPlayerTypeID: getSkillsForPlayerIDAndPlayerTypeID,
+  getSkillsForPlayerTypeID: getSkillsForPlayerTypeID,
   getSkillsForPlayerAndMatch: getSkillsForPlayerAndMatch,
   getTeam: getTeam,
   getTeams: getTeams,
