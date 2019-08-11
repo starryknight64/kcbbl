@@ -1,0 +1,18 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Inducements
+
+append body
+	.container.body-container
+		.row
+			.col-md-3
+				h1 
+					span.glyphicon.glyphicon-info-sign
+					| &nbsp;Inducements
+
+		.row.season-body
+			each inducement, i in inducements
+				.panel.panel-default
+					.panel-heading 0-#{inducement.max} #{inducement.name} (#{inducement.cost},000 gp each)
+					.panel-body !{inducement.description.replace(/\n/g,"<br><br>")}

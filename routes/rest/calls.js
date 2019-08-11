@@ -80,8 +80,8 @@ function getCoachesForSeason(seasonID) {
 function getInducement(id) {
   return db.get("inducement", id)
 }
-function getInducements(wheres, values, joins) {
-  return db.getMany("inducement", undefined, wheres, values, joins)
+function getInducements(wheres, values, joins, cmp, tail, order) {
+  return db.getMany("inducement", undefined, wheres, values, joins, cmp, tail, order)
 }
 
 function formatMatch(match, seasons, matchTypes, teams) {
@@ -419,7 +419,7 @@ function getCurrentSeason() {
 }
 function getPreviousSeason(seasonID) {
   return db.getMany("season", undefined, ["id"], [seasonID], undefined, ["<"], undefined, "ORDER BY id DESC").then((seasons) => {
-    if( seasons.length > 0 ) {
+    if (seasons.length > 0) {
       return Promise.resolve(seasons[0])
     }
     return Promise.resolve(null)
@@ -427,7 +427,7 @@ function getPreviousSeason(seasonID) {
 }
 function getNextSeason(seasonID) {
   return db.getMany("season", undefined, ["id"], [seasonID], undefined, [">"], undefined, "ORDER BY id ASC").then((seasons) => {
-    if( seasons.length > 0 ) {
+    if (seasons.length > 0) {
       return Promise.resolve(seasons[0])
     }
     return Promise.resolve(null)
