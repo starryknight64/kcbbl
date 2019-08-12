@@ -530,6 +530,13 @@ function getSkillTypes(wheres, values, joins) {
   return db.getMany("skill_type", undefined, wheres, values, joins)
 }
 
+function getSkillupNormals() {
+  return db.getMany("player_type_skill_type_normal", undefined, undefined, undefined, undefined, undefined, undefined, "ORDER BY player_type_id ASC")
+}
+function getSkillupDoubles() {
+  return db.getMany("player_type_skill_type_double", undefined, undefined, undefined, undefined, undefined, undefined, "ORDER BY player_type_id ASC")
+}
+
 function getTeam(id) {
   return db.get("team", id).then((team) => {
     return getCoach(team.coach_id).then((coach) => {
@@ -728,6 +735,8 @@ module.exports = {
   getSkillsForPlayerAndMatch: getSkillsForPlayerAndMatch,
   getSkillType: getSkillType,
   getSkillTypes: getSkillTypes,
+  getSkillupNormals: getSkillupNormals,
+  getSkillupDoubles: getSkillupDoubles,
   getTeam: getTeam,
   getTeams: getTeams,
   getTeamsForCoach: getTeamsForCoach,

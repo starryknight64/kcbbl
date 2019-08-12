@@ -28,6 +28,8 @@ append body
 									th.center AG
 									th.center AV
 									th Cost
+									th.center Normal
+									th.center Double
 								each positional, j in race.positionals
 									if positional.star_player == 0
 										tr
@@ -45,21 +47,46 @@ append body
 											td.center #{positional.agility}
 											td.center #{positional.armor}
 											td.nowrap #{positional.value},000 gp
+											td.center #{positional.normals}
+											td.center #{positional.doubles}
+
 							each purchase, j in race.purchases
 								.col-md-4
-									if purchase.max
-										| 0-#{purchase.max} #{purchase.name} (#{purchase.cost}k)
-									else
-										| 0+ #{purchase.name} (#{purchase.cost}k)
-							table.table
-								tr
-									th.nowrap Star&nbsp;Players
-									td
-										each positional, j in race.positionals
-											if positional.star_player == 1
-												if j+1 < race.positionals.length
-													| #{positional.name} (#{positional.value}k), 
-												else
-													| #{positional.name} (#{positional.value}k)
+									| #{purchase.max ? "0-"+purchase.max : "0+"}
+									| #{purchase.name}
+									| (#{purchase.cost ? purchase.cost+"k" : "cost varies"})
+										
 						.col-md-2
 							img.race-crest(src="/images/races/crests/"+race.name.toLowerCase().replace(" ","%20")+".png")
+
+						.col-md-12
+							h4.race-star-players Star Players
+							table.table
+								tr
+									th Name
+									th Skills
+									th Cost
+									th.center MA
+									th.center ST
+									th.center AG
+									th.center AV
+									th Upkeep
+								each positional, j in race.positionals
+									tr
+										if positional.star_player
+											td #{positional.name}
+											td
+												each skill, k in positional.skills
+													if k+1 < positional.skills.length
+														| #{skill.name}, 
+													else
+														| #{skill.name}
+												if positional.description
+													p #{positional.description}
+											td.nowrap #{positional.value},000 gp
+											td.center #{positional.movement}
+											td.center #{positional.strength}
+											td.center #{positional.agility}
+											td.center #{positional.armor}
+											td.nowrap #{positional.value <= 100 ? 20 : positional.value <= 150 ? 30 : positional.value <= 200 ? 40 : positional.value <= 300 ? 50 : 60},000 gp
+											

@@ -90,6 +90,10 @@ body {
   width: 100%;
 }
 
+.race-star-players {
+  margin-top: 20px;
+}
+
 .ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
