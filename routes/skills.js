@@ -5,13 +5,18 @@ var calls = require("./rest/calls")
 router.get("/", function (req, res, next) {
   calls.getSkills().then((skills) => {
     calls.getSkillTypes().then((skillTypes) => {
-      for( var i in skills ) {
+      for (var i in skills) {
         var skill = skills[i]
-        for( var j in skillTypes ) {
+        for (var j in skillTypes) {
           var skillType = skillTypes[j]
-          if( skill.skill_type_id == skillType.id ){
-            skill["type"] = skillType
-            delete skill.skill_type_id
+          if (skill.skill_type_id == skillType.id) {
+            if (skillType.name == "Improvement") {
+              skills.splice(i)
+              break
+            } else {
+              skill["type"] = skillType
+              delete skill.skill_type_id
+            }
           }
         }
       }

@@ -6,13 +6,72 @@ append head
 append body
 	.container.body-container
 		.row
+			a.anchor(id="top")
 			.col-md-3
 				h1 
 					span.glyphicon.glyphicon-info-sign
 					| &nbsp;Skills
 
 		.row.season-body
+			.col-md-4
+				.panel.panel-default
+					.panel-heading.center 
+						b GENERAL
+					.panel-body
+						each skill, i in skills
+							if skill.type.name == "General"
+								.col-md-6
+									a(href!="#"+skill.name.toLowerCase().replace(/[^a-z]/g,'_')) #{skill.name}
+			.col-md-4
+				.panel.panel-default
+					.panel-heading.center 
+						b AGILITY
+					.panel-body
+						each skill, i in skills
+							if skill.type.name == "Agility"
+								.col-md-6
+									a(href!="#"+skill.name.toLowerCase().replace(/[^a-z]/g,'_')) #{skill.name}
+			.col-md-4
+				.panel.panel-default
+					.panel-heading.center 
+						b STRENGTH
+					.panel-body
+						each skill, i in skills
+							if skill.type.name == "Strength"
+								.col-md-6
+									a(href!="#"+skill.name.toLowerCase().replace(/[^a-z]/g,'_')) #{skill.name}
+		.row.season-body
+			.col-md-4
+				.panel.panel-default
+					.panel-heading.center 
+						b PASSING
+					.panel-body
+						each skill, i in skills
+							if skill.type.name == "Passing"
+								.col-md-6
+									a(href!="#"+skill.name.toLowerCase().replace(/[^a-z]/g,'_')) #{skill.name}
+			.col-md-4
+				.panel.panel-default
+					.panel-heading.center 
+						b MUTATION
+					.panel-body
+						each skill, i in skills
+							if skill.type.name == "Mutation"
+								.col-md-6
+									a(href!="#"+skill.name.toLowerCase().replace(/[^a-z]/g,'_')) #{skill.name}
+			.col-md-4
+				.panel.panel-default
+					.panel-heading.center 
+						b EXTRAORDINARY
+					.panel-body
+						each skill, i in skills
+							if skill.type.name == "Extraordinary"
+								.col-md-6
+									a(href!="#"+skill.name.toLowerCase().replace(/[^a-z]/g,'_')) #{skill.name}
+		.row.season-body
 			each skill, i in skills
+				a.anchor(id=skill.name.toLowerCase().replace(/[^a-z]/g,"_"))
 				.panel.panel-default
 					.panel-heading #{skill.name} (#{skill.type.name})
+						a.pull-right(href!="#top") Back to Top
 					.panel-body #{skill.description}
