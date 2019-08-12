@@ -14,5 +14,8 @@ append body
 		.row.season-body
 			each inducement, i in inducements
 				.panel.panel-default
-					.panel-heading 0-#{inducement.max} #{inducement.name} (#{inducement.cost},000 gp each)
+					.panel-heading
+						| #{inducement.max ? "0-"+inducement.max : "0+"}
+						| #{inducement.name}
+						| #{inducement.cost ? "("+inducement.cost+",000 gp each)" : "(cost varies)" }
 					.panel-body !{inducement.description.replace(/\n/g,"<br><br>")}
