@@ -1,6 +1,4 @@
-import collections
-import mysql.connector
-import settings
+import collections, mysql.connector, settings, csv
 from openpyxl import load_workbook
 from timer import Timer
 
@@ -129,7 +127,7 @@ SKILLS = [
     ["Loner", "Extraordinary", "Loners, through inexperience, arrogance, animal ferocity or just plain stupidity, do not work well with the rest of the team. As a result, a Loner may use team re-rolls but has to roll a D6 first. On a roll of 4+, he may use the team re-roll as normal. On a roll of 1-3 the original result stands without being re-rolled but the team re-roll is lost (i.e., used)."],
     ["Mighty Blow", "Strength", "Add 1 to any Armour or Injury roll made by a player with this skill when an opponent is Knocked Down by this player during a block. Note that you only modify one of the dice rolls, so if you decide to use Mighty Blow to modify the Armour roll, you may not modify the Injury roll as well. Mighty Blow cannot be used with the Stab or Chainsaw skills."],
     ["Multiple Block", "Strength", "At the start of a Block Action a player who is adjacent to at least two opponents may choose to throw blocks against two of them. Make each block in turn as normal except that each defender's strength is increased by 2. The player cannot follow up either block when using this skill, so Multiple Block can be used instead of Frenzy, but both skills cannot be used together. To have the option to throw the second block the player must still be on his feet after the first block."],
-    ["Monstrous Mouth", "Extraordinary", "A player with a Monstrous Mouth is allowed to re-roll the D6 if they fail a Catch roll. It also allows the player to re-roll the D6 if they drop a hand-off or fail to make an interception. In addition, the Strip Ball skill will not work against a player with a Monstrous Mouth."],   
+    ["Monstrous Mouth", "Extraordinary", "A player with a Monstrous Mouth is allowed to re-roll the D6 if they fail a Catch roll. It also allows the player to re-roll the D6 if they drop a hand-off or fail to make an interception. In addition, the Strip Ball skill will not work against a player with a Monstrous Mouth."],
     ["Nerves of Steel", "Passing", "The player ignores modifiers for enemy tackle zones when he attempts to pass, catch or intercept."],
     ["No Hands", "Extraordinary", "The player is unable to pick up, intercept or carry the ball and will fail any catch roll automatically, either because he literally has no hands or because his hands are full. If he attempts to pick up the ball then it will bounce, and will cause a turnover if it is his team's turn."],
     ["Nurgle's Rot", "Extraordinary", "This player has a horrible infectious disease which spreads when he kills an opponent during a Block, Blitz or Foul Action. Instead of truly dying, the infected opponent becomes a new rookie Rotter. To do so, the opponent must have been removed from the roster during step 2.1 of the Post-game sequence, his Strength cannot exceed 4, and he cannot have the Decay, Regeneration or Stunty skills. The new Rotter can be added to the Nurgle team for free during step 5 of Updating Your Team Roster (see page 29) if the team has an open Roster slot. This new Rotter still counts at full value towards the total value of the Nurgle team."],
@@ -467,9 +465,11 @@ INDUCEMENTS = [
     ["Cheerleader", 3, {"All": 20}, "Most Blood Bowl teams have a troupe or two of cheerleaders both to inspire the team's players and their fans. It's the team's cheerleaders' job to whip the fans into a state of frenzy and lead the chanting and singing as the crowd's shouts and howls build up to a deafening crescendo. The more cheerleaders you have on your team, the more likely you are to win the 'Cheering Fans' result on the Kick-Off table"],
     ["Assistant Coach", 3, {"All": 20}, "Assistant coaches include offensive and defensive coordinators, special team coaches, personal trainers for your legendary players and numerous others. As a team becomes more successful the number of assistant coaches on its roster just seems to grow and grow. The more assistant coaches you have on your team, the more likely you are to win the 'Brilliant Coaching' result on the Kick-Off table"],
     ["Marketing Blitz", 5, {"All": 20}, "+1 Fan Factor"],
-    ["Mercenary", None, {"All":None}, "For every player safely employed by a team there are dozens of freelance players who play just one game with a team and then move on. These are the stars who didn't quite make it and the cast-offs from teams that went bankrupt. A Mercenary costs 30,000 more than an ordinary player of his position. For example, a Mercenary Human lineman would cost 80,000 gold pieces to hire for a match. The normal limits on the total number of players allowed on a team and in each position do apply to Mercenaries (so they aren't truly unlimited). However, players that are missing the game due to injury do not count towards the number of players on the team, so Mercenaries can be used to replace players that are missing a game. All Mercenaries have the Loner skill as they are unused to playing with the rest of the team. In addition, a Mercenary may be given one additional skill selected from those available to a player of that position on a Normal roll, at an additional cost of 50,000 gold pieces. For example, a Mercenary Human lineman could be given Tackle for a total cost of 130,000 gold pieces to hire for a match. Mercenaries cannot earn Star Player points other than the MVP for the game. Mercenaries can never gain new skills."],
-    ["Star Player", 2, {"All":None}, "Star Players are the heroes of the Blood Bowl arena, the most resourceful and talented players in the sport. Each Star Player has his own set of special skills and each is an individual, standing out from the rest of the players in the league by virtue of the unique set of skills and talents that they possess (see the back cover for Star Player stats and skills).\r\nStar players act as free agents, playing single matches for any team that can afford their high fees (and that they are willing to assist in the first place), and then moving on to play for another Team. A team may hire up to two Star Players that are allowed to play for the team. Unless the League Commissioner decides otherwise, deaths and serious injuries inflicted on Star Players are waived after the match.\r\nStar Players may not take the number of players in the team to more than 16. However, players that are missing the game due to injury do not count towards the number of players on the team, so a team can use Star Players to replace players that are missing a game. It is possible (though unlikely) for both teams to induce the same Star Player. If this happens then neither may use him and he keeps both sets of hiring fees!\r\nStar Players can never gain new skills.\r\nStar Players can never earn Star Player points other than the MVP for the game.\r\nHowever, Casualty SPPs and Touchdown SPPs earned by Star Players do contribute to a team’s redrafting bonuses at the end of each season.\r\nWhile Star Players do not retain these SPPs between matches, do keep track of these SPPs in your match sheet!\r\nFinally, purchased/induced Apothecaries or an Igor may not be used on Star Players ever. Star Players employ their own personal trainers and apothecaries who travel with them to heal them from almost any injury (including death) and to get in shape for their next match and will not use the team's amateur physicians."],
-    ["Special Play Card", 5, {"All":None}, "There are all sorts of ways an enterprising coach can prepare for a grueling match. Everything from praying for assistance to booby- trapping the pitch – if you can think of it, it's been done. Each Special Play you purchase lets you draw and keep an additional Special Play card in the Pre-match sequence."]
+    ["Mercenary", None, {"All": None},
+     "For every player safely employed by a team there are dozens of freelance players who play just one game with a team and then move on. These are the stars who didn't quite make it and the cast-offs from teams that went bankrupt. A Mercenary costs 30,000 more than an ordinary player of his position. For example, a Mercenary Human lineman would cost 80,000 gold pieces to hire for a match. The normal limits on the total number of players allowed on a team and in each position do apply to Mercenaries (so they aren't truly unlimited). However, players that are missing the game due to injury do not count towards the number of players on the team, so Mercenaries can be used to replace players that are missing a game. All Mercenaries have the Loner skill as they are unused to playing with the rest of the team. In addition, a Mercenary may be given one additional skill selected from those available to a player of that position on a Normal roll, at an additional cost of 50,000 gold pieces. For example, a Mercenary Human lineman could be given Tackle for a total cost of 130,000 gold pieces to hire for a match. Mercenaries cannot earn Star Player points other than the MVP for the game. Mercenaries can never gain new skills."],
+    ["Star Player", 2, {"All": None},
+     "Star Players are the heroes of the Blood Bowl arena, the most resourceful and talented players in the sport. Each Star Player has his own set of special skills and each is an individual, standing out from the rest of the players in the league by virtue of the unique set of skills and talents that they possess (see the back cover for Star Player stats and skills).\r\nStar players act as free agents, playing single matches for any team that can afford their high fees (and that they are willing to assist in the first place), and then moving on to play for another Team. A team may hire up to two Star Players that are allowed to play for the team. Unless the League Commissioner decides otherwise, deaths and serious injuries inflicted on Star Players are waived after the match.\r\nStar Players may not take the number of players in the team to more than 16. However, players that are missing the game due to injury do not count towards the number of players on the team, so a team can use Star Players to replace players that are missing a game. It is possible (though unlikely) for both teams to induce the same Star Player. If this happens then neither may use him and he keeps both sets of hiring fees!\r\nStar Players can never gain new skills.\r\nStar Players can never earn Star Player points other than the MVP for the game.\r\nHowever, Casualty SPPs and Touchdown SPPs earned by Star Players do contribute to a team's redrafting bonuses at the end of each season.\r\nWhile Star Players do not retain these SPPs between matches, do keep track of these SPPs in your match sheet!\r\nFinally, purchased/induced Apothecaries or an Igor may not be used on Star Players ever. Star Players employ their own personal trainers and apothecaries who travel with them to heal them from almost any injury (including death) and to get in shape for their next match and will not use the team's amateur physicians."],
+    ["Special Play Card", 5, {"All": None}, "There are all sorts of ways an enterprising coach can prepare for a grueling match. Everything from praying for assistance to booby-trapping the pitch--if you can think of it, it's been done. Each Special Play you purchase lets you draw and keep an additional Special Play card in the Pre-match sequence."]
 ]
 
 PURCHASES = [
@@ -480,7 +480,8 @@ PURCHASES = [
     ["Team Re-roll", 8, {"Amazon": 50, "Chaos": 60, "Chaos Dwarf": 70, "Dark Elf": 50, "Dwarf": 50, "Elf": 50, "Goblin": 60, "Halfling": 60, "High Elf": 50, "Human": 50, "Khemri": 70, "Lizardman": 60, "Necromantic": 70, "Norse": 60, "Nurgle": 70, "Ogre": 70, "Orc": 60, "Skaven": 60, "Undead": 70, "Vampire": 70, "Wood Elf": 50, "Chaos Pact": 70, "Slann": 50, "Underworld": 70, "Bretonnian": 70, "Daemons of Khorne": 70, "Simyin": 60}, "Team re-rolls represent how well trained a team is. A coach may use a team re-roll to re-roll any dice roll (other than Scatter, Distance, Direction, Armour, Injury or Casualty rolls) made by a player on his own team and who is still on the pitch during their own turn (even if the dice roll was successful). The result of the new roll must be accepted in place of the first, even if it is worse. A coach may not use more than one Re-roll counter per turn, and may not use a Re-roll counter to force the opposing coach to re-roll a dice roll."],
     ["Bribe", 2, {"Goblin": 100, "Otherwise": 200}, "Goblin teams may roster a bribe for 100,000 gold pieces; any other team can buy a bribe for 200,000 gold pieces. Each bribe allows a team to attempt to ignore one call by the referee for a player who has committed a foul to be sent off, or a player armed with a secret weapon to be banned from the match. Roll a D6: on a roll of 2-6 the bribe is effective (preventing a turnover if the player was ejected for fouling), but on a roll of 1 the bribe is wasted and the call still stands! Each bribe may be used once per match."],
     ["Halfling Master Chef", 1, {"Halfling": 200, "Otherwise": 600}, "Halfling teams may roster a Halfling Master Chef for 200,000 gold pieces; any other team can roster the Chef for 600,000 gold pieces. Roll 3D6 at the start of each half to see what effect the chef's cooking has on the team. For each dice that rolls 4 or more, the team is so inspired that they gain a Team Re-roll, and in addition, the opposing team is so distracted by the fantastic cooking smells emanating from their opponent's dug-out that they lose a Team Re-roll (but only if they have any left to lose)."],
-    ["Star Player", 1, {"All": None}, "When drafting teams at the start of a season, or when hiring players during the Post-match sequence, coaches can add a Star Player to their roster at their listed cost. This must be a Star Player that can play for their team. For example, a Human team could add Griff Oberwald to their line-up at a cost of 320,000 gold pieces. A player that is hired in this way is referred to as a ‘rostered Star Player'. A team cannot have more than one rostered Star Player, and a team with a rostered Star Player can only add one Star Player to their team through inducements, rather than two.\r\nAs soon as a coach has completed their roster, it should be submitted to the League Commissioner ahead of the start of the league. This locks the Star Player to their team for the start of the season – the League Commissioner should inform the other coaches that the Star Player is taken and that no other teams can choose them. In the cutthroatworld of player contracts, it's very much first-come, first-served.\r\nThe problem with Star Players is that they're very aware of how valuable they are, and no amount of team spirit and goodwill can make them forget it. As such, they expect any team that signs them for a season to ensure that they can live the lifestyle to which they are accustomed. This means luxury travel arrangements, the finest foods and wines, armies of attendants and personal trainers... the list goes on. The following step is added to the end of Phase 4: Hire and Fire of the Post-match sequence for teams that have a rostered\r\nThe team must pay the upkeep charge for its rostered Star Player, deducting an amount from their Treasury determined by the Star Player's cost, as shown next to each Star Player under Upkeep. If a coach cannot afford to pay the upkeep charge, or does not wish to, the Star Player quits the team. They are deleted from the team roster and the League Commissioner lists them as available in the Star Player pool."]
+    ["Star Player", 1, {"All": None},
+     "When drafting teams at the start of a season, or when hiring players during the Post-match sequence, coaches can add a Star Player to their roster at their listed cost. This must be a Star Player that can play for their team. For example, a Human team could add Griff Oberwald to their line-up at a cost of 320,000 gold pieces. A player that is hired in this way is referred to as a 'rostered Star Player'. A team cannot have more than one rostered Star Player, and a team with a rostered Star Player can only add one Star Player to their team through inducements, rather than two.\r\nAs soon as a coach has completed their roster, it should be submitted to the League Commissioner ahead of the start of the league. This locks the Star Player to their team for the start of the season--the League Commissioner should inform the other coaches that the Star Player is taken and that no other teams can choose them. In the cutthroatworld of player contracts, it's very much first-come, first-served.\r\nThe problem with Star Players is that they're very aware of how valuable they are, and no amount of team spirit and goodwill can make them forget it. As such, they expect any team that signs them for a season to ensure that they can live the lifestyle to which they are accustomed. This means luxury travel arrangements, the finest foods and wines, armies of attendants and personal trainers... the list goes on. The following step is added to the end of Phase 4: Hire and Fire of the Post-match sequence for teams that have a rostered\r\nThe team must pay the upkeep charge for its rostered Star Player, deducting an amount from their Treasury determined by the Star Player's cost, as shown next to each Star Player under Upkeep. If a coach cannot afford to pay the upkeep charge, or does not wish to, the Star Player quits the team. They are deleted from the team roster and the League Commissioner lists them as available in the Star Player pool."]
 ]
 
 MATCH_TYPES = ["Preseason", "Regular", "Postseason", "Championship"]
@@ -504,8 +505,8 @@ COACHES = {
     "Joe H": {"email": "hudgenslaw@gmail.com", "aka": ["Joe Hudgens"]},
     "Russell": {"email": "christiangeek6170@gmail.com", "aka": ["Russell Parks"]},
     "Nicholas": {"email": "moluccowrathe@gmail.com", "aka": ["Nicholas J Milberger", "Nicholas J. Milberger"]},
-    "Luke": {"email":"lukermichaels@gmail.com", "aka": ["Luke Michaels"]},
-    "Ron": {"email":"chevyman1ton@gmail.com", "aka": ["Ron Bowser"]}
+    "Luke": {"email": "lukermichaels@gmail.com", "aka": ["Luke Michaels"]},
+    "Ron": {"email": "chevyman1ton@gmail.com", "aka": ["Ron Bowser"]}
 }
 
 TEAMS = [
@@ -546,110 +547,121 @@ DECKS = [
 # 13+13+13+13+26+18+8 = 104
 CARDS = [
     ["Badyear Git", "2H", "Misc Mayhem", "A goblin doom diver who was too cheap to pay for admission is hit by the kick-off while flying over the stadium.", "Play at any kick-off after all players have been set up and the ball placed, but before any scatter has been rolled.", "The ball scatters 2d6, instead of 1d6, on this kick-off."],
-    ["Sprinkler Malfunction", "3H", "Misc Mayhem", "", "", ""],
-    ["Eclipse", "4H", "Misc Mayhem", "", "", ""],
-    ["Fanatic Invasion", "5H", "Misc Mayhem", "", "", ""],
-    ["Friendly Fans", "6H", "Misc Mayhem", "", "", ""],
-    ["Rowdy Fans", "7H", "Misc Mayhem", "", "", ""],
-    ["Heckler", "8H", "Misc Mayhem", "", "", ""],
-    ["Hometown Fans", "9H", "Misc Mayhem", "", "", ""],
-    ["Incoming!", "10H", "Misc Mayhem", "", "", ""],
-    ["Rogue Wizard", "JH", "Misc Mayhem", "", "", ""],
-    ["Ball Clone", "QH", "Misc Mayhem", "", "", ""],
-    ["Johnny Waterboy", "KH", "Misc Mayhem", "", "", ""],
-    ["That Babe's Got Talent!", "AH", "Misc Mayhem", "", "", ""],
-    ["Come To Papa!", "2D", "Special Team Plays", "", "", ""],
-    ["Dogged Defense", "3D", "Special Team Plays", "", "", ""],
-    ["Flea Flicker", "4D", "Special Team Plays", "", "", ""],
-    ["Going the Extra Mile", "5D", "Special Team Plays", "", "", ""],
-    ["Heroic Leap", "6D", "Special Team Plays", "", "", ""],
-    ["New Blocking Scheme", "7D", "Special Team Plays", "", "", ""],
-    ["Perfect Kick", "8D", "Special Team Plays", "", "", ""],
-    ["Option Play", "9D", "Special Team Plays", "", "", ""],
-    ["Punt", "10D", "Special Team Plays", "", "", ""],
-    ["Spectacular Catch", "JD", "Special Team Plays", "", "", ""],
-    ["Suicide Blitz", "QD", "Special Team Plays", "", "", ""],
-    ["Wake Up Call", "KD", "Special Team Plays", "", "", ""],
-    ["Beguiling Bracers", "AD", "Special Team Plays", "", "", ""],
-    ["Belt of Invulnerability", "2C", "Magic Items", "", "", ""],
-    ["Beguiling Bracers", "3C", "Magic Items", "", "", ""],
-    ["Fawndough's Headband", "4C", "Magic Items", "", "", ""],
-    ["Force Shield", "5C", "Magic Items", "", "", ""],
-    ["Gikta's Strength of da Bear", "6C", "Magic Items", "", "", ""],
-    ["Gloves of Holding", "7C", "Magic Items", "", "", ""],
-    ["Inertia Dampner", "8C", "Magic Items", "", "", ""],
-    ["Lucky Charm", "9C", "Magic Items", "", "", ""],
-    ["Magic Gloves of Jark Longarm", "10C", "Magic Items", "", "", ""],
-    ["Good Old Magic Codpiece", "JC", "Magic Items", "", "", ""],
-    ["Rabbit's Foot", "QC", "Magic Items", "", "", ""],
-    ["Ring of Teleportation", "KC", "Magic Items", "", "", ""],
-    ["Wand of Smashing", "AC", "Magic Items", "", "", ""],
-    ["Blatant Foul", "2S", "Dirty Tricks", "", "", ""],
-    ["Chop Block", "3S", "Dirty Tricks", "", "", ""],
-    ["Custard Pie", "4S", "Dirty Tricks", "", "", ""],
-    ["Distract", "5S", "Dirty Tricks", "", "", ""],
-    ["Greased Shoes", "6S", "Dirty Tricks", "", "", ""],
-    ["Gromskull's Exploding Runes", "7S", "Dirty Tricks", "", "", ""],
-    ["Illegal Substitution", "8S", "Dirty Tricks", "", "", ""],
-    ["Kicking Boots", "9S", "Dirty Tricks", "", "", ""],
-    ["Pit Trap", "10S", "Dirty Tricks", "", "", ""],
-    ["Spiked Ball", "JS", "Dirty Tricks", "", "", ""],
-    ["Stolen Playbook", "QS", "Dirty Tricks", "", "", ""],
-    ["Trampoline Trap", "KS", "Dirty Tricks", "", "", ""],
-    ["Witch's Brew", "AS", "Dirty Tricks", "", "", ""],
-    ["All Out Blitz", "2H", "Good Karma", "", "", ""],
-    ["Banana Skin", "3H", "Good Karma", "", "", ""],
-    ["Butterfingers", "4H", "Good Karma", "", "", ""],
-    ["Chainsaw", "5H", "Good Karma", "", "", ""],
-    ["Dazed and Confused", "6H", "Good Karma", "", "", ""],
-    ["Doc Bonesaw", "7H", "Good Karma", "", "", ""],
-    ["Extra Training", "8H", "Good Karma", "", "", ""],
-    ["Fan Uproar", "9H", "Good Karma", "", "", ""],
-    ["Hurry Up Offense", "10H", "Good Karma", "", "", ""],
-    ["Intensive Training", "JH", "Good Karma", "", "", ""],
-    ["Unsportsmanlike Conduct", "QH", "Good Karma", "", "", ""],
-    ["Knutt's Spell of Awesome Strength", "KH", "Good Karma", "", "", ""],
-    ["Lewd Maneuvers", "AH", "Good Karma", "", "", ""],
-    ["Lurve Potion", "2D", "Good Karma", "", "", ""],
-    ["Magic Helmet", "3D", "Good Karma", "", "", ""],
-    ["Miracle Worker", "4D", "Good Karma", "", "", ""],
-    ["One with the Kicker", "5D", "Good Karma", "", "", ""],
-    ["Razzle Dazzle", "6D", "Good Karma", "", "", ""],
-    ["Suitable Pitch", "7D", "Good Karma", "", "", ""],
-    ["Rune of Fear", "8D", "Good Karma", "", "", ""],
-    ["Scutt's Scroll of Weather Magic", "9D", "Good Karma", "", "", ""],
-    ["Stiletto", "10D", "Good Karma", "", "", ""],
-    ["Team Anthem", "JD", "Good Karma", "", "", ""],
-    ["The Fan", "QD", "Good Karma", "", "", ""],
-    ["The Wall", "KD", "Good Karma", "", "", ""],
-    ["Woof Woof!", "AD", "Good Karma", "", "", ""],
-    ["Bad Habits", "2C", "Random Events", "", "", ""],
-    ["Ballista", "3C", "Random Events", "", "", ""],
-    ["Blackmail", "4C", "Random Events", "", "", ""],
-    ["Buzzing", "5C", "Random Events", "", "", ""],
-    ["Duh, Where am I?", "6C", "Random Events", "", "", ""],
-    ["Ego Trip", "7C", "Random Events", "", "", ""],
-    ["Zap!", "8C", "Random Events", "", "", ""],
-    ["Gimme That!", "9C", "Random Events", "", "", ""],
-    ["Iron Man", "10C", "Random Events", "", "", ""],
-    ["Kid Gloves", "2S", "Random Events", "", "", ""],
-    ["Knuckledusters", "3S", "Random Events", "", "", ""],
-    ["Magic Sponge", "4S", "Random Events", "", "", ""],
-    ["Mine", "5S", "Random Events", "", "", ""],
-    ["Not-so-Secret Weapon", "6S", "Random Events", "", "", ""],
-    ["Orcidas Sponsorship", "7S", "Random Events", "", "", ""],
-    ["Rakarth's Curse of Petty Spite", "8S", "Random Events", "", "", ""],
-    ["Tackling Machine", "9S", "Random Events", "", "", ""],
-    ["Get 'em Lads!", "10S", "Random Events", "", "", ""],
-    ["Assassin", "JC", "Desperate Measures", "", "", ""],
-    ["Doom and Gloom", "QC", "Desperate Measures", "", "", ""],
-    ["Da Freight Train", "KC", "Desperate Measures", "", "", ""],
-    ["Morley's Revenge", "AC", "Desperate Measures", "", "", ""],
-    ["I am the Greatest", "JS", "Desperate Measures", "", "", ""],
-    ["Mindblow", "QS", "Desperate Measures", "", "", ""],
-    ["Come on Boys!", "KS", "Desperate Measures", "", "", ""],
-    ["Mysterious Old Medicine Man", "AS", "Desperate Measures", "", "", ""]
+    ["Sprinkler Malfunction", "3H", "Misc Mayhem", "Somebody triggered the sprinkler system, on accident of course. The ball becomes difficult to handle and the mist makes it difficult to see until it is shut off.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "All attempts to pass, catch, or pick up the ball have an additional -1 modifier for this drive."],
+    ["Eclipse", "4H", "Misc Mayhem", "Suddenly all light is blocked out by a total eclipse. Maybe it's the complete darkness, or maybe it's astrological magic, but for one brief moment all players are equal.", "Play at the beginning of your turn before any player takes an Action.", "For your turn and your opponent's turn, all players on the pitch have only the characteristics and skills of a rookie Goblin."],
+    ["Fanatic Invasion", "5H", "Misc Mayhem", "A crazed goblin fan talks an ogre into tossing him onto the pitch!", "Play after your turn has ended but before your opponent's turn begins. You may not play this card after a kick-off is resolved.", "Place a miniature to represent the Goblin Fanatic into any empty square on the pitch. He has the same stats as a rookie Goblin Fanatic. The coach playing this card may immediately move the Fanatic. Each coach can only take a Move Action with the Fanatic after his turn has ended but before his opponent's turn. This Fanatic has no tackle zones and blocks without any offensive assists. At the end of the drive the ref automatically ejects the Fanatic from the game."],
+    ["Friendly Fans", "6H", "Misc Mayhem", "The crowd loves your team, and wouldn't ever consider ripping one of your players apart... well, not this game anyway.", "Play during the pre-game after all inducements are purchased.", "Any player on your team that is pushed into the crowd this game is only Stunned, do not roll injury."],
+    ["Rowdy Fans", "7H", "Misc Mayhem", "Your fans have shown up today and it's with an extra evil glint in their eyes. They want a LOT of blood and are in the mood to help see it.", "Play during the pre-game after all inducements are purchased.", "For this match, any block or foul made by or against an opposing player adjacent to the sidelines is treated as having one extra assist from your team. In addition, no opposing player adjacent to the sidelines can assist a block or foul."],
+    ["Heckler", "8H", "Misc Mayhem", "An overeager fan heckles and distracts one opponent especially well.", "Play at the beginning of your turn before any player takes an Action.", "An opposing player of your choice may not use any skills (including block and dodge defensively) other than those that must be used (frenzy, loner, etc.) for this turn and the following opposing turn."],
+    ["Hometown Fans", "9H", "Misc Mayhem", "Your team's fans start the match very willing to help their favorite team by throwing the ball to the perfect place for you.", "Play during the pre-game after all inducements are purchased.", "You may choose the direction the ball is thrown in on the Throw-in Template every time it goes out of bounds during the first half. During the second half, all throw-ins are done as normal."],
+    ["Incoming!", "10H", "Misc Mayhem", "The crowd received souvenir balls today and has decided to use them as ammunition instead of keepsakes.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For this turn, any player from the opposing team must dodge any time they leave a square within 2 squares of either sideline or end zone."],
+    ["Rogue Wizard", "JH", "Misc Mayhem", "A wizard in the stands starts to get a little bored and bombs the pitch with a fireball!", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Place a marker on the pitch, scatter the marker 5 times. If it does not scatter off the pitch at any point, the fireball explodes as the spell; the center is where the marker is."],
+    ["Ball Clone", "QH", "Misc Mayhem", "The random chaos of Tzeentch has affected the ball.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "If the ball is on the ground, a 2nd ball materializes in the square and one of them is bounced from it. The first player that crosses into the end zone with one of the balls rolls a D6. On a 1-3, the ball vanishes and a touchdown is not scored. This effect ends when a drive ends. Players may not pick-up, catch, or intercept a ball if they already are carrying one. A ball bouncing into the square with the other ball will bounce again."],
+    ["Johnny Waterboy", "KH", "Misc Mayhem", "He must be a magician as that is some mighty fine H2O. One drink from this minor wizard of water seems to revive any bashed up players.", "Play during the pre-game after all inducements are purchased.", "For this match, your players gain a +1 modifier to recover from KO'd for this match (a roll of 1 is still a failure)."],
+    ["That Babe's Got Talent!", "AH", "Misc Mayhem", "Your team visits the local tavern the night before the game. One of the dancers offers to bring some friends to help the cheerleader squad, and some patrons to help with some new play ideas and to see their performance at your match.", "Play during the pre-game after all inducements are purchased.", "You automatically win all Cheering Fan and Brilliant Coaching rolls on the Kick-Off table for this match. In addition, you get an additional +1 to your FAME (see page 18) for any other Kick-Off table result for this match but not for the winning roll."],
+
+    ["Come To Papa!", "2D", "Special Team Plays", "You have read the kick-off almost perfectly and are ready to receive it.", "Play when you are receiving a kick-off after all players have been set up and the ball has been scattered, but before any kick-off result is rolled.", "Move one player not on the line of scrimmage to the square where the ball will land."],
+    ["Dogged Defense", "3D", "Special Team Plays", "Your players give everything they have to defend the end zone, trying to trip the opposition from the ground.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For this turn all your players that are Prone (not Stunned) exert tackle zones as if they were standing, however they cannot assist or cancel assists, catch, or take any other Action that requires a standing player."],
+    ["Flea Flicker", "4D", "Special Team Plays", "A trick play is on. You trick the opponent into thinking one person will run the ball, but he tosses it to someone else who throws the ball.", "Play at the beginning of your turn before any player takes an Action.", "You may take an extra Pass Action, however the first Pass Action you take must be a Quick Pass."],
+    ["Fumblerooski", "5D", "Special Team Plays", "The players on your team intentionally fumble the ball to open up some funny and spectacular plays.", "Play at the beginning of your turn before any player takes an Action.", "For this turn any failed pick up, catch, or fumbled pass rolls do not cause turnovers. Also a player can intentionally fail to pick up or catch the ball, or fumble a pass. Any failed attempt to pick up or throw the ball ends the player's Action. Any player failing a catch roll counts as having taken an Action for the turn as well, even if they have not performed an Action yet."],
+    ["Going the Extra Mile", "6D", "Special Team Plays", "A player on your team throws it into high gear to cover some extra ground.", "Play at the beginning of your turn before any player takes an Action.", "A player of your choice may Go For It any number of times this turn. Each Go For It after the second has a cumulative modifier of -1 to the roll (example: the 4th GFI would have a -2 modifier to the D6 roll). If the player has Sprint he may add 1 to one Go For It roll made this turn (a natural 1 will still result in a failure though)."],
+    ["Heroic Leap", "7D", "Special Team Plays", "The player has one chance to be a hero, and tries for it all!", "Play at the beginning of your turn before any player takes an Action.", "Choose a player with strength four or less. This turn the chosen player may leap, as the skill, with a 3+ to land regardless of that player's agility or skills."],
+    ["New Blocking Scheme", "8D", "Special Team Plays", "A clever blocking play gives you a one-up on your opponents.", "Play at the beginning of your turn before any player takes an Action.", "A player on your team that is in an opponent's tackle zones and adjacent to another player on your team may switch squares with the adjacent player from your team, unless either one has the ball. This may be done with only one set of two players."],
+    ["Perfect Kick", "9D", "Special Team Plays", "You try and kick the ball to just the right spot to help your defense.", "Play after all players have been set up for a kick-off, but before any kick-off result is rolled.", "Place the ball anywhere in the line of scrimmage or the end zone of the opponent's half excluding the wide zones. To determine the landing square for the ball, instead of the normal kick-off scatter, scatter the ball for one square 3 times using the sideline throw-in template for each scatter, you may choose how the template is facing on each scatter as long as it is facing a sideline or end zone."],
+    ["Option Play", "10D", "Special Team Plays", "This play is designed so your ball carrier can choose either to keep the ball himself or dump it off to someone else.", "Play at the beginning of your turn before any player takes an Action.", "A player of your choice gains the Dump-Off and Pass skill until the drive ends."],
+    ["Punt", "JD", "Special Team Plays", "Time to get rid of the ball and pin the opponent deep!", "Play after your turn has ended, but before your opponent's turn begins.", "If a player you control has the ball, you may place the ball in any square you want and scatter the ball three times. If the ball is not caught it will bounce as normal."],
+    ["Spectacular Catch", "QD", "Special Team Plays", "A player puts himself on the line to try for an amazing catch.", "Play at the beginning of your turn before any player takes an Action.", "For this turn a player of your choice gains Catch and Diving Catch."],
+    ["Suicide Blitz", "KD", "Special Team Plays", "A player gets a good jump over the line of scrimmage and launches himself at the opponents.", "Play after a kick-off to your opponent has been resolved (including the ball landing), but before your opponent's turn begins.", "A player of your choice not holding the ball may take a Blitz Action immediately. This player suffers from the No Hands skill for this Action only."],
+    ["Wake Up Call", "AD", "Special Team Plays", "Desperate times call for desperate measures. Time to get some extra players on the pitch, ready or not.", "Play before you set up any players for a drive.", "Instead of rolling for a player to come back from being KO'd, you may have the player automatically recover by placing the player on the pitch Stunned. You may do this with any number of KO'd players. After placing as many players from KO'd on the pitch as you desire, roll a D6 for each player that is Stunned. On a 4+, that player is turned to Prone."],
+
+    ["Beguiling Bracers", "2C", "Magic Items", "A player has come across the bracers of Count Luthor to use for the match. They are so good that they even distract the player wearing them sometimes.", "Play at the beginning of your turn before any player takes an Action.", "Choose one player on your team. That player gains the skills Hypnotic Gaze, Side Step, and Bone-head for the remainder of this game."],
+    ["Belt of Invulnerability", "3C", "Magic Items", "Your player really has found a way to become a man of steel.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Armor rolls made against a player of your choice may not be modified or re-rolled by any positive modifiers for the remainder of this game. This includes (but is not limited to) Claw, Mighty Blow, Dirty Player, Piling On, fouling assists, Stunty and Chainsaw attacks."],
+    ["Fawndough's Headband", "4C", "Magic Items", "One of the great passers of all time has loaned your player his headband for this game, but you had better make sure you get it back before he notices it missing!", "Play at the beginning of your turn before any player takes an Action.", "A player of your choice gains Pass and Accurate for this turn, but an additional +1 modifier on any interception rolls against him is applied as well."],
+    ["Force Shield", "5C", "Magic Items", "Your player paid top gold for a Ring of Invincibility, but it's not all that was advertised.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "The player on your team holding the ball gains the Sure Hands and Fend skills until he no longer has the ball."],
+    ["Gikta's Strength of da Bear", "6C", "Magic Items", "A scroll found in the house of a retired legendary coach contains a spell of Bear strength.", "Play at the beginning of your turn before any player takes an Action.", "A player of your choice on your team gains +1 Strength until the drive ends. After this the player has -1 Strength for the remainder of this game."],
+    ["Gloves of Holding", "7C", "Magic Items", "A player puts a magic salve, Grisnick's Stickum, onto his gloves before the drive.", "Play at any kick-off after all players have been set up and the ball placed, but before any scatter has been rolled.", "A player of your choice on your team gains the Catch and Sure Hands skills, but may not take Pass or Hand-off Actions for the remainder of this game."],
+    ["Inertia Dampner", "8C", "Magic Items", "The player has come across a magic amulet that slows the speed of any large objects that happen to intersect with his location.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Choose one player on your team. For the remainder of this drive, any opponent moving one square or more first and then blitzing this player suffers a -1 modifier to his Strength (minimum Strength of 1) for the block attempt."],
+    ["Lucky Charm", "9C", "Magic Items", "The player has acquired some lucky charms from a Halfling in a green coat before the game.", "Play during the pre-game after all inducements are purchased.", "A player of your choice may ignore the first time his armor is broken, and just be Placed Prone. Any roll that ignores armor, such as the crowd or throw a rock, is not affected by a lucky charm."],
+    ["Magic Gloves of Jark Longarm", "10C", "Magic Items", "Your team is featured in Spike! magazine and the magazine gives you these gloves for your upcoming game.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "A player of your choice gains the Pass Block skill, and an additional +1 modifier to all interception rolls until the drive ends."],
+    ["Good Old Magic Codpiece", "JC", "Magic Items", "Mother always said \"never play without your codpiece\". After years of being passed from one generation to the next, the magic is still working.", "Play during the pre-game after all inducements are purchased.", "A player of your choice may not be fouled for this game and injury rolls against this player cannot be modified or re-rolled by anything including (but not limited to) Dirty Player, Mighty Blow, Piling On, and Stunty."],
+    ["Rabbit's Foot", "QC", "Magic Items", "One player finds himself a lucky rabbit's foot after the pre-game meal of, well, rabbit.", "Play at the beginning of your turn before any player takes an Action.", "A player of your choice without Loner gains the Pro skill for the remainder of this game."],
+    ["Ring of Teleportation", "KC", "Magic Items", "Where'd he go? The player uses a teleportation ring to get out of a tight spot.", "Play after your turn has ended (unless your turn ending would end the half).", "One player on your team of your choice can be moved D6 squares in a single direction of your choice (note: you must move the full D6 squares and must choose the direction before rolling the D6). Treat this movement as if the player had been thrown with the Throw TeamMate skill but without the 3 scatters to determine the landing square. The landing roll from the teleportation is automatically successful unless he has bounced off another player."],
+    ["Wand of Smashing", "AC", "Magic Items", "Stick! Smash!", "Play at the beginning of your turn before any player takes an Action.", "Choose one player on your team. That player gains +1 strength and the Mighty Blow skill for this turn."],
+
+    ["Blatant Foul", "2S", "Dirty Tricks", "A player on your team is determined to take out the opposition, no matter what.", "Play at the beginning of your turn before any player takes an Action.", "The armor roll for your Foul Action this turn automatically succeeds and is considered a non-doubles roll, however the injury roll for the foul must be rolled as normal with the player sent off on doubles."],
+    ["Chop Block", "3S", "Dirty Tricks", "A player throws a dirty block on the opponent.", "Play after your turn has ended but before your opponent's turn begins. You may not play this card after a kick-off is resolved.", "This card may only be played on one of your Standing players that did not take an Action during your last turn. Your player is Placed Prone and an opposing player in a square adjacent to him is now considered Stunned."],
+    ["Custard Pie", "4S", "Dirty Tricks", "One of your players thrusts a cleverly concealed custard pie in the face of an opposing player.", "Play at the beginning of your turn before any player takes an Action.", "Choose one player on the opposing team adjacent to one of your Standing or Prone players (not Stunned). That opposing player is so flabbergasted by the pie hit that he loses his tackle zones for the remainder of this turn as per a successful Hypnotic Gaze roll."],
+    ["Distract", "5S", "Dirty Tricks", "Your player is very good at distracting all those around him.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "The chosen player gains the skill Disturbing Presence for this turn and all opposing players starting their Action within 3 squares of the player count as having Bone-head (lost tackle zones from failed Bone-head rolls return at the end of this turn)."],
+    ["Greased Shoes", "6S", "Dirty Tricks", "The magic grease applied to your opponents' shoes has finally taken effect.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "This turn all opposing players need to roll a 5+ to Go For It instead of the normal 2+."],
+    ["Gromskull's Exploding Runes", "7S", "Dirty Tricks", "A player purchased some exploding runes from a dwarven runesmith before the game. Although they are illegal, they are highly effective.", "Play before setting up for a drive.", "Choose one player on your team. That player gains the Bombardier, No Hands, and Secret Weapon skills for this game. Because the Rune can be very volatile, any Pass roll made with a Rune bomb is performed with a -1 modifier."],
+    ["Illegal Substitution", "8S", "Dirty Tricks", "A reserve sneaks onto the pitch while the ref is cleaning his glasses.", "Play at the beginning of your turn before any player takes an Action.", "You may place any player from the reserves box in an unoccupied square in the end zone you are defending. This player may only take a Move Action this turn. This may take your team to 12 players for the remainder of the drive."],
+    ["Kicking Boots", "9S", "Dirty Tricks", "These boots were made for stomping, and that is just what they will do!", "Play after all players have been set up for a kick-off, but before any kick-off result is rolled.", "A player of your choice on your team gains the Kick and Dirty Player skills and a -1 MA for the remainder of this game."],
+    ["Pit Trap", "10S", "Dirty Tricks", "A devious groundskeeper has set up a pit trap for you.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Choose a player: that player is Placed Prone, no Armor roll is made. If the player had the ball, bounce it as normal."],
+    ["Spiked Ball", "JS", "Dirty Tricks", "A Bloodthirster is in the crowd today, so in honor of this event a spiked ball is swapped with the real ball. More blood for the blood god and the fans!", "Play after all players have been set up for a kick-off, but before any kick-off result is rolled.", "Until the drive ends any failed pick up or catch roll (but not interception roll) is treated as the player being attacked with the Stab skill by an opponent."],
+    ["Stolen Playbook", "QS", "Dirty Tricks", "You nabbed a playbook from the opponent's coach! He sure will be surprised when you know exactly how to ruin his play.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "A player of your choice gains Pass Block and Shadowing until the drive ends."],
+    ["Trampoline Trap", "KS", "Dirty Tricks", "Someone set up a deep pit trap... with a trampoline in it! ", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Choose any opposing player. Using all the rules for the Throw TeamMate skill, the player is automatically thrown (i.e., cannot be fumbled) to a target square that is D6 squares away in a random direction from his own square (use the scatter template). The player will need to make a landing roll as normal if they land on the pitch."],
+    ["Witch's Brew", "AS", "Dirty Tricks", "You've spiked the opponent's Kroxorade bottle with a witch's concoction!", "Play after all players have been set up for a kick-off, but before any kick-off result is rolled.", "Choose an opponent and roll on this table.\r\n1:   Whoops! Mad Cap Mushroom potion! The player gains the Jump Up and No Hands skills until the drive ends.\r\n2:   Snake Oil! Bad taste, but no effect.\r\n3-6: Sedative! The player gains the Really Stupid skill until the drive ends."],
+
+    ["All Out Blitz", "2H", "Good Karma", "A tactical play of great effect... if it works.", "Play at the beginning of your turn before any player takes an Action.", "For this turn, you may declare a second Blitz Action."],
+    ["Banana Skin", "3H", "Good Karma", "One of the oldest tricks in the book, but a well-aimed peel still is a great equalizer.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "An opposing player of your choice in a tackle zone of one of your players is automatically Knocked Down. Roll for Armor/Injury as normal. If the player was holding the ball, it does not cause a turnover."],
+    ["Butterfingers", "4H", "Good Karma", "One player from the opposing team knows he just is not himself today and ball handling for this drive is just out of the question.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this drive, one selected opposing player not currently holding the ball gains the No Hands skill."],
+    ["Chainsaw", "5H", "Good Karma", "One of your players brings along a chainsaw for the game: not too subtle, but effective.", "Play before setting up for a drive.", "A player of your choice on your team gains the Chainsaw, Secret Weapon, and No Hands skills for this game."],
+    ["Dazed and Confused", "6H", "Good Karma", "One player from the opposing team was hit just a little too hard and is having trouble focusing on the game.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this game, one selected opposing player who is currently Prone or Stunned gains the Bone-head skill."],
+    ["Doc Bonesaw", "7H", "Good Karma", "That blood on his outfit and the saw on his hip are not very comforting, but his medical talents are difficult to refute even on undead players.", "Play after a drive has ended and KO'd recovery rolls have been made.", "A player from your team that has been KO'd or Badly Hurt is moved to Reserves."],
+    ["Extra Training", "8H", "Good Karma", "Your team has been working all week on playing better as a united squad.", "Play during the pre-game after all inducements are purchased.", "Your team receives one extra team re-roll for this match."],
+    ["Fan Uproar", "9H", "Good Karma", "Your fans start yelling so loudly that the opposing team cannot hear the coach or any of the on pitch play signals.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "No team re-rolls may be used by your opponent for this turn or his next turn (unless the drive ends before your opponent's second turn)."],
+    ["Hurry Up Offense", "10H", "Good Karma", "Your team is making all of the time that it has left count, trying to mount one last scoring drive.", "Play before moving your turn marker.", "You receive an immediate free turn. However, after each Action roll a D6, on a 1 the free turn ends. This roll may not be re-rolled. Your opponent immediately begins a free turn after your free turn is over, and the same rules will apply for when it ends. If a TD would have been scored during your free turn, a turnover occurs as normal but the touchdown does not count unless a player from your team still has the ball in the end zone at the end of your opponent's free turn."],
+    ["Intensive Training", "JH", "Good Karma", "One player from your team is really psyched for this week's match, and has been working very long hours preparing for it.", "Play at the beginning of your turn before any player takes an Action.", "For the remainder of this game, one player of your choice from your team gains one extra skill. This can be any skill that he can learn from an Improvement roll without a Doubles roll."],
+    ["Unsportsmanlike Conduct", "QH", "Good Karma", "A player's taunting and antics after scoring causes a fan to express his feelings towards him with a well-thrown rock-filled Bloodweiser can.", "Play immediately after your opponent scores a touchdown.", "The player that scored the touchdown is KO'd. He may not roll to recover from KO'd until the end of the next drive."],
+    ["Knutt's Spell of Awesome Strength", "KH", "Good Karma", "A crafty wizard in the stands casts a minor spell to give his favorite player some added hitting power.", "Play at the beginning of your turn before any player takes an Action.", "For this turn, one player of your choice from your team is treated as having double his strength."],
+    ["Lewd Maneuvers", "AH", "Good Karma", "A group of cheerleaders were hired to distract the opposition. They do such a good job of it even your players are not going anywhere.", "Play at the beginning of your turn before any player takes an Action.", "Choose a wide zone. Any player from either team that is currently in that wide zone may take no Action this turn or on the opposing turn that follows this turn."],
+    ["Lurve Potion", "2D", "Good Karma", "A magic potion slipped into your opponent's drink makes someone in the stands completely irresistible to him.", "Play after a kick-off to your opponent has been resolved (including the ball landing), but before your opponent's turn begins.", "One randomly selected opposing player, in a wide zone of your choice, is placed in the Reserve box. If the player was holding the ball, it bounces once from their original square."],
+    ["Magic Helmet", "3D", "Good Karma", "Its magic has almost worn off, but this relic that once protected older generation Blood Bowl players over their entire career appears to have enough magic left for one more game.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this game, one player of your choice from your team gains +1 AV and the Thick Skull skill."],
+    ["Miracle Worker", "4D", "Good Karma", "Whether this crazy man actually has a direct line to Nuffle or not... he gets results.", "Play after a drive has ended before rolling for KO'd players.", "One player on your team who has suffered a Casualty roll of 41 or higher is now considered to be KO'd."],
+    ["One with the Kicker", "5D", "Good Karma", "Somehow one of your players suddenly can read the mind of the opposing kickers and can almost always get to where the ball is going.", "Play when you are receiving a kick-off after all players have been set up and the ball has been scattered, but before any kick-off result is rolled.", "One player on your team gains Kick-Off Return and Diving Catch for the remainder of this game."],
+    ["Razzle Dazzle", "6D", "Good Karma", "A tactical play of great effect... if it works. ", "Play at the beginning of your turn before any player takes an Action.", "For this turn, you may declare either a second Pass Action or a second Hand-off Action."],
+    ["Suitable Pitch", "7D", "Good Karma", "The pitch is made to be in perfect playing conditions for your team, either by removing some of the dangerous objects, or by adding even more. Once the ref is wise to this situation the state of the pitch is restored to normal, however.", "Play after all players have been set up for a kick-off, but before any kick-off result is rolled.", "Choose to either add more dangerous objects or to remove them. If you add more dangerous objects then all Armor rolls caused by being Knocked Down are modified by +1. If you choose to remove them, the modifier is -1 instead. This modifier affects both teams and stays in effect until the drive ends."],
+    ["Rune of Fear", "8D", "Good Karma", "Your head coach had a Dwarf rune forged for him before the game and has decided now is the time to put its limited effect into Action.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "During only this turn of your opponent, every player on your team is treated as having the Foul Appearance and Disturbing Presence skills."],
+    ["Scutt's Scroll of Weather Magic", "9D", "Good Karma", "You have tricked a gullible wizard into parting with a useful scroll.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Select a weather result. The weather will immediately change to that result and remain there until a Weather Change kick-off roll is made."],
+    ["Stiletto", "10D", "Good Karma", "One player from your team has come armed to even up this match.", "Play at the beginning of your turn before any player takes an Action.", "For the remainder of this game, one player of your choice from your team gains the Dirty Player and Stab skills."],
+    ["Team Anthem", "JD", "Good Karma", "The crowd today is really out in full fanatic support. Their cheers and encouragement for your team and abuse for the referees and the opposing team really have set the stage for your team to do their best (including bribing the ref for the coin toss).", "Play during the pre-game after all inducements are purchased.", "Your team automatically wins the coin toss to kick or receive without flipping the coin. In addition, your team receives an additional +2 modifier to your FAME (see page 18) for any Kick-Off table result for this match but not for the winnings roll."],
+    ["The Fan", "QD", "Good Karma", "As your team takes the pitch, a crazed retired warrior runs out of the stands and asks to help you \"smash those gits!\" The head coach decides to see if he can help.", "Play during the pre-game after all inducements are purchased.", "Add the fan to your team as a player even if this takes your team to more than 16 players. The fan's stats are MA 6, ST 4, AG 2, AV 7, and he has the Loner and Frenzy skills. The fan leaves your team when the half ends."],
+    ["The Wall", "KD", "Good Karma", "Your team has been practicing a new special play and now is the time to try it out.", "Play after your turn has ended but before your opponent's turn begins. You may not play this card after a kick-off is resolved.", "During only this turn of your opponent, every player on your team is treated as having the Stand Firm skill."],
+    ["Woof Woof!", "AD", "Good Karma", "A stray dog runs onto the pitch and runs off with the ball.", "Play at the beginning of your turn before any player takes an Action.", "The ball must be on the ground for this card to have an effect. Roll for Scatter direction with the Throw-in template. The ball scatters D6 squares in that direction and is where the dog places it on the ground (no bounce roll). If the final square is occupied, scatter once more in the same direction. If at any time the scatter result indicates the dog ran into the crowd, stop scattering and have the crowd throw-in the ball."],
+
+    ["Bad Habits", "2C", "Random Events", "The opposing team has picked up some really bad habits and it's starting to change their ability to work together as a team.", "Play during the pre-game after all inducements are purchased.", "The opposing team loses D3 Team Re-rolls for this game only."],
+    ["Ballista", "3C", "Random Events", "Your team has cunningly concealed a massive ballista along the sidelines allowing you to fire it at an unsuspecting opposing player at just the right moment.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "The Ballista works exactly like a Wizard's Lightning Bolt spell."],
+    ["Blackmail", "4C", "Random Events", "You have the goods on one of the opposing players, and you have chosen now to call in your favor.", "Play at the beginning of your turn before any player takes an Action.", "You may treat a chosen opposing player, other than the ball carrier, as a member of your team for this turn only. Note that the referee recognizes the player as an opponent, so you may not score a touchdown for your team with this player and the player cannot be ejected for fouling his own team."],
+    ["Buzzing", "5C", "Random Events", "One player from your team accidentally drank some Mad-Cap Mushroom-laced coffee before this drive.", "Play at the beginning of your turn before any player takes an Action.", "For the remainder of this game, one player of your choice from your team not holding the ball gains +1 to his AG and the Jump Up, No Hands and Frenzy skills."],
+    ["Duh, Where am I?", "6C", "Random Events", "One player from the opposing team was out all night on a bender and is really not ready for this game.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this game, one selected opposing player gains the Really Stupid skill."],
+    ["Ego Trip", "7C", "Random Events", "One player from the opposing team has developed a real swelled head from his success and is demanding super star treatment.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Choose one opposing player. For the remainder of this game, that player must take his Action first every turn or not take an Action at all."],
+    ["Zap!", "8C", "Random Events", "An underhanded mage you have bribed turns an opponent into a frog.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "Roll a D6. On a 1, the spell has FIZZLED and this card has no effect. On a 2+, one targeted player is treated as having ONLY the following characteristics and skills for the remainder of the drive (MA: 4; ST: 1; AG: 4; AV: 4; Dodge, Leap, No Hands, Stunty, Titchy). If he was carrying the ball it will bounce once from his square. His characteristics/skills will return to normal at the end of the drive, but any injury he suffers as a frog is permanent."],
+    ["Gimme That!", "9C", "Random Events", "One player from your team has been waiting all season to show what he can do--and he wants the ball NOW!", "Play at the beginning of your turn before any player takes an Action.", "For the remainder of this game, one player of your choice from your team gains the Dauntless, Juggernaut, and Strip Ball skills."],
+    ["Iron Man", "10C", "Random Events", "One player from your team has dedicated the match to his recently departed mum and is determined to play for the whole game, no matter what the cost.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this game, any event that results in an Injury roll against a selected player from your team is treated as if a Stunned result was rolled without actually rolling to see an injury result."],
+    ["Kid Gloves", "2S", "Random Events", "One player from the opposing team has the NAF questioning his tactics on how he has been racking up those injuries. He decides to go easy this game to reduce the scrutiny on him.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this game, all armor breaks against your team by a selected opposing player from fouling or blocking will be treated as Stunned results without actually rolling to see an injury result."],
+    ["Knuckledusters", "3S", "Random Events", "A player from your team slips on a pair of magical one-shot knuckledusters to make sure that the opponent he has his eye on goes down this turn.", "Play at the beginning of your turn before any player takes an Action.", "For this turn, one player of your choice from your team can convert any and all Block dice he rolls to \"Defender Down\" results."],
+    ["Magic Sponge", "4S", "Random Events", "The local wizard's guild is a fan of your team and has provided your team with a magic sponge that offers possible healing magic to one lucky player.", "Play after a drive has ended.", "Roll a D6. On a 1, the sponge's magic fails. On a 2+, you may heal one player in the Dead and Injured box to move him to Reserves."],
+    ["Mine", "5S", "Random Events", "Your team trapped the pitch with a disguised mine and the opposing team has just set it off.", "Play at the beginning of your turn before any player takes an Action.", "Mine works exactly like a Wizard's Fireball spell except that the center square must have an opposing player in it for this card to be played."],
+    ["Not-so-Secret Weapon", "6S", "Random Events", "You bribe the Groundsman to drive his \"other\" machine onto the pitch to help your team out.", "Play at the beginning of your turn before any player takes an Action.", "Place a miniature to represent the Groundsman in any square on the pitch adjacent to the sidelines but not in an end zone. The Groundsman has all the stats and skills of a rookie Dwarf Deathroller. You may treat this player as a normal member of your team and it may take you above 11 players on the pitch for this drive. The Groundsman will only play this drive before he returns his equipment to the garage."],
+    ["Orcidas Sponsorship", "7S", "Random Events", "One player from your team has been selected to help field-test the latest innovation in Blood Bowl footwear. The air-elemental filled soles make the player especially light on their feet.", "Play at the beginning of your turn before any player takes an Action.", "For the remainder of this game, one player of your choice from your team gains +1 MA and the Sprint and Sure Feet skills."],
+    ["Rakarth's Curse of Petty Spite", "8S", "Random Events", "Your team has bribed an old witch to curse one of the opposing players.", "Play after your turn has ended or your kick-off to an opponent is resolved, but before your opponent's turn begins.", "For the remainder of this game, one selected opposing player may not re-roll any dice roll either through team or skill re-rolls."],
+    ["Tackling Machine", "9S", "Random Events", "One player from your team has been told \"win or else\" by the Goblin bookies to make good on his gambling debts and he is determined to get his team the win even if he needs to take down every opposing player himself.", "Play at the beginning of your turn before any player takes an Action.", "For the remainder of this game, one player of your choice from your team gains the Diving Tackle, Jump Up, Tackle, and Wrestle skills."],
+    ["Get 'em Lads!", "10S", "Random Events", "Your team makes a major push to break through the opposing team after seeing one of their own go down.", "Play at the beginning of your turn, before any player takes an Action as long as your team suffered any injuries (including Stunned) during the opposition's previous turn.", "For this turn, each of your players gains +1 ST."],
+
+    ["Assassin", "JC", "Desperate Measures", "Your team hires a trained assassin to dope a vital player from your opponent's team to force him to miss the game.", "Play during the pre-game after all inducements are purchased.", "Pick a player on the opposing team. He must miss this game."],
+    ["Doom and Gloom", "QC", "Desperate Measures", "Due to some cunningly planted rumors and smear campaigns, the opposing team comes into the game with some serious morale issues.", "Play during the pre-game after all inducements are purchased.", "Roll a D6 for each re-roll the opposing team has; for each result other than 1, the opposing team loses a re-roll for the match."],
+    ["Da Freight Train", "KC", "Desperate Measures", "You've bribed star Borg 'Freight Train' Gorthag and he comes flying onto the pitch to assist your team.", "Play at the beginning of your turn before any player takes an Action.", "Place a miniature to represent Borg in any square adjacent to the sidelines but not in an end zone. Borg's characteristics/skills are MA 6;ST 5;AG 2;AV 9 with Loner, Mighty Blow, Thick Skull, Break Tackle, Juggernaut, and Strip Ball. You may treat this player as a normal member of your team, he may take an Action as normal the turn he is placed on the pitch, and it may take you above 11 players on the pitch for this drive. Borg will leave your team at the end of the current half."],
+    ["Morley's Revenge", "AC", "Desperate Measures", "The opposing team's drinks have been spiked with a powerful laxative, which makes several players have trouble getting out of the locker room facilities for each drive.", "Play during the pre-game after all inducements are purchased.", "Randomly select three opposing players. For the remainder of this game, each one must roll a D6 before every kick-off. On a roll of 1-3, he may not take part in this drive. On a roll of 4-6, he may be set up normally."],
+    ["I am the Greatest", "JS", "Desperate Measures", "Egos on the opposing team are running very high for this match and the head coach is unable to override his team's prima donnas.", "Play during the pre-game after all inducements are purchased.", "For each drive, only one of the two players with the highest Team Value or Inducement Cost on the opposing team eligible to be set-up for that drive (i.e., not Sent Off or in the KO'd or Dead & Injured box) may be placed on the pitch."],
+    ["Mindblow", "QS", "Desperate Measures", "Your team has employed a powerful telepath and has chosen this moment to utilize her talent. Her mental scream temporarily stuns the opposing team into inactivity.", "Play at the beginning of your turn before any player takes an Action.", "Roll a D6 for each opposing player on the pitch. On a 2+, treat that player as if he had failed a Bone-head roll previously. This effect only last until the end of your turn after which the Bone-head effect is removed without the player needing to start his next Action to cancel it."],
+    ["Come on Boys!", "KS", "Desperate Measures", "Your players show great discipline in the face of misfortune against a tough opponent.", "Play after your turn has ended, but before your opponent's turn begins.", "If your turn just ended from a turnover, your team does not actually suffer a turnover from that failed roll. The Action of the player causing the turnover is ended, but any player on your team who has not yet declared an Action may continue their turn as if the turnover did not occur. Any further turnovers this turn simply end the Action of the player committing the turnover instead of ending the turn."],
+    ["Mysterious Old Medicine Man", "AS", "Desperate Measures", "A small, wrinkled, cackling man comes to the team offering them some of his latest brewed snake oil which he claims will \"cure all that ails you.\" Surprisingly it works... too bad he vanished without a trace after selling it to you.", "Play during the pre-game after all inducements are purchased.", "Your team may subtract 1 from all Injury rolls against its players this game. If this takes the result below 2, the player is treated as Prone not Stunned. Rolls on the Casualty table against your team are not affected by this effect."]
 ]
+
+with open("special-play-cards.csv", "wb") as f:
+    writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+    writer.writerow(["Card Name", "Card Face", "Deck", "Description", "Timing", "Effect"])
+    writer.writerows(CARDS)
 
 
 def getAliases(name, aliases):
@@ -946,7 +958,7 @@ if __name__ == '__main__':
                 masterChef = rows[25][19] if rows[25][19] else 0
                 bribes = rows[26][19] if rows[26][19] else 0
 
-                if rows[25][11] != "HALFLING MASTER CHEF": # Then this utilizes the old style sheet without master chef and bribes added
+                if rows[25][11] != "HALFLING MASTER CHEF":  # Then this utilizes the old style sheet without master chef and bribes added
                     raceName = rows[21][8]
                     coachName = rows[22][8]
                     teamValue = rows[23][8]
@@ -1035,7 +1047,7 @@ if __name__ == '__main__':
                 masterChef = rows[25][19] if rows[25][19] else 0
                 bribes = rows[26][19] if rows[26][19] else 0
 
-                if rows[25][11] != "HALFLING MASTER CHEF": # Then this utilizes the old style sheet without master chef and bribes added
+                if rows[25][11] != "HALFLING MASTER CHEF":  # Then this utilizes the old style sheet without master chef and bribes added
                     raceName = rows[21][8]
                     coachName = rows[22][8]
                     teamValue = rows[23][8]
@@ -1095,7 +1107,7 @@ if __name__ == '__main__':
                         exit()
             print "Loaded %s rosters in %s" % (len(sheetNames), t.elapsed())
             totalRosters += len(sheetNames)
- 
+
         # Season 5 Rosters
         if True:
             print
@@ -1261,8 +1273,6 @@ if __name__ == '__main__':
                         exit()
             print "Loaded %s rosters in %s" % (len(sheetNames), t.elapsed())
             totalRosters += len(sheetNames)
-
-
 
     MATCHES = []
     # Season 2 Matches
@@ -1949,7 +1959,6 @@ if __name__ == '__main__':
         print "Loaded %s matches in %s" % (len(sheetNames), t.elapsed())
         totalMatches += len(sheetNames)
 
-
     print "Loaded spreadsheets in %s. Importing into database..." % t1.elapsed()
     t.start()
 
@@ -2160,7 +2169,6 @@ if __name__ == '__main__':
                 if skillType.startswith(initial):
                     cursor.execute("INSERT INTO player_type_skill_type_double VALUES(%s,%s)", (playerTypeID, skillTypeIDs[skillType]))
 
-
     # ["Willow Rosebark", ["Amazon", "Halfling", "Wood Elf"], ["Loner", "Dauntless", "Side Step", "Thick Skull"], 150, 5, 4, 3, 8, ""]
     print
     print "Star Players"
@@ -2188,7 +2196,6 @@ if __name__ == '__main__':
                     if raceIDs[race2] == raceID and race2 in newRaces:
                         newRaces.remove(race2)
             races = newRaces
-
 
         addedRaceIDs = []
         for race in races:
@@ -2254,16 +2261,16 @@ if __name__ == '__main__':
 
         prevTeamID = None
         if len(seasonIDs) > 1:
-            if seasonID != season5ID: # Season 5 restarted all teams
+            if seasonID != season5ID:  # Season 5 restarted all teams
                 prevSeasonID = seasonID - 1
-                
+
                 minSeasonID = 1
                 if seasonID > season5ID and season5ID is not None:
                     minSeasonID = season5ID
 
                 while prevSeasonID >= minSeasonID and prevSeasonID > 0:
                     prevSeasonTeams = teamIDsBySeasonID[prevSeasonID]
-                    
+
                     if teamName in prevSeasonTeams:
                         prevTeamID = prevSeasonTeams[teamName]
                         break
@@ -2300,7 +2307,7 @@ if __name__ == '__main__':
             isStarPlayer = 0
             playerName = player[0].strip() if player[0] else None
             playerPosition = player[1].strip() if player[1] else None
-            
+
             playerTypeID = None
             if playerPosition:
                 if playerPosition.startswith("Star: "):
@@ -2321,7 +2328,7 @@ if __name__ == '__main__':
 
             if playerName.lower() == "journeyman":
                 continue
-            
+
             ma = player[2]
             st = player[3]
             ag = player[4]
@@ -2456,7 +2463,7 @@ if __name__ == '__main__':
                     for exceptRaceName in exceptRaceNames:
                         exceptRaceID = raceIDs[exceptRaceName]
                         raceNames.remove(exceptRaceName)
-                        for race, raceID  in raceIDs.iteritems():
+                        for race, raceID in raceIDs.iteritems():
                             if raceID == exceptRaceID and race in raceNames:
                                 raceNames.remove(race)
 
@@ -2686,7 +2693,7 @@ if __name__ == '__main__':
                         cardID = cardIDs[inducement]
                         deckID = deckIDsByCardID[cardID]
                         deckName = deckNamesByDeckID[deckID]
-                        
+
                         addDesc = "\n'%s' drew the %s card named \"%s\"" % (team["name"], deckName, inducement)
                         print "            %s" % addDesc.strip()
                         description += addDesc
@@ -2709,7 +2716,7 @@ if __name__ == '__main__':
                 teamPurchases = team["purchases"]
             else:
                 teamPurchases = team["purchases"].split("\n") if team["purchases"] else []
-                
+
             for purchase in teamPurchases:
                 if purchase == "" or purchase is None:
                     continue
