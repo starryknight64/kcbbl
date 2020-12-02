@@ -70,8 +70,13 @@ append body
 								.list-group
 									if title == "Cards"
 										each obj in result
-											a.list-group-item(href="#") 
-												h4 #{obj.name} (#{obj.aka})
+											a.list-group-item(href="/decks#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_"))
+												h4 #{obj.name} (
+													if obj.aka.indexOf("H") > 0 || obj.aka.indexOf("D") > 0 
+														span.suit-red !{obj.aka.replace("H","&hearts;").replace("D","&diams;")}
+													else
+														span.suit-black !{obj.aka.replace("S","&spades;").replace("C","&clubs;")}
+													| )
 												h5.ellipsis #{obj.description}
 									else if title == "Coaches"
 										each obj in result
@@ -79,11 +84,12 @@ append body
 												h4 #{obj.name}
 									else if title == "Decks"
 										each obj in result
-											a.list-group-item(href="#") 
+											a.list-group-item(href="/decks#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_"))
 												h4 #{obj.name}
+												h5.ellipsis #{obj.cost},000 gp each card
 									else if title == "Inducements"
 										each obj in result
-											a.list-group-item(href="#") 
+											a.list-group-item(href="/inducements#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_"))
 												h4 #{obj.name}
 												h5.ellipsis #{obj.description}
 									else if title == "Players"
@@ -105,12 +111,12 @@ append body
 													h4 #{obj.race.name}: #{obj.name}
 									else if title == "Purchases"
 										each obj in result
-											a.list-group-item(href="#") 
+											a.list-group-item(href="/purchases#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_")) 
 												h4 #{obj.name}
 												h5.ellipsis #{obj.description}
 									else if title == "Races"
 										each obj in result
-											a.list-group-item(href="#") 
+											a.list-group-item(href="/races#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_")) 
 												h4 #{obj.name}
 												h5.ellipsis #{obj.description}
 									else if title == "Seasons"
@@ -120,12 +126,12 @@ append body
 												h5 #{obj.start_date} - #{obj.end_date}
 									else if title == "Skills"
 										each obj in result
-											a.list-group-item(href="#") 
+											a.list-group-item(href="/skills#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_")) 
 												h4 #{obj.name}
 												h5.ellipsis #{obj.description}
 									else if title == "Skill Types"
 										each obj in result
-											a.list-group-item(href="#") 
+											a.list-group-item(href="/skills#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_")) 
 												h4 #{obj.name}
 									else if title == "Teams"
 										each obj in result

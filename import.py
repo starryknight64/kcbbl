@@ -370,7 +370,7 @@ STAR_PLAYERS = [
     ["Captain Colander", ["Halfling"], ["Loner", "Catch", "Disturbing Presence", "Dodge", "Fend", "Jump Up", "Regeneration", "Right Stuff", "Side Step", "Stunty"], 100, 6, 2, 3, 7, ""],
     ["Cindy Piewhistle", ["Halfling"], ["Loner", "Accurate", "Bombardier", "Dodge", "Secret Weapon", "Stunty"], 50, 5, 2, 3, 6, ""],
     ["Count Luthor Von Drakenborg", ["Necromantic", "Undead", "Vampire"], ["Loner", "Block", "Hypnotic Gaze", "Regeneration", "Side Step"], 390, 6, 5, 4, 9, ""],
-    ["Crazy Igor", ["Vampire", "Chaos Pact"], ["Loner", "Dauntless", "Regeneration", "Thick Skull"], 120, 6, 3, 3, 8, "Note: Crazy Igor can be bitten by a Vampire on your team as if he was a Thrall."],
+    ["Crazy Igor", ["Vampire", "Chaos Pact"], ["Loner", "Dauntless", "Regeneration", "Thick Skull"], 120, 6, 3, 3, 8, "Note: Crazy Igor can be bitten by a player on your team with Blood Lust as if he was a Thrall."],
     ["Curnoth Darkwold", ["Wood Elf"], ["Loner", "Dodge", "Frenzy", "Jump Up", "Leap", "Wrestle"], 240, 7, 3, 4, 7, ""],
     ["Deeproot Strongbranch", ["Halfling"], ["Loner", "Block", "Mighty Blow", "Stand Firm", "Strong Arm", "Thick Skull", "Throw Team-Mate", "Timmm-ber!"], 300, 2, 7, 1, 10, ""],
     ["Dolfar Longstride", ["Elf", "High Elf", "Wood Elf", "Bretonnian"], ["Loner", "Diving Catch", "Hail Mary Pass", "Kick", "Kick-Off Return", "Pass Block"], 150, 7, 3, 4, 7, ""],

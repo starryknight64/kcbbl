@@ -13,9 +13,20 @@ append body
 
 		.row.season-body
 			each inducement, i in inducements
+				a.anchor(id=inducement.name.toLowerCase().replace(/[^a-z]/g,"_"))
 				.panel.panel-default
 					.panel-heading
-						| #{inducement.max ? "0-"+inducement.max : "0+"}
-						| #{inducement.name}
-						| #{inducement.cost ? "("+inducement.cost+",000 gp each)" : "(cost varies)" }
+						| #{inducement.max ? "0-"+inducement.max : "0+"} 
+						b
+							if inducement.name == "Special Play Card"
+								a(href="/decks") #{inducement.name} 
+							else
+								| #{inducement.name} 
+						if inducement.name == "Bribe" || inducement.name == "Halfling Master Chef" || inducement.name == "Igor"
+							| (*
+						else
+							| (
+						i
+							| #{inducement.cost ? inducement.cost+",000 gp each" : "cost varies" }
+						| )
 					.panel-body !{inducement.description.replace(/\n/g,"<br><br>")}

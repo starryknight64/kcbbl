@@ -1,0 +1,52 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Special Play Cards
+
+append body
+	.container.body-container
+		.row
+			a.anchor(id="top")
+			.col-md-12
+				h1
+					span.glyphicon.glyphicon-info-sign
+					| &nbsp;Special Play Cards
+
+		.row.season-body
+			each deck, i in decks
+				.col-md-4
+					.panel.panel-default
+						.panel-heading.center
+							b
+								a(href!="#"+deck.name.toLowerCase().replace(/[^a-z]/g,'_')) #{deck.name}
+								| &nbsp;(#{deck.cost},000 gp each)
+						.panel-body
+							each card, i in deck.cards
+								.col-md-6
+									a(href!="#"+card.name.toLowerCase().replace(/[^a-z]/g,'_')) #{card.name}
+
+		.row.season-body
+			each deck, i in decks
+				a.anchor(id=deck.name.toLowerCase().replace(/[^a-z]/g,"_"))
+				each card, j in deck.cards
+					a.anchor(id=card.name.toLowerCase().replace(/[^a-z]/g,"_"))
+					.panel.panel-default
+						.panel-heading 
+							b #{deck.name} 
+							| - 
+							i #{card.name} 
+							| (
+							if card.aka.indexOf("H") > 0 || card.aka.indexOf("D") > 0 
+								span.suit-red !{card.aka.replace("H","&hearts;").replace("D","&diams;")}
+							else
+								span.suit-black !{card.aka.replace("S","&spades;").replace("C","&clubs;")}
+							| )
+							a.pull-right(href!="#top") Back to Top
+						.panel-body
+							.col-md-4 #{card.description}
+							.col-md-4 
+								b Timing:
+								| &nbsp;#{card.timing}
+							.col-md-4
+								b Effect:
+								| &nbsp;#{card.effect}

@@ -1,0 +1,28 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Purchases
+
+append body
+	.container.body-container
+		.row
+			.col-md-3
+				h1 
+					span.glyphicon.glyphicon-info-sign
+					| &nbsp;Purchases
+
+		.row.season-body
+			each purchase, i in purchases
+				a.anchor(id=purchase.name.toLowerCase().replace(/[^a-z]/g,"_"))
+				.panel.panel-default
+					.panel-heading
+						| #{purchase.max ? "0-"+purchase.max : "0+"} 
+						b #{purchase.name} 
+						if purchase.name == "Bribe" || purchase.name == "Halfling Master Chef"
+							| (*
+						else
+							| (
+						i
+							| #{purchase.cost ? purchase.cost+",000 gp each" : "cost varies" }
+						| )
+					.panel-body !{purchase.description.replace(/\n/g,"<br><br>")}

@@ -13,11 +13,14 @@ append body
 
 		.row.season-body
 			each race, i in races
+				a.anchor(id=race.name.toLowerCase().replace(/[^a-z]/g,"_"))
 				.panel.panel-default
-					.panel-heading #{race.name}
+					.panel-heading 
+						b #{race.name}
 					.panel-body 
 						.col-md-10
-							p #{race.description}
+							p
+								i #{race.description}
 							table.table
 								tr
 									th.center Max
@@ -82,7 +85,13 @@ append body
 													else
 														| #{skill.name}
 												if positional.description
-													p #{positional.description}
+													p
+														i
+															if positional.description.startsWith("Note: ")
+																b Note: 
+																| #{positional.description.replace("Note: ","")}
+															else
+																| #{positional.description}
 											td.nowrap #{positional.value},000 gp
 											td.center #{positional.movement}
 											td.center #{positional.strength}

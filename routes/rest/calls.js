@@ -3,9 +3,9 @@ var Type = require("type-of-is")
 
 function search(query, filter) {
   var queries = {
-    // "card": [null, ["name", "description", "timing", "effect"], null],
+    "card": [null, ["name", "description", "timing", "effect"], null],
     "coach": [["id", "name"], ["name"], null],
-    // "deck": [null, ["name"], null],
+    "deck": [null, ["name"], null],
     "inducement": [null, ["name", "description"], "GROUP BY name"],
     "player": [null, ["name"], "GROUP BY name"],
     "player_type": [null, ["name", "description"], "GROUP BY CASE WHEN star_player=1 THEN name ELSE id END"],
@@ -75,6 +75,27 @@ function getCoachesForSeason(seasonID) {
     .then((season) => {
       return getCoaches(["team.season_id"], [season.id], ["INNER JOIN team ON team.coach_id = coach.id"])
     })
+}
+
+
+function getCard(id) {
+  return db.get("card", id)
+}
+function getCards(wheres, values, joins, cmp, tail, order) {
+  return db.getMany("card", undefined, wheres, values, joins, cmp, tail, order)
+}
+function getCardsForDeck(deckID) {
+  return getDeck(deckID)
+    .then((deck) => {
+      return getCards(["card.deck_id"], [deck.id], ["INNER JOIN deck ON deck.id = card.deck_id"])
+    })
+}
+
+function getDeck(id) {
+  return db.get("deck", id)
+}
+function getDecks(wheres, values, joins, cmp, tail, order) {
+  return db.getMany("deck", undefined, wheres, values, joins, cmp, tail, order)
 }
 
 function getInducement(id) {
@@ -697,6 +718,11 @@ module.exports = {
   getCoaches: getCoaches,
   getCoachesAuth: getCoachesAuth,
   getCoachesForSeason: getCoachesForSeason,
+  getCard: getCard,
+  getCards: getCards,
+  getCardsForDeck: getCardsForDeck,
+  getDeck: getDeck,
+  getDecks: getDecks,
   getInducement: getInducement,
   getInducements: getInducements,
   getMatch: getMatch,

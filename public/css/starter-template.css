@@ -202,3 +202,11 @@ h3.panel-title a {
 .table>tbody>tr.vert-center>td, .table>tbody>tr.vert-center>th, .table>tfoot>tr.vert-center>td, .table>tfoot>tr.vert-center>th, .table>thead>tr.vert-center>td, .table>thead>tr.vert-center>th {
   vertical-align: middle;
 }
+
+.suit-black {
+  color: black;
+}
+
+.suit-red {
+  color: red;
+}
