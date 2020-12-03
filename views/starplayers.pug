@@ -1,0 +1,101 @@
+extends ../layouts/starter
+
+append head
+	title [KCBBL] Player #{curStarPlayer.name}
+
+append body
+	.container.body-container
+		.row
+			.jumbotron
+				.container
+					.row
+						h1 #{curStarPlayer.name}
+						p Star Player
+						p
+							.col-md-12
+								table.table-bordered.table-condensed
+									thead
+										tr
+											th MV
+											th ST
+											th AG
+											th AV
+											th Skills
+											th Cost
+											th Upkeep
+									tbody
+										tr
+											td.text-center #{curStarPlayer.movement}
+											td.text-center #{curStarPlayer.strength}
+											td.text-center #{curStarPlayer.agility}
+											td.text-center #{curStarPlayer.armor}
+											td
+												each skill, i in curStarPlayer.skills
+													+tooltip-bottom(skill.name,skill.description,"/skills#"+skill.name.toLowerCase().replace(/[^a-z]/g,"_"))
+													if i+1 < curStarPlayer.skills.length
+														| , 
+											td.nowrap #{curStarPlayer.value},000 gp
+											td.nowrap #{curStarPlayer.value <= 100 ? 20 : curStarPlayer.value <= 150 ? 30 : curStarPlayer.value <= 200 ? 40 : curStarPlayer.value <= 300 ? 50 : 60},000 gp
+					if curStarPlayer.description
+						.row
+							p
+								.col-md-12 
+									i
+										if curStarPlayer.description.startsWith("Note: ")
+											b Note: 
+											| #{curStarPlayer.description.replace("Note: ","")}
+										else
+											| #{curStarPlayer.description}
+					.row
+						p
+							.col-md-12
+								table.table-bordered.table-condensed
+									thead
+										tr
+											th Will play for the following races:
+									tbody
+										tr
+											td
+												each race, i in curStarPlayer.races
+													if i+1 < curStarPlayer.races.length
+														a(href="/races#" + race.name.toLowerCase().replace(/[^a-z]/g,"_")) #{race.name}
+														| , 
+													else
+														a(href="/races#" + race.name.toLowerCase().replace(/[^a-z]/g,"_")) #{race.name}
+		.row
+			.col-md-12
+				.panel.panel-default
+					.panel-heading
+						h3.panel-title Star Players
+					.panel-body
+						table.table-bordered.table-condensed
+							thead
+								tr
+									th Name
+									th MV
+									th ST
+									th AG
+									th AV
+									th Skills
+									th Cost
+									th Upkeep
+							tbody
+								for starPlayer, i in starPlayers
+									tr
+										td
+											a(href="/starplayers/"+starPlayer.id) #{starPlayer.name}
+										td.text-center #{starPlayer.movement}
+										td.text-center #{starPlayer.strength}
+										td.text-center #{starPlayer.agility}
+										td.text-center #{starPlayer.armor}
+										td
+											if starPlayer.skills.length > 0
+												each skill, i in starPlayer.skills
+													+tooltip-bottom(skill.name,skill.description,"/skills#"+skill.name.toLowerCase().replace(/[^a-z]/g,"_"))
+													if i+1 < starPlayer.skills.length
+														| , 
+											else
+												| None
+										td.nowrap #{starPlayer.value},000 gp
+										td.nowrap #{starPlayer.value <= 100 ? 20 : starPlayer.value <= 150 ? 30 : starPlayer.value <= 200 ? 40 : starPlayer.value <= 300 ? 50 : 60},000 gp
+											

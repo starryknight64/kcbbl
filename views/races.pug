@@ -40,10 +40,9 @@ append body
 											td #{positional.name}
 											td 
 												each skill, k in positional.skills
+													+tooltip-bottom(skill.name,skill.description,"/skills#"+skill.name.toLowerCase().replace(/[^a-z]/g,"_"))
 													if k+1 < positional.skills.length
-														| #{skill.name}, 
-													else
-														| #{skill.name}
+														| , 
 
 											td.center #{positional.movement}
 											td.center #{positional.strength}
@@ -53,12 +52,24 @@ append body
 											td.center #{positional.normals}
 											td.center #{positional.doubles}
 
+							h4 Coaching Staff
 							each purchase, j in race.purchases
 								.col-md-4
-									| #{purchase.max ? "0-"+purchase.max : "0+"}
-									| #{purchase.name}
-									| (#{purchase.cost ? purchase.cost+"k" : "cost varies"})
-										
+									| #{purchase.max ? "0-"+purchase.max : "0+"} 
+									+tooltip-bottom(purchase.name,purchase.description,"/purchases#"+purchase.name.toLowerCase().replace(/[^a-z]/g,"_"))
+									| &nbsp;(#{purchase.cost ? purchase.cost+"k" : "cost varies"})
+							if race.name == "Necromantic Horror" || race.name == "Shambling Undead"
+								.col-md-6 
+									| No Apothecary--your head coach is a 
+									+tooltip-bottom("Necromancer","Instead of purchasing an Apothecary, Necromantic and Undead teams use the services of a Necromancer. The Necromancer is free to the team and allows the team once per a match to 'Raise the Dead'.\r\n\r\nIf a player on the opposing team with Strength 4 or less that does not have Regeneration or Stunty is killed during the match (after Apothecary attempt if any) then the team may immediately place a new Zombie player in the Reserves box of their dugout (this may cause a team to have more than 16 players for the remainder of the match). During Step 5 of Prepare for Next Match, you may add this player to your roster for free if you have less than 16 players on the team. A free Zombie still counts at full value towards the team value.")
+									| !
+							else if race.name == "Nurgle" || race.name == "Khemri Tomb Kings"
+								.col-md-6
+									| No Apothecary--your players have 
+									+tooltip-bottom(regenSkill.name,regenSkill.description,"/skills#"+regenSkill.name.toLowerCase().replace(/[^a-z]/g,"_"))
+									| !
+							
+							
 						.col-md-2
 							img.race-crest(src="/images/races/crests/"+race.name.toLowerCase().replace(" ","%20")+".png")
 
@@ -77,13 +88,14 @@ append body
 								each positional, j in race.positionals
 									tr
 										if positional.star_player
-											td #{positional.name}
+											td
+												a(href="/starplayers/" + positional.id) #{positional.name}
 											td
 												each skill, k in positional.skills
 													if k+1 < positional.skills.length
-														| #{skill.name}, 
-													else
-														| #{skill.name}
+														+tooltip-bottom(skill.name,skill.description,"/skills#"+skill.name.toLowerCase().replace(/[^a-z]/g,"_"))
+													if k+1 < positional.skills.length
+														| , 
 												if positional.description
 													p
 														i

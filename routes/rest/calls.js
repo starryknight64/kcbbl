@@ -412,6 +412,61 @@ function getPlayerTypes(wheres, values, joins) {
     })
   })
 }
+function getStarPlayers() {
+  return db.getMany("player_type", undefined, ["star_player"], ["1"]).then((playerTypes) => {
+    return getAllRaces().then((races) => {
+      for (var i in playerTypes) {
+        playerTypes[i].star_player = true
+      }
+      
+      var playerTypesUnique = []
+      for (var i in playerTypes) {
+        var found = false
+        for (var j in playerTypesUnique) {
+          if (playerTypesUnique[j].name == playerTypes[i].name) {
+            found = true
+            break
+          }
+        }
+        
+        if (!found) {
+          playerTypes[i].races = []
+          playerTypesUnique.push(playerTypes[i])
+        }
+      }
+
+      for (var i in playerTypes) {
+        for (var j in races) {
+          if (playerTypes[i].race_id == races[j].id) {
+            for (var k in playerTypesUnique) {
+              if (playerTypesUnique[k].name == playerTypes[i].name) {
+                playerTypesUnique[k].races.push(races[j])
+                break
+              }
+            }
+            break
+          }
+        }
+      }
+      
+      /*for (var i in playerTypesUnique) {
+        delete playerTypesUnique[i].race
+      }*/
+    
+      var promises = []
+      for (var i in playerTypesUnique) {
+        promises.push(getSkillsForPlayerTypeID(playerTypesUnique[i].id))
+      }
+
+      return Promise.all(promises).then((playerTypeSkillsData) => {
+        for (var i in playerTypesUnique) {
+          playerTypesUnique[i].skills = playerTypeSkillsData[i]
+        }
+        return Promise.resolve(playerTypesUnique)
+      })
+    })
+  })
+}
 
 
 function getPurchase(id) {
@@ -739,6 +794,7 @@ module.exports = {
   getPlayersForTeam: getPlayersForTeam,
   getPlayerType: getPlayerType,
   getPlayerTypes: getPlayerTypes,
+  getStarPlayers: getStarPlayers,
   getPurchase: getPurchase,
   getPurchases: getPurchases,
   getRace: getRace,
