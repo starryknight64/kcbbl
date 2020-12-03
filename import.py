@@ -682,8 +682,8 @@ if __name__ == '__main__':
     t1 = Timer()
     totalRosters = 0
     totalMatches = 0
+    # Season 1 Rosters
     if True:
-        # Season 1 Rosters
         if True:
             print "Loading Season 1 Rosters..."
             s1 = load_workbook("imports/S1 Rosters.xlsx", data_only=True, read_only=True)
@@ -1900,10 +1900,10 @@ if __name__ == '__main__':
             team2Players = []
             for i in range(16, 32):
                 team2Players.append([rows[i][j] for j in range(24, 37)])
-                team2TDs += rows[i][24] if rows[i][24] else 0
-                team2Cas += rows[i][26] if rows[i][26] else 0
-                team2Kills += rows[i][27] if rows[i][27] else 0
-                team2Fouls += rows[i][28] if rows[i][28] else 0
+                team2TDs += rows[i][25] if rows[i][25] else 0
+                team2Cas += rows[i][27] if rows[i][27] else 0
+                team2Kills += rows[i][28] if rows[i][28] else 0
+                team2Fouls += rows[i][29] if rows[i][29] else 0
 
             team2Winnings = rows[33][23]
             team2ExpMistakes = rows[33][28] if str(rows[33][28]).isdigit() else 0
