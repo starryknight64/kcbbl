@@ -12,7 +12,8 @@ append body
 						h2.scoreboard.col-md-2.col-md-offset-5.text-center #{curMatch.team1_tds} - #{curMatch.team2_tds}
 					.row
 						.col-md-5
-							h1.text-center.match-team-name #{curMatch.team1.name}
+							h1.text-center.match-team-name 
+								a(href="/teams/"+curMatch.team1.id) #{curMatch.team1.name}
 							table.table.table-condensed.table-bordered
 								tbody
 									tr.active
@@ -29,7 +30,8 @@ append body
 							//- h2.text-center.scoreboard #{curMatch.team1_tds} - #{curMatch.team2_tds}
 							h2.text-center.versus VS
 						.col-md-5
-							h1.text-center.match-team-name #{curMatch.team2.name}
+							h1.text-center.match-team-name 
+								a(href="/teams/"+curMatch.team2.id) #{curMatch.team2.name}
 							table.table.table-condensed.table-bordered
 								tbody
 									tr.active
@@ -67,6 +69,62 @@ append body
 								tr
 									th Team Value
 									td #{curMatch.team1_tv},000 gp
+								tr
+									th Inducements
+									td
+										if curMatch.team1_inducements_value > 0 
+											table.table.table-condensed.table-hover
+												tbody
+													tr
+														td &nbsp;
+														th.text-right +Petty Cash: 
+														td
+															if curMatch.team1_petty_cash > 0
+																| #{curMatch.team1_petty_cash},000 gp
+															else
+																| 0 gp
+													tr
+														td &nbsp;
+														th.text-right Total Allowed: 
+														td #{curMatch.team1_inducements_value},000 gp
+														- var team1_inducements_taken = 0
+													each inducement, i in team1Inducements.inducements
+														- team1_inducements_taken += (inducement.cost * inducement.amount)
+														tr
+															td #{inducement.amount}x
+															td 
+																+tooltip-bottom(inducement.name, inducement.description, "/inducements#" + inducement.name.toLowerCase().replace(/[^a-z]/g,"_"))
+															td #{inducement.cost * inducement.amount},000 gp
+													each inducement, i in team1Inducements.playerInducements
+														- team1_inducements_taken += (inducement.cost * inducement.amount)
+														tr
+															td #{inducement.amount}x
+															td
+																if inducement.star_player == 0
+																	+tooltip-bottom("Mercenary "+inducement.name, "Same as regular '"+inducement.name+"' "+inducement.raceName+" positional but includes 'Loner' skill.", "/races#"+inducement.raceName.toLowerCase().replace(/[^a-z]/g,"_"))
+																else
+																	+tooltip-bottom(inducement.name, "Star Player", "/starplayers/"+inducement.player_type_id)
+															td #{inducement.cost * inducement.amount},000 gp
+													each inducement, i in team1Inducements.deckInducements
+														- team1_inducements_taken += (inducement.cost * inducement.amount)
+														tr
+															td #{inducement.amount}x
+															td
+																if inducement.cardName
+																	+tooltip-bottom(inducement.name+" Card ("+inducement.cardName+")", inducement.description, "/decks#"+inducement.cardName.toLowerCase().replace(/[^a-z]/g,"_"))
+																else
+																	a(href="/decks#"+inducement.name.toLowerCase().replace(/[^a-z]/g,"_")) #{inducement.name} Card
+															td #{inducement.cost * inducement.amount},000 gp
+													tr
+														td &nbsp;
+														th.text-right Total Taken: 
+														td
+															if team1_inducements_taken > 0
+																| #{team1_inducements_taken},000 gp
+															else
+																| 0 gp
+										else
+											| None
 								tr
 									th Match Type
 									td #{curMatch.team1_match_type.name}
@@ -185,13 +243,69 @@ append body
 									th Team Value
 									td #{curMatch.team2_tv},000 gp
 								tr
+									th Inducements
+									td
+										if curMatch.team2_inducements_value > 0 
+											table.table.table-condensed.table-hover
+												tbody
+													tr
+														td &nbsp;
+														th.text-right +Petty Cash: 
+														td
+															if curMatch.team2_petty_cash > 0
+																| #{curMatch.team2_petty_cash},000 gp
+															else
+																| 0 gp
+													tr
+														td &nbsp;
+														th.text-right Total Allowed: 
+														td #{curMatch.team2_inducements_value},000 gp
+														- var team2_inducements_taken = 0
+													each inducement, i in team2Inducements.inducements
+														- team2_inducements_taken += (inducement.cost * inducement.amount)
+														tr
+															td #{inducement.amount}x
+															td 
+																+tooltip-bottom(inducement.name, inducement.description, "/inducements#" + inducement.name.toLowerCase().replace(/[^a-z]/g,"_"))
+															td #{inducement.cost * inducement.amount},000 gp
+													each inducement, i in team2Inducements.playerInducements
+														- team2_inducements_taken += (inducement.cost * inducement.amount)
+														tr
+															td #{inducement.amount}x
+															td
+																if inducement.star_player == 0
+																	+tooltip-bottom("Mercenary "+inducement.name, "Same as regular '"+inducement.name+"' "+inducement.raceName+" positional but includes 'Loner' skill.", "/races#"+inducement.raceName.toLowerCase().replace(/[^a-z]/g,"_"))
+																else
+																	+tooltip-bottom(inducement.name, "Star Player", "/starplayers/"+inducement.player_type_id)
+															td #{inducement.cost * inducement.amount},000 gp
+													each inducement, i in team2Inducements.deckInducements
+														- team2_inducements_taken += (inducement.cost * inducement.amount)
+														tr
+															td #{inducement.amount}x
+															td
+																if inducement.cardName
+																	+tooltip-bottom(inducement.name+" Card ("+inducement.cardName+")", inducement.description, "/decks#"+inducement.cardName.toLowerCase().replace(/[^a-z]/g,"_"))
+																else
+																	a(href="/decks#"+inducement.name.toLowerCase().replace(/[^a-z]/g,"_")) #{inducement.name} Card
+															td #{inducement.cost * inducement.amount},000 gp
+													tr
+														td &nbsp;
+														th.text-right Total Taken: 
+														td
+															if team2_inducements_taken > 0
+																| #{team2_inducements_taken},000 gp
+															else
+																| 0 gp
+										else
+											| None
+								tr
 									th Match Type
 									td #{curMatch.team2_match_type.name}
 								tr
 									th Gate
 									td #{curMatch.team2_gate},000 fans
 								tr
-									th Fame
+									th FAME
 									td +#{curMatch.team2_fame}
 						table.table.table-condensed.table-hover.table-bordered.match-roster
 							thead

@@ -104,6 +104,21 @@ function getInducement(id) {
 function getInducements(wheres, values, joins, cmp, tail, order) {
   return db.getMany("inducement", undefined, wheres, values, joins, cmp, tail, order)
 }
+function getInducementsForMatchAndTeam(matchID, teamID) {
+  return getMatch(matchID).then((match) => {
+    return getTeam(teamID).then((team) => {
+      var promises = []
+      promises.push(db.getMany("match_inducement", ["match_inducement.amount","i.name","i.cost","i.description"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN inducement i ON i.id = match_inducement.inducement_id"]))
+      promises.push(db.getMany("match_inducement", ["match_inducement.amount","pt.name","pt.value AS cost","pt.star_player","r.name AS raceName"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN player_type pt ON pt.id = match_inducement.player_type_id", "INNER JOIN race r ON r.id = pt.race_id"]))
+      //promises.push(db.getMany("match_inducement", ["*"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN deck d ON d.id = match_inducement.deck_id"]))
+      promises.push(db.getMany("match_inducement", ["match_inducement.amount","d.name","d.cost","c.name AS cardName","c.description"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["LEFT JOIN card c ON c.id = match_inducement.card_id", "INNER JOIN deck d ON d.id = match_inducement.deck_id"]))
+      
+      return Promise.all(promises).then((inducementData) => {
+        return Promise.resolve({ "inducements": inducementData[0], "playerInducements": inducementData[1], "deckInducements": inducementData[2]/*, "cardInducements": inducementData[3]*/ })
+      })
+    })
+  })
+}
 
 function formatMatch(match, seasons, matchTypes, teams) {
   for (var i in seasons) {
@@ -780,6 +795,7 @@ module.exports = {
   getDecks: getDecks,
   getInducement: getInducement,
   getInducements: getInducements,
+  getInducementsForMatchAndTeam: getInducementsForMatchAndTeam,
   getMatch: getMatch,
   getMatches: getMatches,
   getMatchesForCoach: getMatchesForCoach,
