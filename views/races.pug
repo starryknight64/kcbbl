@@ -58,17 +58,23 @@ append body
 									| #{purchase.max ? "0-"+purchase.max : "0+"} 
 									+tooltip-bottom(purchase.name,purchase.description,"/purchases#"+purchase.name.toLowerCase().replace(/[^a-z]/g,"_"))
 									| &nbsp;(#{purchase.cost ? purchase.cost+"k" : "cost varies"})
+							
 							if race.name == "Necromantic Horror" || race.name == "Shambling Undead"
-								.col-md-6 
-									| No Apothecary--your head coach is a 
-									+tooltip-bottom("Necromancer","Instead of purchasing an Apothecary, Necromantic and Undead teams use the services of a Necromancer. The Necromancer is free to the team and allows the team once per a match to 'Raise the Dead'.\r\n\r\nIf a player on the opposing team with Strength 4 or less that does not have Regeneration or Stunty is killed during the match (after Apothecary attempt if any) then the team may immediately place a new Zombie player in the Reserves box of their dugout (this may cause a team to have more than 16 players for the remainder of the match). During Step 5 of Prepare for Next Match, you may add this player to your roster for free if you have less than 16 players on the team. A free Zombie still counts at full value towards the team value.")
-									| !
+								h4.race-necromancer No Apothecary&mdash;your head coach is a Necromancer!
+								.col-md-12
+									p Instead of purchasing an Apothecary, Necromantic Horror and Shambling Undead teams use the services of a Necromancer. The Necromancer is free to the team and allows the team once per a match to 'Raise the Dead'.
+								.col-md-12
+									p
+										| If a player on the opposing team with Strength 4 or less that does not have 
+										+tooltip-bottom(regenSkill.name,regenSkill.description,"/skills#"+regenSkill.name.toLowerCase().replace(/[^a-z]/g,"_"))
+										| &nbsp;or 
+										+tooltip-bottom(stuntySkill.name,stuntySkill.description,"/skills#"+stuntySkill.name.toLowerCase().replace(/[^a-z]/g,"_"))
+										| &nbsp;is killed during the match (after Apothecary attempt if any) then the team may immediately place a new Zombie player in the Reserves box of their dugout (this may cause a team to have more than 16 players for the remainder of the match). During Step 5 of Prepare for Next Match, you may add this player to your roster for free if you have less than 16 players on the team. A free Zombie still counts at full value towards the team value.
 							else if race.name == "Nurgle" || race.name == "Khemri Tomb Kings"
 								.col-md-6
 									| No Apothecary--your players have 
 									+tooltip-bottom(regenSkill.name,regenSkill.description,"/skills#"+regenSkill.name.toLowerCase().replace(/[^a-z]/g,"_"))
 									| !
-							
 							
 						.col-md-2
 							img.race-crest(src="/images/races/crests/"+race.name.toLowerCase().replace(" ","%20")+".png")
