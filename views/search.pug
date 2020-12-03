@@ -103,12 +103,14 @@ append body
 												h5.ellipsis #{obj.team.name}
 									else if title == "Player Types"
 										each obj in result
-											a.list-group-item(href="#")
-												if obj.star_player
+											if obj.star_player
+												a.list-group-item(href="/starplayers/"+obj.id)
 													h4 #{obj.name}
 													h5.ellipsis Star Player
-												else
-													h4 #{obj.race.name}: #{obj.name}
+											else
+												a.list-group-item(href="/races#" + obj.race.name.toLowerCase().replace(/[^a-z]/g,"_")) 
+													h4 #{obj.name}
+													h5.ellipsis #{obj.race.name} Positional
 									else if title == "Purchases"
 										each obj in result
 											a.list-group-item(href="/purchases#" + obj.name.toLowerCase().replace(/[^a-z]/g,"_")) 
