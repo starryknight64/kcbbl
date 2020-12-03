@@ -109,7 +109,7 @@ function getInducementsForMatchAndTeam(matchID, teamID) {
     return getTeam(teamID).then((team) => {
       var promises = []
       promises.push(db.getMany("match_inducement", ["match_inducement.amount","i.name","i.cost","i.description"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN inducement i ON i.id = match_inducement.inducement_id"]))
-      promises.push(db.getMany("match_inducement", ["match_inducement.amount","pt.name","pt.value AS cost","pt.star_player","r.name AS raceName"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN player_type pt ON pt.id = match_inducement.player_type_id", "INNER JOIN race r ON r.id = pt.race_id"]))
+      promises.push(db.getMany("match_inducement", ["match_inducement.amount","pt.name","pt.value AS cost","pt.star_player","pt.id","r.name AS raceName"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN player_type pt ON pt.id = match_inducement.player_type_id", "INNER JOIN race r ON r.id = pt.race_id"]))
       //promises.push(db.getMany("match_inducement", ["*"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["INNER JOIN deck d ON d.id = match_inducement.deck_id"]))
       promises.push(db.getMany("match_inducement", ["match_inducement.amount","d.name","d.cost","c.name AS cardName","c.description"], ["match_inducement.match_id", "match_inducement.team_id"], [match.id, team.id], ["LEFT JOIN card c ON c.id = match_inducement.card_id", "INNER JOIN deck d ON d.id = match_inducement.deck_id"]))
       
@@ -464,9 +464,10 @@ function getStarPlayers() {
         }
       }
       
-      /*for (var i in playerTypesUnique) {
+      for (var i in playerTypesUnique) {
+        playerTypesUnique[i].races.sort((a, b) => (a.name > b.name) ? 1 : -1)
         delete playerTypesUnique[i].race
-      }*/
+      }
     
       var promises = []
       for (var i in playerTypesUnique) {
@@ -490,6 +491,19 @@ function getPurchase(id) {
 function getPurchases(wheres, values, joins, cmp, tail, order) {
   return db.getMany("purchase", undefined, wheres, values, joins, cmp, tail, order)
 }
+function getPurchasesForMatchAndTeam(matchID, teamID) {
+  return getMatch(matchID).then((match) => {
+    return getTeam(teamID).then((team) => {
+      var promises = []
+      promises.push(db.getMany("match_purchase", ["match_purchase.amount","p.name","p.cost","p.description"], ["match_purchase.match_id", "match_purchase.team_id"], [match.id, team.id], ["INNER JOIN purchase p ON p.id = match_purchase.purchase_id"]))
+      promises.push(db.getMany("match_purchase", ["match_purchase.amount","pt.name","pt.value AS cost","r.name AS raceName"], ["match_purchase.match_id", "match_purchase.team_id"], [match.id, team.id], ["INNER JOIN player_type pt ON pt.id = match_purchase.player_type_id", "INNER JOIN race r ON r.id = pt.race_id"]))
+      
+      return Promise.all(promises).then((purchaseData) => {
+        return Promise.resolve({ "purchases": purchaseData[0], "playerPurchases": purchaseData[1] })
+      })
+    })
+  })
+}
 
 
 function getRace(id) {
@@ -499,7 +513,7 @@ function getRaces(wheres, values, joins) {
   return db.getMany("race", undefined, wheres, values, joins)
 }
 function getAllRaces() {
-  return db.getMany("race", undefined, undefined, undefined, undefined, undefined, undefined, " ORDER BY name ASC")
+  return db.getMany("race", undefined, undefined, undefined, undefined, undefined, undefined, "ORDER BY name ASC")
 }
 
 
@@ -813,6 +827,7 @@ module.exports = {
   getStarPlayers: getStarPlayers,
   getPurchase: getPurchase,
   getPurchases: getPurchases,
+  getPurchasesForMatchAndTeam: getPurchasesForMatchAndTeam,
   getRace: getRace,
   getRaces: getRaces,
   getAllRaces: getAllRaces,

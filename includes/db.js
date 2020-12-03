@@ -118,7 +118,7 @@ function getMany(table, cols, wheres, values, joins, cmp, tail, order) {
         tail = ""
     }
     if (!order) {
-        order = " ORDER BY `" + table + "`.id ASC"
+        order = "ORDER BY `" + table + "`.id ASC"
     }
 
     var sql = "SELECT DISTINCT " + cols.join(",") + " FROM `" + table + "` "

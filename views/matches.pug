@@ -103,7 +103,7 @@ append body
 																if inducement.star_player == 0
 																	+tooltip-bottom("Mercenary "+inducement.name, "Same as regular '"+inducement.name+"' "+inducement.raceName+" positional but includes 'Loner' skill.", "/races#"+inducement.raceName.toLowerCase().replace(/[^a-z]/g,"_"))
 																else
-																	+tooltip-bottom(inducement.name, "Star Player", "/starplayers/"+inducement.player_type_id)
+																	+tooltip-bottom(inducement.name, "Star Player", "/starplayers/"+inducement.id)
 															td #{inducement.cost * inducement.amount},000 gp
 													each inducement, i in team1Inducements.deckInducements
 														- team1_inducements_taken += (inducement.cost * inducement.amount)
@@ -227,8 +227,42 @@ append body
 												div 
 											//- td #{player.}
 											td 
-
-
+						table.table.table-condensed.table-hover
+							tbody
+								tr
+									th Winnings
+									td #{curMatch.team1_winnings},000 gp
+								tr
+									th Expensive Mistakes
+									td None
+								tr
+									th Fan Factor
+									td
+										if curMatch.team1_ff >= 0
+											| +
+										else
+											| -
+										| #{curMatch.team1_ff}
+								tr
+									th Purchases
+									td
+										if team1Purchases.purchases.length > 0 || team1Purchases.playerPurchases.length > 0
+											table.table.table-condensed.table-hover
+												tbody
+													each purchase, i in team1Purchases.purchases
+														tr
+															td #{purchase.amount}x
+															td
+																+tooltip-bottom(purchase.name, purchase.description, "/purchases#" + purchase.name.toLowerCase().replace(/[^a-z]/g,"_"))
+															td #{purchase.cost * purchase.amount},000 gp
+													each purchase, i in team1Purchases.playerPurchases
+														tr
+															td #{purchase.amount}x
+															td
+																a(href="/races#" + purchase.raceName.toLowerCase().replace(/[^a-z]/g,"_")) #{purchase.name}
+															td #{purchase.cost * purchase.amount},000 gp
+										else
+											| None
 
 			.col-md-6
 				.panel.panel-default
@@ -276,7 +310,7 @@ append body
 																if inducement.star_player == 0
 																	+tooltip-bottom("Mercenary "+inducement.name, "Same as regular '"+inducement.name+"' "+inducement.raceName+" positional but includes 'Loner' skill.", "/races#"+inducement.raceName.toLowerCase().replace(/[^a-z]/g,"_"))
 																else
-																	+tooltip-bottom(inducement.name, "Star Player", "/starplayers/"+inducement.player_type_id)
+																	+tooltip-bottom(inducement.name, "Star Player", "/starplayers/"+inducement.id)
 															td #{inducement.cost * inducement.amount},000 gp
 													each inducement, i in team2Inducements.deckInducements
 														- team2_inducements_taken += (inducement.cost * inducement.amount)
@@ -400,3 +434,39 @@ append body
 												div 
 											//- td #{player.}
 											td 
+						table.table.table-condensed.table-hover
+							tbody
+								tr
+									th Winnings
+									td #{curMatch.team2_winnings},000 gp
+								tr
+									th Expensive Mistakes
+									td None
+								tr
+									th Fan Factor
+									td
+										if curMatch.team2_ff >= 0
+											| +
+										else
+											| -
+										| #{curMatch.team2_ff}
+								tr
+									th Purchases
+									td
+										if team2Purchases.purchases.length > 0 || team2Purchases.playerPurchases.length > 0
+											table.table.table-condensed.table-hover
+												tbody
+													each purchase, i in team2Purchases.purchases
+														tr
+															td #{purchase.amount}x
+															td
+																+tooltip-bottom(purchase.name, purchase.description, "/purchases#" + purchase.name.toLowerCase().replace(/[^a-z]/g,"_"))
+															td #{purchase.cost * purchase.amount},000 gp
+													each purchase, i in team2Purchases.playerPurchases
+														tr
+															td #{purchase.amount}x
+															td
+																a(href="/races#" + purchase.raceName.toLowerCase().replace(/[^a-z]/g,"_")) #{purchase.name}
+															td #{purchase.cost * purchase.amount},000 gp
+										else
+											| None

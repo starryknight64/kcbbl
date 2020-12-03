@@ -3,7 +3,7 @@ var router = express.Router()
 var calls = require("./calls")
 
 router.get("/", function (req, res) {
-  calls.getRaces()
+  calls.getAllRaces()
     .then((obj) => res.send(obj))
     .catch((error) => util.handleRESTError(res, error))
 })
