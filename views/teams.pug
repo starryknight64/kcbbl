@@ -6,27 +6,42 @@ append head
 append body
 	.container.body-container
 		.row
-			.jumbotron
+			.jumbotron.match-jumbotron
 				.container
+					.row
+						.col-md-12
+							.btn-group
+								.btn-group(role="group")
+									button.btn.btn-default.dropdown-toggle(data-toggle="dropdown" type="button") 
+										| #{curTeam.season.name} 
+										span.caret
+									ul.dropdown-menu
+										each season, i in seasons
+											li
+												if season.firstTeam
+													a(href="/teams/"+season.firstTeam.id) #{season.name} 
+														if season.id == curTeam.season.id
+															| (selected)
+												else
+													a(href="#") #{season.name} (no teams)
+								.btn-group(role="group")
+									button.btn.btn-default.dropdown-toggle(data-toggle="dropdown" type="button") 
+										| #{curTeam.name} 
+										span.caret
+									ul.dropdown-menu
+										each team, i in curSeasonTeams
+											li
+												a(href="/teams/"+team.id) #{team.name} (#{team.race.name}) 
+													if team.id == curTeam.id 
+														| &nbsp;(selected)
 					.row
 						.col-md-8
 							h1 #{curTeam.name}
 							p
 								| #{curTeam.race.name} team coached by 
 								a(href="/coaches/"+curTeam.coach.id) #{curTeam.coach.name}
-							p
-								h1.btn-group
-									button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a team...&nbsp;
-										span.caret
-									ul.dropdown-menu
-										each team, i in teams
-											li
-												if team.id == curTeam.id
-													a(href="#") #{team.name}
-												else
-													a(href="/teams/"+team.id) #{team.name}
-						.col-md-4
-							img.race-portrait.img-responsive.pull-right(src="/images/races/portraits/"+curTeam.race.name.toLowerCase().replace(" ","%20")+".png")
+						.col-md-2.pull-right
+							img.race-crest.img-responsive(src="/images/races/crests/"+curTeam.race.name.toLowerCase().replace(" ","%20")+".png")
 		.row
 			.col-md-4
 				.panel.panel-default
@@ -105,7 +120,7 @@ append body
 						h3.panel-title Seasons
 					.panel-body
 						.list-group
-							each season, i in seasons
+							each season, i in teamSeasons
 								a.list-group-item(href="/seasons/"+season.id) #{season.name}
 									if season.id == curSeason.id
 										| &nbsp;(in progress)

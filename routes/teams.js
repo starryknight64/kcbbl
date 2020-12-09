@@ -4,31 +4,38 @@ var calls = require("./rest/calls")
 
 router.get("/", function (req, res, next) {
   calls.getTeamsUnique().then((teams) => {
-    calls.getPlayersForTeam(teams[0].id).then((players) => {
-      calls.getSeasonsForTeam(teams[0].id).then((seasons) => {
-        calls.getCurrentSeason().then((curSeason) => {
-          var promises = []
-          for( var i in players ) {
-            promises.push(calls.getSkillsForPlayerIDAndPlayerTypeID(players[i].id, players[i].type.id))
-          }
-          Promise.all(promises).then((skillData) => {
-            for( var i in players ) {
-              if( skillData[i] ) {
-                players[i]["skills"] = skillData[i]
-              } else {
-                players[i]["skills"] = []
-              }
-            }
-            var renderJSON = {
-              "seasons": seasons,
-              "teams": teams,
-              "curSeason": curSeason,
-              "curTeam": teams[0],
-              "players": players,
-              "stats": getTeamStats(players)
-            }
-            res.render("teams", renderJSON)
-          })
+		var curTeam = teams[0]
+    calls.getPlayersForTeam(curTeam.id).then((players) => {
+      calls.getSeasonsForTeam(curTeam.id).then((teamSeasons) => {
+				calls.getSeasons().then((seasons) => {
+					calls.getCurrentSeason().then((curSeason) => {
+						calls.getTeamsForSeason(curTeam.season.id).then((curSeasonTeams) => {
+							var promises = []
+							for( var i in players ) {
+								promises.push(calls.getSkillsForPlayerIDAndPlayerTypeID(players[i].id, players[i].type.id))
+							}
+							Promise.all(promises).then((skillData) => {
+								for( var i in players ) {
+									if( skillData[i] ) {
+										players[i]["skills"] = skillData[i]
+									} else {
+										players[i]["skills"] = []
+									}
+								}
+								curSeasonTeams.sort((a, b) => (a.name > b.name) ? 1 : -1)
+								var renderJSON = {
+									"seasons": seasons,
+									"teamSeasons": teamSeasons,
+									"curSeason": curSeason,
+									"curSeasonTeams": curSeasonTeams,
+									"curTeam": curTeam,
+									"players": players,
+									"stats": getTeamStats(players)
+								}
+								res.render("teams", renderJSON)
+							})
+						})
+					})
         })
       })
     })
@@ -41,33 +48,34 @@ router.get("/:teamid/seasons/:seasonid", function (req, res, next) {
   calls.getTeam(teamID).then((team) => {
     calls.getPlayersForTeam(team.id).then((players) => {
       calls.getSeason(seasonID).then((selectedSeason) => {
-        calls.getTeamsForSeason(selectedSeason.id).then((teams) => {
+        calls.getTeamsForSeason(selectedSeason.id).then((curSeasonTeams) => {
           calls.getSeasons().then((seasons) => {
             calls.getCurrentSeason().then((curSeason) => {
-              var promises = []
-              for( var i in players ) {
-                promises.push(calls.getSkillsForPlayerIDAndPlayerTypeID(players[i].id, players[i].type.id))
-              }
-              Promise.all(promises).then((skillData) => {
-                for( var i in players ) {
-                  if( skillData[i] ) {
-                    players[i]["skills"] = skillData[i]
-                  } else {
-                    players[i]["skills"] = []
-                  }
-                }
-                var renderJSON = {
-                  "seasons": seasons,
-                  "teams": teams,
-                  "curSeason": curSeason,
-                  "curTeam": team,
-                  "players": players,
-                  "selectedSeason": selectedSeason,
-                  "stats": getTeamStats(players)
-                }
-                res.render("teams", renderJSON)
-              })
-            })
+							var promises = []
+							for( var i in players ) {
+								promises.push(calls.getSkillsForPlayerIDAndPlayerTypeID(players[i].id, players[i].type.id))
+							}
+							Promise.all(promises).then((skillData) => {
+								for( var i in players ) {
+									if( skillData[i] ) {
+										players[i]["skills"] = skillData[i]
+									} else {
+										players[i]["skills"] = []
+									}
+								}
+								curSeasonTeams.sort((a, b) => (a.name > b.name) ? 1 : -1)
+								var renderJSON = {
+									"seasons": seasons,
+									"curSeason": curSeason,
+									"curSeasonTeams": curSeasonTeams,
+									"curTeam": team,
+									"players": players,
+									"selectedSeason": selectedSeason,
+									"stats": getTeamStats(players)
+								}
+								res.render("teams", renderJSON)
+							})
+						})
           })
         })
       })
@@ -81,32 +89,38 @@ router.get("/:id", function (req, res, next) {
   calls.getTeam(id).then((team) => {
     calls.getPlayersForTeam(team.id).then((players) => {
       calls.getTeams().then((teams) => {
-        calls.getSeasonsForTeam(team.id).then((seasons) => {
-          calls.getCurrentSeason().then((curSeason) => {
-            var promises = []
-            for( var i in players ) {
-              promises.push(calls.getSkillsForPlayerIDAndPlayerTypeID(players[i].id, players[i].type.id))
-            }
-            Promise.all(promises).then((skillData) => {
-              for( var i in players ) {
-                if( skillData[i] ) {
-                  players[i]["skills"] = skillData[i]
-                } else {
-                  players[i]["skills"] = []
-                }
-              }
-              var renderJSON = {
-                "seasons": seasons,
-                "teams": teams,
-                "curSeason": curSeason,
-                "curTeam": team,
-                "players": players,
-                "stats": getTeamStats(players)
-              }
-              res.render("teams", renderJSON)
-            })
-          })
-        })
+        calls.getSeasonsForTeam(team.id).then((teamSeasons) => {
+          calls.getSeasons().then((seasons) => {
+						calls.getCurrentSeason().then((curSeason) => {
+							calls.getTeamsForSeason(team.season.id).then((curSeasonTeams) => {
+								var promises = []
+								for( var i in players ) {
+									promises.push(calls.getSkillsForPlayerIDAndPlayerTypeID(players[i].id, players[i].type.id))
+								}
+								Promise.all(promises).then((skillData) => {
+									for( var i in players ) {
+										if( skillData[i] ) {
+											players[i]["skills"] = skillData[i]
+										} else {
+											players[i]["skills"] = []
+										}
+									}
+									curSeasonTeams.sort((a, b) => (a.name > b.name) ? 1 : -1)
+									var renderJSON = {
+										"seasons": seasons,
+										"teamSeasons": teamSeasons,
+										"curSeason": curSeason,
+										"curSeasonTeams": curSeasonTeams,
+										"curTeam": team,
+										"players": players,
+										"stats": getTeamStats(players)
+									}
+									res.render("teams", renderJSON)
+								})
+							})
+						})
+					})
+				})
       })
     })
   }).catch(next)
