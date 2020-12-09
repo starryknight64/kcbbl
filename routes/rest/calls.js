@@ -541,8 +541,14 @@ function getNextSeason(seasonID) {
 function getSeason(id) {
   return db.get("season", id).then((season) => {
     return getTrophy(season.trophy_id).then((trophy) => {
-      season["trophy"] = trophy
-      return Promise.resolve(season)
+			return db.getMany("match", undefined, ["season_id"], [season.id], undefined, undefined, "GROUP BY season_id").then((firstMatch) => {
+				season.trophy = trophy
+				season.firstMatch = null
+				if (firstMatch.length > 0) {
+					season.firstMatch = firstMatch[0]
+				}
+				return Promise.resolve(season)
+			})
     })
   })
 }
@@ -558,21 +564,34 @@ function getWinningTeamForSeason(seasonID) {
 }
 
 function getSeasons(wheres, values, joins) {
-  return db.getMany("season", undefined, wheres, values, joins)
-    .then((seasons) => {
-      return getTrophies().then((trophies) => {
-        for (var i in seasons) {
-          var trophyID = seasons[i].trophy_id
-          for (var j in trophies) {
-            if (trophies[j].id == trophyID) {
-              seasons[i]["trophy"] = trophies[j]
-              break
-            }
-          }
-        }
-        return Promise.resolve(seasons)
-      })
-    })
+  return db.getMany("season", undefined, wheres, values, joins).then((seasons) => {
+		return getTrophies().then((trophies) => {
+			return db.getMany("match", undefined, undefined, undefined, undefined, undefined, "GROUP BY season_id").then((firstMatches) => {
+				for (var i in seasons) {
+					var trophyID = seasons[i].trophy_id
+					for (var j in trophies) {
+						if (trophies[j].id == trophyID) {
+							seasons[i]["trophy"] = trophies[j]
+							break
+						}
+					}
+					
+					var hasMatches = false
+					for (var j in firstMatches) {
+						if (firstMatches[j].season_id == seasons[i].id) {
+							seasons[i].firstMatch = firstMatches[j]
+							hasMatches = true
+							break
+						}
+					}
+					if (!hasMatches) {
+						seasons[i].firstMatch = null
+					}
+				}
+				return Promise.resolve(seasons)
+			})
+		})
+	})
 }
 
 function getSeasonsForCoach(coachID) {

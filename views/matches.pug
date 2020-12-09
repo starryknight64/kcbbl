@@ -9,11 +9,35 @@ append body
 			.jumbotron.match-jumbotron
 				.container
 					.row
+						.col-md-4
+							.btn-group
+								.btn-group(role="group")
+									button.btn.btn-default.dropdown-toggle(data-toggle="dropdown" type="button") 
+										| #{curMatch.season.name} 
+										span.caret
+									ul.dropdown-menu
+										each season, i in seasons
+											li
+												if season.firstMatch
+													a(href="/matches/"+season.firstMatch.id) #{season.name} 
+														if season.id == curMatch.season.id
+															| (selected)
+												else
+													a(href="#") #{season.name} (no matches)
+								.btn-group(role="group")
+									button.btn.btn-default.dropdown-toggle(data-toggle="dropdown" type="button") 
+										| Match ##{curMatch.number} 
+										span.caret
+									ul.dropdown-menu
+										each seasonMatch, i in seasonMatches
+											li
+												a(href="/matches/"+seasonMatch.id) Match ##{i+1}: #{seasonMatch.team1.name} vs. #{seasonMatch.team2.name} (#{seasonMatch.team1_tds} - #{seasonMatch.team2_tds}) 
+													if seasonMatch.id == curMatch.id 
+														| &nbsp;(selected)
+					.row
 						h2.scoreboard.col-md-2.col-md-offset-5.text-center #{curMatch.team1_tds} - #{curMatch.team2_tds}
 					.row
-						.col-md-5
-							h1.text-center.match-team-name 
-								a(href="/teams/"+curMatch.team1.id) #{curMatch.team1.name}
+						.col-md-5.text-center
 							table.table.table-condensed.table-bordered
 								tbody
 									tr.active
@@ -26,12 +50,8 @@ append body
 										td.text-center #{curMatch.team1_cas}
 										td.text-center #{curMatch.team1_kills}
 										td.text-center 0
-						.col-md-2.vertical-center-parent
-							//- h2.text-center.scoreboard #{curMatch.team1_tds} - #{curMatch.team2_tds}
-							h2.text-center.versus VS
-						.col-md-5
-							h1.text-center.match-team-name 
-								a(href="/teams/"+curMatch.team2.id) #{curMatch.team2.name}
+						.col-md-2 &nbsp;
+						.col-md-5.text-center
 							table.table.table-condensed.table-bordered
 								tbody
 									tr.active
@@ -45,17 +65,15 @@ append body
 										td.text-center #{curMatch.team2_kills}
 										td.text-center 0
 					.row
-						.col-md-12.text-center
-							h2.btn-group
-								button.btn.btn-default.btn-lg.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") Select a match...&nbsp;
-									span.caret
-								ul.dropdown-menu
-									each match, i in matches
-										li
-											if match.id == curMatch.id
-												a(href="#") #{match.team1.name} VS #{match.team2.name} (#{match.team1_tds}-#{match.team2_tds})
-											else
-												a(href="/matches/"+match.id) #{match.team1.name} VS #{match.team2.name} (#{match.team1_tds}-#{match.team2_tds})
+						.col-md-5
+							h1.text-center.match-team-name 
+								a(href="/teams/"+curMatch.team1.id) #{curMatch.team1.name}
+						.col-md-2.vertical-center-parent
+							//- h2.text-center.scoreboard #{curMatch.team1_tds} - #{curMatch.team2_tds}
+							h2.text-center.versus VS
+						.col-md-5
+							h1.text-center.match-team-name 
+								a(href="/teams/"+curMatch.team2.id) #{curMatch.team2.name}
 		.row
 			.col-md-6
 				.panel.panel-default
