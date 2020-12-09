@@ -541,13 +541,25 @@ function getNextSeason(seasonID) {
 function getSeason(id) {
   return db.get("season", id).then((season) => {
     return getTrophy(season.trophy_id).then((trophy) => {
-			return db.getMany("match", undefined, ["season_id"], [season.id], undefined, undefined, "GROUP BY season_id").then((firstMatch) => {
-				season.trophy = trophy
-				season.firstMatch = null
-				if (firstMatch.length > 0) {
-					season.firstMatch = firstMatch[0]
-				}
-				return Promise.resolve(season)
+			return db.getMany("match", undefined, ["season_id"], [season.id], undefined, undefined, "GROUP BY season_id").then((firstMatches) => {
+				return db.getMany("team", undefined, ["season_id"], [season.id], undefined, undefined, "GROUP BY season_id").then((firstTeams) => {
+					return db.getMany("player", ["player.id","player.name","player.team_id","team.season_id"], undefined, undefined, ["INNER JOIN team ON team.id = player.team_id"], undefined, "GROUP BY season_id").then((firstPlayers) => {
+						season.trophy = trophy
+						season.firstMatch = null
+						if (firstMatches.length > 0) {
+							season.firstMatch = firstMatches[0]
+						}
+						season.firstTeam = null
+						if (firstTeams.length > 0) {
+							season.firstTeam = firstTeams[0]
+						}
+						season.firstPlayer = null
+						if (firstPlayers.length > 0) {
+							season.firstPlayer = firstPlayers[0]
+						}
+						return Promise.resolve(season)
+					})
+				})
 			})
     })
   })
@@ -567,28 +579,57 @@ function getSeasons(wheres, values, joins) {
   return db.getMany("season", undefined, wheres, values, joins).then((seasons) => {
 		return getTrophies().then((trophies) => {
 			return db.getMany("match", undefined, undefined, undefined, undefined, undefined, "GROUP BY season_id").then((firstMatches) => {
-				for (var i in seasons) {
-					var trophyID = seasons[i].trophy_id
-					for (var j in trophies) {
-						if (trophies[j].id == trophyID) {
-							seasons[i]["trophy"] = trophies[j]
-							break
+				return db.getMany("team", undefined, undefined, undefined, undefined, undefined, "GROUP BY season_id").then((firstTeams) => {
+					              //table, cols, wheres, values, joins, cmp, tail, order
+					return db.getMany("player", ["player.id","player.name","player.team_id","team.season_id"], undefined, undefined, ["INNER JOIN team ON team.id = player.team_id"], undefined, "GROUP BY season_id").then((firstPlayers) => {
+						for (var i in seasons) {
+							var trophyID = seasons[i].trophy_id
+							for (var j in trophies) {
+								if (trophies[j].id == trophyID) {
+									seasons[i]["trophy"] = trophies[j]
+									break
+								}
+							}
+							
+							var hasMatches = false
+							for (var j in firstMatches) {
+								if (firstMatches[j].season_id == seasons[i].id) {
+									seasons[i].firstMatch = firstMatches[j]
+									hasMatches = true
+									break
+								}
+							}
+							if (!hasMatches) {
+								seasons[i].firstMatch = null
+							}
+							
+							var hasTeams = false
+							for (var j in firstTeams) {
+								if (firstTeams[j].season_id == seasons[i].id) {
+									seasons[i].firstTeam = firstTeams[j]
+									hasTeams = true
+									break
+								}
+							}
+							if (!hasTeams) {
+								seasons[i].firstTeam = null
+							}
+							
+							var hasPlayers = false
+							for (var j in firstPlayers) {
+								if (firstPlayers[j].season_id == seasons[i].id) {
+									seasons[i].firstPlayer = firstPlayers[j]
+									hasPlayers = true
+									break
+								}
+							}
+							if (!hasPlayers) {
+								seasons[i].firstPlayer = null
+							}
 						}
-					}
-					
-					var hasMatches = false
-					for (var j in firstMatches) {
-						if (firstMatches[j].season_id == seasons[i].id) {
-							seasons[i].firstMatch = firstMatches[j]
-							hasMatches = true
-							break
-						}
-					}
-					if (!hasMatches) {
-						seasons[i].firstMatch = null
-					}
-				}
-				return Promise.resolve(seasons)
+						return Promise.resolve(seasons)
+					})
+				})
 			})
 		})
 	})
@@ -680,28 +721,43 @@ function getTeams(wheres, values, joins, cmp) {
     return getCoaches().then((coaches) => {
       return getRaces().then((races) => {
         return getSeasons().then((seasons) => {
-          for (var i in teams) {
-            for (var j in coaches) {
-              if (teams[i].coach_id == coaches[j].id) {
-                teams[i]["coach"] = coaches[j]
-                break
-              }
-            }
-            for (var j in races) {
-              if (teams[i].race_id == races[j].id) {
-                teams[i]["race"] = races[j]
-                break
-              }
-            }
-            for (var j in seasons) {
-              if (teams[i].season_id == seasons[j].id) {
-                teams[i]["season"] = seasons[j]
-                break
-              }
-            }
-          }
-          return Promise.resolve(teams)
-        })
+					return db.getMany("player", undefined, undefined, undefined, undefined, undefined, "GROUP BY team_id").then((teamPlayers) => {
+						for (var i in teams) {
+							teams[i].coach = null
+							for (var j in coaches) {
+								if (teams[i].coach_id == coaches[j].id) {
+									teams[i].coach = coaches[j]
+									break
+								}
+							}
+							
+							teams[i].race = null
+							for (var j in races) {
+								if (teams[i].race_id == races[j].id) {
+									teams[i].race = races[j]
+									break
+								}
+							}
+							
+							teams[i].season = null
+							for (var j in seasons) {
+								if (teams[i].season_id == seasons[j].id) {
+									teams[i].season = seasons[j]
+									break
+								}
+							}
+							
+							teams[i].firstPlayer = null
+							for (var j in teamPlayers) {
+								if (teamPlayers[j].team_id == teams[i].id) {
+									teams[i].firstPlayer = teamPlayers[j]
+									break
+								}
+							}
+						}
+						return Promise.resolve(teams)
+					})
+				})
       })
     })
   })
