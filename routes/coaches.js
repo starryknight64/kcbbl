@@ -4,8 +4,9 @@ var calls = require("./rest/calls")
 
 router.get("/", function (req, res, next) {
   calls.getCoaches().then((coaches) => {
-    calls.getSeasonsForCoach(coaches[0].id).then((seasons) => {
-      calls.getTeamsForCoach(coaches[0].id).then((teams) => {
+		var curCoach = coaches[0]
+    calls.getSeasonsForCoach(curCoach.id).then((seasons) => {
+      calls.getTeamsForCoach(curCoach.id).then((teams) => {
         var promises = []
         for (var i in teams) {
           promises.push(calls.getPlayersForTeam(teams[i].id))
@@ -18,9 +19,10 @@ router.get("/", function (req, res, next) {
               teams[i]["players"] = []
             }
           }
+					coaches.sort((a, b) => (a.name > b.name) ? 1 : -1)
           var renderJSON = {
             "coaches": coaches,
-            "curCoach": coaches[0],
+            "curCoach": curCoach,
             "teams": teams,
             "seasons": seasons,
             "stats": getCoachStats(teams)
@@ -52,6 +54,7 @@ router.get("/:id", function (req, res, next) {
                 teams[i]["players"] = []
               }
             }
+						coaches.sort((a, b) => (a.name > b.name) ? 1 : -1)
             var renderJSON = {
               "coaches": coaches,
               "curCoach": coach,
